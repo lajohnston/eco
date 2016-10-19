@@ -8,7 +8,8 @@ decoupled from both this framework and the game framework you wish to use with i
 Components are data structures. They don't need to contain any logic, so you can define them as simple objects containing default attributes and values:
 
     var ecos = new Ecos();
-    ecos.components.add(
+
+    ecos.addComponent(
         'position',     // the name of the component
         {               // the component's default values
             x: 0,
@@ -35,62 +36,54 @@ Components can also be classes if you wish to add some data encapsulation and pr
 
 ## Entities
 
-Entities are simply bags of components. Components can be added and removed at runtime allowing behaviour to be changed dynamically.
+Entities are simply a collection of components. Components can be added and removed at runtime allowing behaviour to be changed dynamically.
 
-    ecos.entities.add({
+    var entity = ecos.createEntity({
         isPlayer: { value: true },
         position: { x: 0, y: 0 },
         vector: { x: 0, y: 0] },
         friction: { value: -1 },
-        gravity: { value: -1 },
-        health: { value: 5 }
+        gravity: { value: -1 }
     });
+
+    // Add components
+    entity.add('foo', { bar: 'baz' });
+
+    // Remove components
+    entity.remove('gravity');
+    entity.has('gravity');      // false
+
+    // Access components
+    entity.get('health').amount = 100;
 
 ## Systems
 
-Systems provide the logic. Each system defines what components it's interested in and only listens for entities that contain all of these components.
+Systems are where you define your game logic and behaviour. It's up to you how you want to write them, but Ecos provides efficient entity iterators to iterate
+through relevant entities that contain a certain combination of components.
 
-    var systems = ecos.systems('ingame');
+    // Create a iterator for all entities that have both a position and a vector component
+    var moveableEntities = ecos.createIterator(['position', 'vector']);
 
-    systems.add(
-        'VectorMovement',           // the name of the system
-        ['position', 'vector'],     // only listen for entities with both the 'position' and 'vector' components
-        function (position, vector, entity) {
-            /**
-             * This callback is called for each matching entity, each update cycle.
-             * Each entity's 'position' and 'vector' components are injected in for you
-             * in the order you provided in the second argument
-             */
-            position.x += vector.getVectorX();
-            position.y += vector.getVectorY();
-        }
-    );
+    ...
 
-    // This calls each system in turn, in the order they were registered
-    systems.update();
+    // In your update loop
+    moveableEntities.each(function (position, vector, entity) {
+        /**
+         * This callback is called for each matching entity
+         * The components for each entity are injected in the order you specified when creating the iterator (position, vector)
+         * The entity itself is passed as the last argument
+         */
 
-You can group systems into named categories and update them independently:
+        // Update entity position based on its movement vector values
+        position.x += vector.getVectorX();
+        position.y += vector.getVectorY();
+    });
 
-    var logicSystems  = ecos.systems('logic');
-    var renderSystems = ecos.systems('render');
+    // or you can use a while loop
+    moveableEntities.reset();
+    while (var entity = moveableEntities.next()) {
 
-    logicSystems.update();
-    renderSystems.update();
-
-A system's callback can of course be a method in a plain JavaScript class.
-
-    var Counter = function () {
-        this.counter = 0;
     }
 
-    Counter.prototype.update = function (foo) {
-        this.counter++;
-        foo.frameCount = this.counter;
-    }
-
-    var counter = new Counter();
-    ecos.systems('logic').add(
-        'Counter',      // the name of the system
-        ['foo'],        // listen for foo components
-        counter.update  // the method to call for each matching entity
-    );
+    // or just get the array of entities
+    var entities = moveableEntities.toArray();
