@@ -2,11 +2,14 @@
  * Ecos gulpfile
  *
  * Available tasks:
- *     gulp build
+ *      gulp build
+ *      gulp test
+ *
  */
 
 const gulp = require('gulp');
 const plugins = require('gulp-load-plugins')();
+const KarmaServer = require('karma').Server;
 
 /**
  * Simple bundler to bundle ES6 classes into one file, without using a module system
@@ -26,4 +29,11 @@ gulp.task('build', () => {
         .pipe(plugins.wrap('(function() { <%= contents %> window.Ecos = Ecos;})();'))
         .pipe(plugins.uglify())
         .pipe(gulp.dest('dist'));
+});
+
+gulp.task('test', (done) => {
+    new KarmaServer({
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: true
+    }, done).start();
 });
