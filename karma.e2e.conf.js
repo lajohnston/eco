@@ -9,8 +9,8 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'src/**/*.js',
-            'spec/**/*.js'
+            'dist/ecos.min.js',
+            'spec/e2e/**/*.js'
         ],
 
         // list of files to exclude
@@ -19,20 +19,19 @@ module.exports = function(config) {
 
         // preprocess matching files before serving them to the browser
         preprocessors: {
-            'src/**/*.js': ['babel'],
             'spec/**/*.js': ['babel']
         },
 
         babelPreprocessor: {
             options: {
                 presets: ['es2015'],
-                plugins: ['__coverage__', 'transform-es2015-modules-umd'],
+                plugins: ['transform-es2015-modules-umd'],
                 sourceMap: 'inline'
             }
         },
 
         // test results reporter to use
-        reporters: ['progress', 'coverage'],
+        reporters: ['progress'],
 
         // web server port
         port: 9876,
