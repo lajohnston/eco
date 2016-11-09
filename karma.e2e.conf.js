@@ -1,50 +1,50 @@
 // Karma configuration
 
-module.exports = function(config) {
-    config.set({
-        frameworks: [
-            'jasmine',
-            'source-map-support'
-        ],
+module.exports = (config) => {
+  config.set({
+    frameworks: [
+      'jasmine',
+      'source-map-support',
+    ],
 
-        // list of files / patterns to load in the browser
-        files: [
-            'dist/ecos.min.js',
-            'spec/e2e/**/*.js'
-        ],
+    // list of files / patterns to load in the browser
+    files: [
+      'dist/ecos.min.js',
+      'spec/e2e/**/*.js',
+    ],
 
-        // list of files to exclude
-        exclude: [
-        ],
+    // list of files to exclude
+    exclude: [
+    ],
 
-        // preprocess matching files before serving them to the browser
-        preprocessors: {
-            'spec/**/*.js': ['babel']
-        },
+    // preprocess matching files before serving them to the browser
+    preprocessors: {
+      'spec/**/*.js': ['babel'],
+    },
 
-        babelPreprocessor: {
-            options: {
-                presets: ['es2015'],
-                plugins: ['transform-es2015-modules-umd'],
-                sourceMap: 'inline'
-            }
-        },
+    babelPreprocessor: {
+      options: {
+        presets: ['es2015'],
+        plugins: ['transform-es2015-modules-umd'],
+        sourceMap: 'inline',
+      },
+    },
 
-        // test results reporter to use
-        reporters: ['progress'],
+    // test results reporter to use
+    reporters: ['progress'],
 
-        // web server port
-        port: 9876,
+    // web server port
+    port: 9876,
 
-        // start these browsers
-        browsers: ['PhantomJS', 'Chrome'],
+    // start these browsers
+    browsers: ['PhantomJS', 'Chrome'],
 
-        // Continuous Integration mode
-        // if true, Karma captures browsers, runs the tests and exits
-        singleRun: false,
+    // Continuous Integration mode
+    // if true, Karma captures browsers, runs the tests and exits
+    singleRun: false,
 
-        // Concurrency level
-        // how many browser should be started simultaneous
-        concurrency: Infinity
-    })
-}
+    // Concurrency level
+    // how many browser should be started simultaneous
+    concurrency: Infinity,
+  });
+};

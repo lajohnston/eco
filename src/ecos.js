@@ -1,7 +1,7 @@
-import {ComponentCollection} from './componentCollection';
+import { ComponentCollection } from './componentCollection';
 
 export default class Ecos {
-    constructor() {
-        this.components = new ComponentCollection();
-    }
+  constructor() {
+    this.components = new ComponentCollection();
+  }
 }
