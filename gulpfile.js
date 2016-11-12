@@ -29,10 +29,11 @@ function karmaErrorHandler(err, done) {
  * Simple bundler to bundle ES6 classes into one file, without using a module system
  */
 function bundleJs() {
-  return gulp.src(['src/componentCollection.js', 'src/entity.js', 'src/ecos.js'])
+  return gulp.src(['src/**/*.js', 'src/index.js'])
     .pipe(plugins.concat('ecos.js'))
+    .pipe(plugins.replace(/import { .* } from '.*';/g, ''))
     .pipe(plugins.replace('export default class', 'class'))
-    .pipe(plugins.replace(/import {.*} from '.*';/g, ''));
+    .pipe(plugins.replace(/export default .*/g, ''));
 }
 
 gulp.task('lint', () => (
@@ -41,17 +42,19 @@ gulp.task('lint', () => (
     .pipe(plugins.eslint.format())
 ));
 
-gulp.task('build', gulp.parallel('lint', () => (
-  bundleJs()
+gulp.task('build', gulp.parallel('lint', () => {
+  const wrapper = '(function() { <%= contents %> window.Ecos = function () { return createEcosInstance(); };})();';
+
+  return bundleJs()
     .pipe(plugins.babel({
       presets: ['es2015'],
     }))
-    .pipe(plugins.wrap('(function() { <%= contents %> window.Ecos = Ecos;})();'))
+    .pipe(plugins.wrap(wrapper))
     .pipe(gulp.dest('dist'))
     .pipe(plugins.uglify())
     .pipe(plugins.rename('ecos.min.js'))
-    .pipe(gulp.dest('dist'))
-)));
+    .pipe(gulp.dest('dist'));
+}));
 
 gulp.task('test:unit', (done) => {
   new KarmaServer({
