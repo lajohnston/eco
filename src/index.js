@@ -23,7 +23,12 @@ function createEntityFactory(componentCollection) {
 }
 
 function createEcosInstance() {
-  return new Ecos(createEntityFactory());
+  const componentCollection = createComponentCollection();
+
+  return new Ecos(
+    createEntityFactory(componentCollection),
+    componentCollection
+  );
 }
 
 export default createEcosInstance;
