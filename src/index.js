@@ -1,3 +1,4 @@
+import { ComponentCollection } from './ComponentCollection';
 import { Ecos } from './Ecos';
 import { EntityFactory } from './EntityFactory';
 import { Entity } from './Entity';
@@ -5,13 +6,20 @@ import { Entity } from './Entity';
 function createInstanceFactory(Newable) {
   return {
     create(...args) {
-      return new (Function.prototype.bind.apply(Newable, args)); // eslint-disable-line new-parens
+      return new Newable(...args);
     },
   };
 }
 
-function createEntityFactory() {
-  return new EntityFactory(createInstanceFactory(Entity));
+function createComponentCollection() {
+  return new ComponentCollection();
+}
+
+function createEntityFactory(componentCollection) {
+  return new EntityFactory(
+    createInstanceFactory(Entity),
+    componentCollection || createComponentCollection()
+  );
 }
 
 function createEcosInstance() {
