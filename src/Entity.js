@@ -21,4 +21,15 @@ export default class Entity {
   get(componentName) {
     return this.componentCollection.getForEntity(this.id, componentName);
   }
+
+  /**
+   * Set the data for a given component
+   *
+   * @param {string}  the name of the component
+   * @param {mixed}   the data to set for the component
+   */
+  set(componentName, data) {
+    this.componentCollection.setForEntity(this.id, componentName, data);
+    return this;
+  }
 }
