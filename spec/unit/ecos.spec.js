@@ -22,8 +22,4 @@ describe('Ecos', () => {
       expect(result).toBe(entity);
     });
   });
-
-  it('should create entities', () => {
-
-  });
 });
