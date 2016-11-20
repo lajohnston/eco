@@ -1,4 +1,4 @@
-import ComponentCollection from '../../src/ComponentCollection';
+import ComponentCollection from '../../src/components/ComponentCollection';
 
 describe('ComponentCollection', () => {
   let collection;

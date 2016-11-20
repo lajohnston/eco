@@ -1,4 +1,4 @@
-import Component from '../../src/Component';
+import Component from '../../src/components/Component';
 
 describe('Component', () => {
   describe('get() and set()', () => {

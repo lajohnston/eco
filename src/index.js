@@ -1,8 +1,8 @@
-import { ComponentCollection } from './ComponentCollection';
-import { Component } from './Component';
+import { ComponentCollection } from './components/ComponentCollection';
+import { Component } from './components/Component';
 import { Ecos } from './Ecos';
-import { EntityFactory } from './EntityFactory';
-import { Entity } from './Entity';
+import { EntityFactory } from './entities/EntityFactory';
+import { Entity } from './entities/Entity';
 
 function createInstanceFactory(Newable) {
   return {
