@@ -10,7 +10,7 @@ module.exports = (config) => {
     // list of files / patterns to load in the browser
     files: [
       'src/**/*.js',
-      'spec/unit/**/*.js',
+      'spec/unit/**/*.spec.js',
     ],
 
     // list of files to exclude
