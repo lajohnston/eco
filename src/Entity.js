@@ -5,7 +5,7 @@
 export default class Entity {
   constructor(id, componentCollection) {
     this.id = id;
-    this.componentCollection = componentCollection;
+    this.components = componentCollection;
   }
 
   getId() {
@@ -19,17 +19,20 @@ export default class Entity {
    * @param {mixed}   the component data, or null if it does not exist
    */
   get(componentName) {
-    return this.componentCollection.getForEntity(this.id, componentName);
+    return this.components.get(componentName)
+      .get(this.id);
   }
 
   /**
-   * Set the data for a given component
+   * Add a component to the entity
    *
    * @param {string}  the name of the component
    * @param {mixed}   the data to set for the component
    */
-  set(componentName, data) {
-    this.componentCollection.setForEntity(this.id, componentName, data);
+  add(componentName, data) {
+    this.components.get(componentName)
+      .set(this.id, data);
+
     return this;
   }
 }
