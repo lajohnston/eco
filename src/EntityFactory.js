@@ -26,7 +26,7 @@ export default class EntityFactory {
 
     if (components) {
       Object.keys(components).forEach((component) => {
-        entity.set(component, components[component]);
+        entity.add(component, components[component]);
       });
     }
 

@@ -7,7 +7,7 @@ describe('create()', () => {
   let entity;
 
   beforeEach(() => {
-    entity = jasmine.createSpyObj('entity', ['set']);
+    entity = jasmine.createSpyObj('entity', ['add']);
 
     instanceFactory = jasmine.createSpyObj('instanceFactory', ['create']);
     instanceFactory.create.and.returnValue(entity);
@@ -35,13 +35,13 @@ describe('create()', () => {
 
     const result = factory.create(components);
 
-    expect(result.set.calls.count()).toBe(2);
-    expect(result.set.calls.argsFor(0)).toEqual(['foo', 'fooValue']);
-    expect(result.set.calls.argsFor(1)).toEqual(['bar', 'barValue']);
+    expect(result.add.calls.count()).toBe(2);
+    expect(result.add.calls.argsFor(0)).toEqual(['foo', 'fooValue']);
+    expect(result.add.calls.argsFor(1)).toEqual(['bar', 'barValue']);
   });
 
   it('should not add the components if none were given', () => {
     const result = factory.create();
-    expect(result.set.calls.count()).toBe(0);
+    expect(result.add.calls.count()).toBe(0);
   });
 });
