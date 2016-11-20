@@ -7,7 +7,7 @@ describe('Ecos', () => {
 
   beforeEach(() => {
     entityFactory = jasmine.createSpyObj('entityFactory', ['create']);
-    componentCollection = jasmine.createSpyObj('componentCollection', ['add']);
+    componentCollection = jasmine.createSpyObj('componentCollection', ['set']);
     ecos = new Ecos(entityFactory, componentCollection);
   });
 
@@ -29,10 +29,10 @@ describe('Ecos', () => {
     [true, false].forEach((result) => {
       it('should add the component to the component collection and return the result', () => {
         const data = {};
-        componentCollection.add.and.returnValue(result);
+        componentCollection.set.and.returnValue(result);
 
         expect(ecos.addComponent('foo', data)).toBe(result);
-        expect(componentCollection.add).toHaveBeenCalledWith('foo', data);
+        expect(componentCollection.set).toHaveBeenCalledWith('foo', data);
       });
     });
   });

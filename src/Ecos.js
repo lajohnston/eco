@@ -14,7 +14,7 @@ export default class Ecos {
    *                    or false if it was invalid or already exists
    */
   addComponent(name, data) {
-    return this.componentCollection.add(name, data);
+    return this.componentCollection.set(name, data);
   }
 
   createEntity(components) {

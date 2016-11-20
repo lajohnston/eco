@@ -5,7 +5,7 @@ describe('ComponentCollection', () => {
   let componentFactory;
 
   beforeEach(() => {
-    componentFactory = jasmine.createSpyObj('componentFactory', ['add']);
+    componentFactory = jasmine.createSpyObj('componentFactory', ['set', 'create']);
     collection = new ComponentCollection(componentFactory);
   });
 
@@ -14,18 +14,16 @@ describe('ComponentCollection', () => {
     expect(new ComponentCollection()).toBeDefined();
   });
 
-  describe('add()', () => {
-    it('should add the definition to the component factory', () => {
-      const definition = {};
-      collection.add('foo', definition);
-      expect(componentFactory.add).toHaveBeenCalledWith('foo', definition);
-    });
+  describe('set()', () => {
+    it('should create the definition using the component factory', () => {
+      const component = {};
+      componentFactory.create.and.returnValue(component);
 
-    [true, false].forEach((result) => {
-      it('should return the result from the component factory', () => {
-        componentFactory.add.and.returnValue(result);
-        expect(collection.add('foo', {})).toBe(result);
-      });
+      const definition = {};
+
+      expect(collection.set('foo', definition)).toBe(component);
+      expect(componentFactory.create).toHaveBeenCalledWith(definition);
+      expect(collection.get('foo')).toBe(component);
     });
   });
 });

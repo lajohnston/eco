@@ -59,7 +59,7 @@ gulp.task('build', gulp.parallel('lint', () => {
 gulp.task('test:unit', (done) => {
   new KarmaServer({
     configFile: path.join(__dirname, '/karma.unit.conf.js'),
-    singleRun: true,
+    singleRun: false,
   }, err => karmaErrorHandler(err, done)).start();
 });
 
