@@ -1,4 +1,5 @@
 import { ComponentCollection } from './ComponentCollection';
+import { Component } from './Component';
 import { Ecos } from './Ecos';
 import { EntityFactory } from './EntityFactory';
 import { Entity } from './Entity';
@@ -12,7 +13,9 @@ function createInstanceFactory(Newable) {
 }
 
 function createComponentCollection() {
-  return new ComponentCollection();
+  return new ComponentCollection(
+    createInstanceFactory(Component)
+  );
 }
 
 function createEntityFactory(componentCollection) {
