@@ -15,8 +15,9 @@ export default class Entity {
   /**
    * Get the component with the given name
    *
-   * @param {string}  the name of the component
-   * @param {mixed}   the component data, or null if it does not exist
+   * @param {string}  componentName the name of the component
+   *
+   * @returns {mixed} the component data, or null if it does not exist
    */
   get(componentName) {
     return this.components.get(componentName)
@@ -26,8 +27,10 @@ export default class Entity {
   /**
    * Add a component to the entity
    *
-   * @param {string}  the name of the component
-   * @param {mixed}   the data to set for the component
+   * @param {string}  componentName the name of the component
+   * @param {mixed}   data the data to set for the component
+   *
+   * @returns {Entity} itself
    */
   add(componentName, data) {
     this.components.get(componentName)
