@@ -16,7 +16,38 @@ describe('Adding components', () => {
       expect(component.get(2).foo).toBe('foo2');
     });
 
-    it('should allow components to be replaced, but not affect the existing component');
+    describe('Replacing components', () => {
+      let oldComponent;
+      let newComponent;
+      let entityA;
+      let entityB;
+
+      beforeEach(() => {
+        oldComponent = ecos.addComponent('foo', { componentName: 'oldFoo' });
+        entityA = ecos.createEntity({ foo: { entityName: 'entityA' } });
+
+        newComponent = ecos.addComponent('foo', { componentName: 'newFoo' });
+        entityB = ecos.createEntity({ foo: { entityName: 'entityB' } });
+      });
+
+      it('should not change the original component', () => {
+        // The old component instance should still contain entityA's data
+        expect(oldComponent.get(1).entityName).toBe('entityA');
+        expect(oldComponent.get(2)).not.toBeDefined();
+
+        // The new component should only contain entityB's data
+        expect(newComponent.get(1)).not.toBeDefined();
+        expect(newComponent.get(2).entityName).toBe('entityB');
+      });
+
+      it('should ensure existing entities no longer have the component, as the definition has changed', () => {
+        expect(entityA.has('foo')).toBe(false);
+      });
+
+      it('should use the new definition for new entities', () => {
+        expect(entityB.get('foo').componentName).toBe('newFoo');
+      });
+    });
   });
 
   describe('Adding undefined objects as component definitions', () => {
