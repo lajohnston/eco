@@ -5,8 +5,28 @@ describe('Adding components', () => {
     ecos = new window.Ecos();
   });
 
+  describe('ecos.addComponent()', () => {
+    it('should return a component instance that stores data for entities', () => {
+      const component = ecos.addComponent('foo', {});
+
+      component.set(1, { foo: 'foo1' });
+      component.set(2, { foo: 'foo2' });
+
+      expect(component.get(1).foo).toBe('foo1');
+      expect(component.get(2).foo).toBe('foo2');
+    });
+
+    it('should allow components to be replaced, but not affect the existing component');
+  });
+
+  describe('Adding undefined objects as component definitions', () => {
+    it('should return boolean true when retrieving data for entities that have this component');
+
+    it('should return undefined when retrieving data for entities tha do not have this component');
+  });
+
   describe('Adding object literals as component definitions', () => {
-    it('should merge in default values using the object definition', () => {
+    it('should shallow merge in default values using the object definition', () => {
       ecos.addComponent('foo', {
         fooValue: 'defaultFooValue',
         barValue: 'defaultBarValue',
@@ -21,20 +41,9 @@ describe('Adding components', () => {
       expect(entity.get('foo').fooValue).toBe('defaultFooValue');
       expect(entity.get('foo').barValue).toBe('newBarValue');
     });
-
-    it('should merge in nested values using the object definition');
-
-    it('should include functions and nested functions from the object definition');
   });
 
-  it('should return false without side effects if the component is already defined');
-
-  it('should accept functions as component constructors');
-
-  it('should throw an error if the component is not an object or a function');
-
-  it('should throw an error if the component is already defined');
-
-  it('should throw an error if an entity defines an component');
+  describe('Adding functions as component definitions', () => {
+    it('should call the function when creating new instances, and store the result');
+  });
 });
-

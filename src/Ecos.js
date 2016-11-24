@@ -10,8 +10,7 @@ export default class Ecos {
    * @param {string}  name  the unique name for the component
    * @param {mixed}   data  the default data for the component
    *
-   * @returns {boolean} true if the component was added successfully,
-   *                    or false if it was invalid or already exists
+   * @returns {object} the component object
    */
   addComponent(name, data) {
     return this.componentCollection.set(name, data);

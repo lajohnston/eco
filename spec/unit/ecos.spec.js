@@ -26,14 +26,14 @@ describe('Ecos', () => {
   });
 
   describe('addComponent', () => {
-    [true, false].forEach((result) => {
-      it('should add the component to the component collection and return the result', () => {
-        const data = {};
-        componentCollection.set.and.returnValue(result);
+    it('should add the component to the component collection and return the result', () => {
+      const data = {};
+      const result = {};
 
-        expect(ecos.addComponent('foo', data)).toBe(result);
-        expect(componentCollection.set).toHaveBeenCalledWith('foo', data);
-      });
+      componentCollection.set.and.returnValue(result);
+
+      expect(ecos.addComponent('foo', data)).toBe(result);
+      expect(componentCollection.set).toHaveBeenCalledWith('foo', data);
     });
   });
 });
