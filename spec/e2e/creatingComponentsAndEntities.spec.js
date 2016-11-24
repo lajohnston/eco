@@ -50,27 +50,39 @@ describe('Adding components', () => {
     });
   });
 
-  describe('Adding undefined objects as component definitions', () => {
-    it('should return boolean true when retrieving data for entities that have this component');
-
-    it('should return undefined when retrieving data for entities tha do not have this component');
-  });
-
   describe('Adding object literals as component definitions', () => {
-    it('should shallow merge in default values using the object definition', () => {
-      ecos.addComponent('foo', {
+    [undefined, null, false, true, function foo() {}, 1, '', 'foo'].forEach((nonObject) => {
+      it('should use the default value if non-object data is passed for a component instance', () => {
+        const defaultData = {
+          fooValue: 'defaultFooValue',
+        };
+
+        ecos.addComponent('foo', defaultData);
+
+        const entity = ecos.createEntity()
+          .add('foo', nonObject);
+
+        expect(entity.get('foo')).not.toBe(defaultData); // it should be a copy
+        expect(entity.get('foo').fooValue).toBe('defaultFooValue');
+      });
+    });
+
+    it('should shallow merge default values using the object definition', () => {
+      const defaultData = {
         fooValue: 'defaultFooValue',
         barValue: 'defaultBarValue',
-      });
+      };
 
-      const entity = ecos.createEntity({
-        foo: {
+      ecos.addComponent('foo', defaultData);
+
+      const entity = ecos.createEntity()
+        .add('foo', {
           barValue: 'newBarValue',
-        },
-      });
+        });
 
       expect(entity.get('foo').fooValue).toBe('defaultFooValue');
       expect(entity.get('foo').barValue).toBe('newBarValue');
+      expect(defaultData.barValue).toBe('defaultBarValue');
     });
   });
 

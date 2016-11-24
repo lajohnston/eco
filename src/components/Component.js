@@ -48,14 +48,21 @@ export default class Component {
    *
    * @param   {object}  defaultData the base default data
    * @param   {object}  data  the data to merge in
+   *
    * @returns {object}  the merged data
    */
   static mergeObjects(defaultData, data) {
-    const instance = JSON.parse(JSON.stringify(defaultData));
+    const instance = {};
 
-    Object.keys(data).forEach((key) => {
-      instance[key] = data[key];
+    Object.keys(defaultData).forEach((key) => {
+      instance[key] = defaultData[key];
     });
+
+    if (data && typeof data === 'object') {
+      Object.keys(data).forEach((key) => {
+        instance[key] = data[key];
+      });
+    }
 
     return instance;
   }
