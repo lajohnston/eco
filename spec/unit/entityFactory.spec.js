@@ -7,7 +7,7 @@ describe('create()', () => {
   let entity;
 
   beforeEach(() => {
-    entity = jasmine.createSpyObj('entity', ['add']);
+    entity = {};
 
     instanceFactory = jasmine.createSpyObj('instanceFactory', ['create']);
     instanceFactory.create.and.returnValue(entity);
@@ -17,31 +17,13 @@ describe('create()', () => {
   });
 
   it('should create an entity instance and provide it with a new id', () => {
-    const resultA = factory.create({});
-    const resultB = factory.create({});
+    const resultA = factory.create();
+    const resultB = factory.create();
 
     expect(resultA).toBe(entity);
     expect(resultB).toBe(entity);
 
     expect(instanceFactory.create.calls.argsFor(0)).toEqual([1, componentCollection]);
     expect(instanceFactory.create.calls.argsFor(1)).toEqual([2, componentCollection]);
-  });
-
-  it('should add the components to the entity', () => {
-    const components = {
-      foo: 'fooValue',
-      bar: 'barValue',
-    };
-
-    const result = factory.create(components);
-
-    expect(result.add.calls.count()).toBe(2);
-    expect(result.add.calls.argsFor(0)).toEqual(['foo', 'fooValue']);
-    expect(result.add.calls.argsFor(1)).toEqual(['bar', 'barValue']);
-  });
-
-  it('should not add the components if none were given', () => {
-    const result = factory.create();
-    expect(result.add.calls.count()).toBe(0);
   });
 });

@@ -24,10 +24,13 @@ describe('Adding components', () => {
 
       beforeEach(() => {
         oldComponent = ecos.addComponent('foo', { componentName: 'oldFoo' });
-        entityA = ecos.createEntity({ foo: { entityName: 'entityA' } });
+        entityA = ecos.createEntity()
+          .add('foo', { entityName: 'entityA' });
 
         newComponent = ecos.addComponent('foo', { componentName: 'newFoo' });
-        entityB = ecos.createEntity({ foo: { entityName: 'entityB' } });
+
+        entityB = ecos.createEntity()
+          .add('foo', { entityName: 'entityB' });
       });
 
       it('should not change the original component', () => {

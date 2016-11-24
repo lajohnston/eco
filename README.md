@@ -52,13 +52,12 @@ a class and return a new instance from the function.
 Entities are simply a collection of components. Components can be added and
 removed at runtime allowing behaviour to be changed dynamically.
 
-    var entity = ecos.createEntity({
-        isPlayer: { value: true },
-        position: { x: 0, y: 0 },
-        vector: { x: 0, y: 0] },
-        friction: { value: -1 },
-        gravity: { value: -1 }
-    });
+    var entity = ecos.createEntity()
+        .add('isPlayer')
+        .add('position', { x: 0, y: 0 })
+        .add('vector', { x: 0, y: 0 })
+        .add('friction', { value: -1 })
+        .add('gravity', { value: -1 });
 
     // Add components
     entity.add('foo', { bar: 'baz' });

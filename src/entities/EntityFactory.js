@@ -10,27 +10,20 @@ export default class EntityFactory {
    */
   constructor(instanceFactory, componentCollection) {
     this.instanceFactory = instanceFactory;
-    this.componentCollection = componentCollection;
+    this.components = componentCollection;
     this.prevId = 0;
   }
 
   /**
-   * @param   {object}  components  componentName: data pairs to give to the entity
-   * @returns {Entity}  entity instance
+   * Creates a new entity with a unique id
+   *
+   * @returns {Entity}  the new entity instance
    */
-  create(components) {
-    const entity = this.instanceFactory.create(
+  create() {
+    return this.instanceFactory.create(
       this.getNextId(),
-      this.componentCollection
+      this.components
     );
-
-    if (components) {
-      Object.keys(components).forEach((component) => {
-        entity.add(component, components[component]);
-      });
-    }
-
-    return entity;
   }
 
   /**

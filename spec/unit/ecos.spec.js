@@ -14,14 +14,11 @@ describe('Ecos', () => {
   describe('createEntity', () => {
     it('should return a new entity instance from the entity factory', () => {
       const entity = {};
-      const components = {};
 
       entityFactory.create.and.returnValue(entity);
 
-      const result = ecos.createEntity(components);
-
-      expect(entityFactory.create).toHaveBeenCalledWith(components);
-      expect(result).toBe(entity);
+      expect(ecos.createEntity()).toBe(entity);
+      expect(entityFactory.create).toHaveBeenCalled();
     });
   });
 

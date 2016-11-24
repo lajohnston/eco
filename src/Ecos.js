@@ -16,7 +16,12 @@ export default class Ecos {
     return this.componentCollection.set(name, data);
   }
 
-  createEntity(components) {
-    return this.entityFactory.create(components);
+  /**
+   * Create a new entity with a unique id
+   *
+   * @returns {Entity} the new entity instance
+   */
+  createEntity() {
+    return this.entityFactory.create();
   }
 }
