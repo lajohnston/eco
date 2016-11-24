@@ -2,7 +2,7 @@ import Component from '../../src/components/Component';
 
 describe('Component', () => {
   describe('get() and set()', () => {
-    it('should store and retrieve component data ', () => {
+    it('should store and retrieve component data', () => {
       const component = new Component({});
 
       component.set(1, { foo: 'a' });
@@ -28,6 +28,19 @@ describe('Component', () => {
         fooValue: 'defaultFooValue',
         barValue: 'newBarValue',
       });
+    });
+  });
+
+  describe('has()', () => {
+    it('should return true if the component contains data for the entity', () => {
+      const component = new Component({});
+      component.set(1, {});
+      expect(component.has(1)).toBe(true);
+    });
+
+    it('should return false if the component does not contain data for the entity', () => {
+      const component = new Component({});
+      expect(component.has(1)).toBe(false);
     });
   });
 });

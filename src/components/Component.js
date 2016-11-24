@@ -31,6 +31,18 @@ export default class Component {
   }
 
   /**
+   * Indicates whether the component contains data for the given entity id
+   *
+   * @param   {number}  entityId  the entity's unique id
+   *
+   * @returns {boolean} true if the component has data for the entity,
+   *                    otherwise false
+   */
+  has(entityId) {
+    return Object.hasOwnProperty.call(this.entities, entityId);
+  }
+
+  /**
    * Merge two objects, returning the merged data without affecting
    * the originals
    *
