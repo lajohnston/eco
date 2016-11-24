@@ -7,7 +7,7 @@ describe('Entity', () => {
 
   beforeEach(() => {
     componentCollection = jasmine.createSpyObj('ComponentCollection', ['get', 'add']);
-    component = jasmine.createSpyObj('Component', ['get', 'set']);
+    component = jasmine.createSpyObj('Component', ['get', 'set', 'has']);
 
     entity = new Entity(100, componentCollection);
   });
@@ -36,6 +36,19 @@ describe('Entity', () => {
       expect(result).toBe(entity);
       expect(componentCollection.get).toHaveBeenCalledWith('foo');
       expect(component.set).toHaveBeenCalledWith(entity.getId(), data);
+    });
+  });
+
+  describe('has()', () => {
+    [true, false].forEach((result) => {
+      it('should return the result from the component has() method', () => {
+        componentCollection.get.and.returnValue(component);
+        component.has.and.returnValue(result);
+
+        expect(entity.has('foo')).toBe(result);
+        expect(componentCollection.get).toHaveBeenCalledWith('foo');
+        expect(component.has).toHaveBeenCalledWith(entity.getId());
+      });
     });
   });
 });

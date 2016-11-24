@@ -38,4 +38,16 @@ export default class Entity {
 
     return this;
   }
+
+  /**
+   * Indicates whether an entity has a given component
+   *
+   * @param {string}  componentName the name of the component
+   *
+   * @returns {boolean} true if the entity has the component, otherwise false
+   */
+  has(componentName) {
+    return this.components.get(componentName)
+      .has(this.id);
+  }
 }
