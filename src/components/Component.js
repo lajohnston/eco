@@ -6,6 +6,8 @@ export default class Component {
       this.factory = definition;
     } else if (typeof definition === 'object') {
       this.factory = data => Component.mergeObjects(definition, data);
+    } else {
+      this.factory = data => data;
     }
   }
 

@@ -45,6 +45,19 @@ describe('Component', () => {
     });
   });
 
+  describe('get() and set() when no component definition has been given', () => {
+    [undefined, null, false, true, function foo() {}, 1, '', 'foo', {}].forEach((value) => {
+      it('should store and return any non-object values passed to it', () => {
+        const component = new Component();
+        component.set(1, value);
+
+        const result = component.get(1);
+
+        expect(result).toBe(value);
+      });
+    });
+  });
+
   describe('get() and set() with a factory/function component definition', () => {
     it('should call the factory when creating the object', () => {
       const componentData = {};

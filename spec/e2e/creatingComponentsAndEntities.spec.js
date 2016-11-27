@@ -105,6 +105,19 @@ describe('Adding components', () => {
     });
   });
 
+  describe('Not passing any value as the component definition', () => {
+    [undefined, null, false, true, function foo() {}, 1, '', 'foo', {}].forEach((value) => {
+      it('should store and return any data passed to it', () => {
+        ecos.addComponent('foo');
+
+        const entity = ecos.createEntity()
+          .add('foo', value);
+
+        expect(entity.get('foo')).toBe(value);
+      });
+    });
+  });
+
   describe('Adding a non-existant component to an object', () => {
     it('should act as if the component was not added', () => {
       const entity = ecos.createEntity()
