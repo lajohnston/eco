@@ -1,7 +1,7 @@
 import Component from '../../../src/components/Component';
 
 describe('Component', () => {
-  describe('get() and set()', () => {
+  describe('get() and set() with an object literal component definition', () => {
     it('should store and retrieve component data', () => {
       const component = new Component({});
 
@@ -12,7 +12,7 @@ describe('Component', () => {
       expect(component.get(2).foo).toBe('b');
     });
 
-    it('should merge the data with the default object literal, if one was provided', () => {
+    it('should merge the data with the default object literal', () => {
       const component = new Component({
         fooValue: 'defaultFooValue',
         barValue: 'defaultBarValue',
@@ -42,6 +42,20 @@ describe('Component', () => {
         expect(result).toEqual(defaultData);
         expect(result).not.toBe(defaultData);
       });
+    });
+  });
+
+  describe('get() and set() with a factory/function component definition', () => {
+    it('should call the factory when creating the object', () => {
+      const componentData = {};
+
+      const component = new Component((data) => {
+        expect(data).toBe(componentData);
+        return 'foo';
+      });
+
+      component.set(1, componentData);
+      expect(component.get(1)).toBe('foo');
     });
   });
 

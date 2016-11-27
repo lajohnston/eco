@@ -2,7 +2,9 @@ export default class Component {
   constructor(definition) {
     this.entities = {};
 
-    if (typeof definition === 'object') {
+    if (typeof definition === 'function') {
+      this.factory = definition;
+    } else if (typeof definition === 'object') {
       this.factory = data => Component.mergeObjects(definition, data);
     }
   }

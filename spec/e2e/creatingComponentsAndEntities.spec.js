@@ -90,7 +90,19 @@ describe('Adding components', () => {
   });
 
   describe('Adding functions as component definitions', () => {
-    it('should call the function when creating new instances, and store the result');
+    it('should call the function when creating new instances, and store the result', () => {
+      const entityData = {};
+
+      ecos.addComponent('foo', (data) => {
+        expect(data).toBe(entityData);
+        return 'foo';
+      });
+
+      const entity = ecos.createEntity()
+        .add('foo', entityData);
+
+      expect(entity.get('foo')).toBe('foo');
+    });
   });
 
   describe('Adding a non-existant component to an object', () => {
