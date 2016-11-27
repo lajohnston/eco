@@ -3,6 +3,7 @@ import { Component } from './components/Component';
 import { Ecos } from './Ecos';
 import { EntityFactory } from './entities/EntityFactory';
 import { Entity } from './entities/Entity';
+import { NullComponent } from './components/NullComponent';
 
 function createInstanceFactory(Newable) {
   return {
@@ -13,9 +14,13 @@ function createInstanceFactory(Newable) {
 }
 
 function createComponentCollection() {
-  return new ComponentCollection(
+  const collection = new ComponentCollection(
     createInstanceFactory(Component)
   );
+
+  collection.setNullObject(new NullComponent());
+
+  return collection;
 }
 
 function createEntityFactory(componentCollection) {

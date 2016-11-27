@@ -24,10 +24,34 @@ export default class ComponentCollection {
   /**
    * Get a component with the given name
    *
-   * @param {string}  name  the name of the component
+   * @param   {string}  componentName  the name of the component
    * @returns {object}  the component object, or undefined
    */
-  get(name) {
-    return this.components[name];
+  get(componentName) {
+    if (this.has(componentName)) {
+      return this.components[componentName];
+    }
+
+    return this.nullComponent;
+  }
+
+  /**
+   * Indicates whether the collection contains a component with the given name
+   *
+   * @param   {string}  name  the component's unique name
+   *
+   * @returns {boolean} true if the component exists, otherwise false
+   */
+  has(name) {
+    return Object.hasOwnProperty.call(this.components, name);
+  }
+
+  /**
+   * Sets the null value to return if a component does not exist
+   *
+   * @param {mixed}  the null value to return
+   */
+  setNullObject(nullComponent) {
+    this.nullComponent = nullComponent;
   }
 }

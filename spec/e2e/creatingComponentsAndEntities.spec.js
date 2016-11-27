@@ -92,4 +92,18 @@ describe('Adding components', () => {
   describe('Adding functions as component definitions', () => {
     it('should call the function when creating new instances, and store the result');
   });
+
+  describe('Adding a non-existant component to an object', () => {
+    it('should act as if the component was not added', () => {
+      const entity = ecos.createEntity()
+        .add('nonExistantComponentA')
+        .add('nonExistantComponentB');
+
+      expect(entity.has('nonExistantComponentA')).toBe(false);
+      expect(entity.has('nonExistantComponentB')).toBe(false);
+
+      expect(entity.get('nonExistantComponentA')).not.toBeDefined();
+      expect(entity.get('nonExistantComponentB')).not.toBeDefined();
+    });
+  });
 });
