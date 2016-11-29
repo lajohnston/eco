@@ -1,6 +1,6 @@
 import { ComponentCollection } from './components/ComponentCollection';
 import { Component } from './components/Component';
-import { Ecos } from './Ecos';
+import { Eco } from './Eco';
 import { EntityFactory } from './entities/EntityFactory';
 import { Entity } from './entities/Entity';
 import { NullComponent } from './components/NullComponent';
@@ -30,13 +30,13 @@ function createEntityFactory(componentCollection) {
   );
 }
 
-function createEcosInstance() {
+function createEcoInstance() {
   const componentCollection = createComponentCollection();
 
-  return new Ecos(
+  return new Eco(
     createEntityFactory(componentCollection),
     componentCollection
   );
 }
 
-export default createEcosInstance;
+export default createEcoInstance;

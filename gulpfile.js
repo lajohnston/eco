@@ -1,5 +1,5 @@
 /**
- * Ecos gulpfile
+ * Eco gulpfile
  *
  * Available tasks:
  *      gulp.lint
@@ -30,7 +30,7 @@ function karmaErrorHandler(err, done) {
  */
 function bundleJs() {
   return gulp.src(['src/**/*.js', 'src/index.js'])
-    .pipe(plugins.concat('ecos.js'))
+    .pipe(plugins.concat('eco.js'))
     .pipe(plugins.replace(/import { .* } from '.*';/g, ''))
     .pipe(plugins.replace('export default class', 'class'))
     .pipe(plugins.replace(/export default .*/g, ''));
@@ -43,7 +43,7 @@ gulp.task('lint', () => (
 ));
 
 gulp.task('build', gulp.parallel('lint', () => {
-  const wrapper = '(function() { <%= contents %> window.Ecos = function () { return createEcosInstance(); };})();';
+  const wrapper = '(function() { <%= contents %> window.Eco = function () { return createEcoInstance(); };})();';
 
   return bundleJs()
     .pipe(plugins.babel({
@@ -52,7 +52,7 @@ gulp.task('build', gulp.parallel('lint', () => {
     .pipe(plugins.wrap(wrapper))
     .pipe(gulp.dest('dist'))
     .pipe(plugins.uglify())
-    .pipe(plugins.rename('ecos.min.js'))
+    .pipe(plugins.rename('eco.min.js'))
     .pipe(gulp.dest('dist'));
 }));
 

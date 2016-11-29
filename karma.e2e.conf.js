@@ -9,7 +9,7 @@ module.exports = (config) => {
 
     // list of files / patterns to load in the browser
     files: [
-      'dist/ecos.min.js',
+      'dist/eco.min.js',
       'spec/e2e/**/*.spec.js',
     ],
 

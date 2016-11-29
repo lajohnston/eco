@@ -1,4 +1,4 @@
-export default class Ecos {
+export default class Eco {
   constructor(entityFactory, componentCollection) {
     this.entityFactory = entityFactory;
     this.componentCollection = componentCollection;

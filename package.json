@@ -1,5 +1,5 @@
 {
-  "name": "ecos",
+  "name": "eco",
   "version": "0.0.0",
   "description": "Entity-component-system microframework",
   "main": "index.js",

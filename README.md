@@ -1,6 +1,6 @@
-# Ecos Entity Component System
+# Eco Entity Component System
 
-Ecos is an entity component system for JavaScript/HTML5 games that lets you
+Eco is an entity component system for JavaScript/HTML5 games that lets you
 define your components and game logic as decoupled POJO objects and functions.
 You can use it as part of a custom game engine, and also as a glue layer to
 keep your game logic decoupled from the game framework and libraries of your
@@ -15,9 +15,9 @@ Components are data structures. They don't need to contain any logic, so you
 can define them either as simple objects containing default values, or as a
 function that returns the object data.
 
-    var ecos = new Ecos();
+    var eco = new Eco();
 
-    ecos.addComponent(
+    eco.addComponent(
         'position',     // the name of the component
         {               // the component's default values
             x: 0,
@@ -43,7 +43,7 @@ a class and return a new instance from the function.
 
     // The function will be called each time a component is added to an entity
     // Each entity will therefore have a new instance of Vector
-    ecos.components.add('vector', function(data) {
+    eco.addComponent('vector', function(data) {
         return new Vector(data.x, data.y);
     });
 
@@ -52,7 +52,7 @@ a class and return a new instance from the function.
 Entities are simply a collection of components. Components can be added and
 removed at runtime allowing behaviour to be changed dynamically.
 
-    var entity = ecos.createEntity()
+    var entity = eco.createEntity()
         .add('isPlayer')
         .add('position', { x: 0, y: 0 })
         .add('vector', { x: 0, y: 0 })
@@ -71,12 +71,12 @@ removed at runtime allowing behaviour to be changed dynamically.
 
 ## Systems
 
-Systems are your game logic and behaviour. Ecos provides iterators that iterate
+Systems are your game logic and behaviour. Eco provides iterators that iterate
 through entities that contain certain combination of components.
 
     // Create an iterator for all entities that have both a position and a
     // vector component
-    var moveableEntities = ecos.createIterator(['position', 'vector']);
+    var moveableEntities = eco.createIterator(['position', 'vector']);
 
     // In your update loop
     moveableEntities.each(function(position, vector, entity) {

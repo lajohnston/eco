@@ -1,13 +1,13 @@
 describe('Adding components', () => {
-  let ecos;
+  let eco;
 
   beforeEach(() => {
-    ecos = new window.Ecos();
+    eco = new window.Eco();
   });
 
-  describe('ecos.addComponent()', () => {
+  describe('eco.addComponent()', () => {
     it('should return a component instance that stores data for entities', () => {
-      const component = ecos.addComponent('foo', {});
+      const component = eco.addComponent('foo', {});
 
       component.set(1, { foo: 'foo1' });
       component.set(2, { foo: 'foo2' });
@@ -23,13 +23,13 @@ describe('Adding components', () => {
       let entityB;
 
       beforeEach(() => {
-        oldComponent = ecos.addComponent('foo', { componentName: 'oldFoo' });
-        entityA = ecos.createEntity()
+        oldComponent = eco.addComponent('foo', { componentName: 'oldFoo' });
+        entityA = eco.createEntity()
           .add('foo', { entityName: 'entityA' });
 
-        newComponent = ecos.addComponent('foo', { componentName: 'newFoo' });
+        newComponent = eco.addComponent('foo', { componentName: 'newFoo' });
 
-        entityB = ecos.createEntity()
+        entityB = eco.createEntity()
           .add('foo', { entityName: 'entityB' });
       });
 
@@ -60,9 +60,9 @@ describe('Adding components', () => {
           fooValue: 'defaultFooValue',
         };
 
-        ecos.addComponent('foo', defaultData);
+        eco.addComponent('foo', defaultData);
 
-        const entity = ecos.createEntity()
+        const entity = eco.createEntity()
           .add('foo', nonObject);
 
         expect(entity.get('foo')).not.toBe(defaultData); // it should be a copy
@@ -76,9 +76,9 @@ describe('Adding components', () => {
         barValue: 'defaultBarValue',
       };
 
-      ecos.addComponent('foo', defaultData);
+      eco.addComponent('foo', defaultData);
 
-      const entity = ecos.createEntity()
+      const entity = eco.createEntity()
         .add('foo', {
           barValue: 'newBarValue',
         });
@@ -93,12 +93,12 @@ describe('Adding components', () => {
     it('should call the function when creating new instances, and store the result', () => {
       const entityData = {};
 
-      ecos.addComponent('foo', (data) => {
+      eco.addComponent('foo', (data) => {
         expect(data).toBe(entityData);
         return 'foo';
       });
 
-      const entity = ecos.createEntity()
+      const entity = eco.createEntity()
         .add('foo', entityData);
 
       expect(entity.get('foo')).toBe('foo');
@@ -108,9 +108,9 @@ describe('Adding components', () => {
   describe('Not passing any value as the component definition', () => {
     [undefined, null, false, true, function foo() {}, 1, '', 'foo', {}].forEach((value) => {
       it('should store and return any data passed to it', () => {
-        ecos.addComponent('foo');
+        eco.addComponent('foo');
 
-        const entity = ecos.createEntity()
+        const entity = eco.createEntity()
           .add('foo', value);
 
         expect(entity.get('foo')).toBe(value);
@@ -120,7 +120,7 @@ describe('Adding components', () => {
 
   describe('Adding a non-existant component to an object', () => {
     it('should act as if the component was not added', () => {
-      const entity = ecos.createEntity()
+      const entity = eco.createEntity()
         .add('nonExistantComponentA')
         .add('nonExistantComponentB');
 

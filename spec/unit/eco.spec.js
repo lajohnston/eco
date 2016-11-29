@@ -1,14 +1,14 @@
-import Ecos from '../../src/Ecos';
+import Eco from '../../src/Eco';
 
-describe('Ecos', () => {
-  let ecos;
+describe('Eco', () => {
+  let eco;
   let entityFactory;
   let componentCollection;
 
   beforeEach(() => {
     entityFactory = jasmine.createSpyObj('entityFactory', ['create']);
     componentCollection = jasmine.createSpyObj('componentCollection', ['set']);
-    ecos = new Ecos(entityFactory, componentCollection);
+    eco = new Eco(entityFactory, componentCollection);
   });
 
   describe('createEntity', () => {
@@ -17,7 +17,7 @@ describe('Ecos', () => {
 
       entityFactory.create.and.returnValue(entity);
 
-      expect(ecos.createEntity()).toBe(entity);
+      expect(eco.createEntity()).toBe(entity);
       expect(entityFactory.create).toHaveBeenCalled();
     });
   });
@@ -29,7 +29,7 @@ describe('Ecos', () => {
 
       componentCollection.set.and.returnValue(result);
 
-      expect(ecos.addComponent('foo', data)).toBe(result);
+      expect(eco.addComponent('foo', data)).toBe(result);
       expect(componentCollection.set).toHaveBeenCalledWith('foo', data);
     });
   });
