@@ -118,6 +118,19 @@ describe('Adding components', () => {
     });
   });
 
+  describe('Passing a non-object or function as the component definition', () => {
+    [null, false, true, 1, '', 'foo'].forEach((constantValue) => {
+      it('should treat the definition as a constant and always return this value', () => {
+        eco.addComponent('foo', constantValue);
+
+        const entity = eco.createEntity()
+          .add('foo', 'data that will be ignored');
+
+        expect(entity.get('foo')).toBe(constantValue);
+      });
+    });
+  });
+
   describe('Adding a non-existant component to an object', () => {
     it('should act as if the component was not added', () => {
       const entity = eco.createEntity()

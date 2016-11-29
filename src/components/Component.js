@@ -1,14 +1,7 @@
 export default class Component {
   constructor(definition) {
     this.entities = {};
-
-    if (typeof definition === 'function') {
-      this.factory = definition;
-    } else if (typeof definition === 'object') {
-      this.factory = data => Component.mergeObjects(definition, data);
-    } else {
-      this.factory = data => data;
-    }
+    this.factory = getFactory(definition); // eslint-disable-line no-use-before-define
   }
 
   /**
@@ -70,4 +63,18 @@ export default class Component {
 
     return instance;
   }
+}
+
+function getFactory(definition) {
+  const type = typeof definition;
+
+  if (type === 'function') {
+    return definition;
+  } else if (type === 'object' && definition !== null) {
+    return data => Component.mergeObjects(definition, data);
+  } else if (type === 'undefined') {
+    return data => data;
+  }
+
+  return () => definition;
 }

@@ -72,6 +72,17 @@ describe('Component', () => {
     });
   });
 
+  describe('get() with a non-object or function component definition', () => {
+    [null, false, true, 1, '', 'foo'].forEach((constantValue) => {
+      it('should return the definition value as a constant', () => {
+        const component = new Component(constantValue);
+
+        component.set(1, 'foo');  // it should ignore this value
+        expect(component.get(1)).toBe(constantValue);
+      });
+    });
+  });
+
   describe('has()', () => {
     it('should return true if the component contains data for the entity', () => {
       const component = new Component({});
