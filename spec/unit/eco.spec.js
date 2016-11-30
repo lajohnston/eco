@@ -11,7 +11,7 @@ describe('Eco', () => {
     eco = new Eco(entityFactory, componentCollection);
   });
 
-  describe('createEntity', () => {
+  describe('createEntity()', () => {
     it('should return a new entity instance from the entity factory', () => {
       const entity = {};
 
@@ -22,14 +22,14 @@ describe('Eco', () => {
     });
   });
 
-  describe('addComponent', () => {
+  describe('createComponent()', () => {
     it('should add the component to the component collection and return the result', () => {
       const data = {};
       const result = {};
 
       componentCollection.set.and.returnValue(result);
 
-      expect(eco.addComponent('foo', data)).toBe(result);
+      expect(eco.createComponent('foo', data)).toBe(result);
       expect(componentCollection.set).toHaveBeenCalledWith('foo', data);
     });
   });

@@ -5,14 +5,14 @@ export default class Eco {
   }
 
   /**
-   * Adds a component definition
+   * Creates a component definition
    *
    * @param {string}  name  the unique name for the component
    * @param {mixed}   data  the default data for the component
    *
    * @returns {object} the component object
    */
-  addComponent(name, data) {
+  createComponent(name, data) {
     return this.componentCollection.set(name, data);
   }
 

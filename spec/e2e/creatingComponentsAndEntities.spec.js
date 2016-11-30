@@ -5,9 +5,9 @@ describe('Adding components and entities', () => {
     eco = new window.Eco();
   });
 
-  describe('Adding new components with eco.addComponent()', () => {
+  describe('Adding new components with eco.createComponent()', () => {
     it('should return a component instance that stores data for entities', () => {
-      const component = eco.addComponent('foo', {});
+      const component = eco.createComponent('foo', {});
 
       component.set(1, { foo: 'foo1' });
       component.set(2, { foo: 'foo2' });
@@ -17,18 +17,18 @@ describe('Adding components and entities', () => {
     });
   });
 
-  describe('Redefining existing components with eco.addComponent()', () => {
+  describe('Redefining existing components with eco.createComponent()', () => {
     let oldComponent;
     let newComponent;
     let entityA;
     let entityB;
 
     beforeEach(() => {
-      oldComponent = eco.addComponent('foo', { componentName: 'oldFoo' });
+      oldComponent = eco.createComponent('foo', { componentName: 'oldFoo' });
       entityA = eco.createEntity()
         .add('foo', { entityName: 'entityA' });
 
-      newComponent = eco.addComponent('foo', { componentName: 'newFoo' });
+      newComponent = eco.createComponent('foo', { componentName: 'newFoo' });
 
       entityB = eco.createEntity()
         .add('foo', { entityName: 'entityB' });
@@ -60,7 +60,7 @@ describe('Adding components and entities', () => {
           fooValue: 'defaultFooValue',
         };
 
-        eco.addComponent('foo', defaultData);
+        eco.createComponent('foo', defaultData);
 
         const entity = eco.createEntity()
           .add('foo', nonObject);
@@ -76,7 +76,7 @@ describe('Adding components and entities', () => {
         barValue: 'defaultBarValue',
       };
 
-      eco.addComponent('foo', defaultData);
+      eco.createComponent('foo', defaultData);
 
       const entity = eco.createEntity()
         .add('foo', {
@@ -93,7 +93,7 @@ describe('Adding components and entities', () => {
     it('should call the function when creating new instances, and store the result', () => {
       const entityData = {};
 
-      eco.addComponent('foo', (data) => {
+      eco.createComponent('foo', (data) => {
         expect(data).toBe(entityData);
         return 'foo';
       });
@@ -108,7 +108,7 @@ describe('Adding components and entities', () => {
   describe('Components defined by a name only', () => {
     [undefined, null, false, true, function foo() {}, 1, '', 'foo', {}].forEach((value) => {
       it('should store and return any data passed to it', () => {
-        eco.addComponent('foo');
+        eco.createComponent('foo');
 
         const entity = eco.createEntity()
           .add('foo', value);
@@ -121,7 +121,7 @@ describe('Adding components and entities', () => {
   describe('Components defined by a primitive value', () => {
     [null, false, true, 1, '', 'foo'].forEach((constantValue) => {
       it('should ignore data passed to it and always return the primitive value', () => {
-        eco.addComponent('foo', constantValue);
+        eco.createComponent('foo', constantValue);
 
         const entity = eco.createEntity()
           .add('foo', 'this data should be ignored');

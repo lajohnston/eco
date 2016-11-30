@@ -17,7 +17,7 @@ function that returns the object data.
 
     var eco = new Eco();
 
-    eco.addComponent(
+    eco.createComponent(
         'position',     // the name of the component
         {               // the component's default values
             x: 0,
@@ -43,7 +43,7 @@ a class and return a new instance from the function.
 
     // The function will be called each time a component is added to an entity
     // Each entity will therefore have a new instance of Vector
-    eco.addComponent('vector', function(data) {
+    eco.createComponent('vector', function(data) {
         return new Vector(data.x, data.y);
     });
 
