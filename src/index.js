@@ -3,6 +3,7 @@ import { Component } from './components/Component';
 import { Eco } from './Eco';
 import { EntityFactory } from './entities/EntityFactory';
 import { Entity } from './entities/Entity';
+import { Iterator } from './entities/Iterator';
 import { NullComponent } from './components/NullComponent';
 
 function createInstanceFactory(Newable) {
@@ -34,8 +35,9 @@ function createEcoInstance() {
   const componentCollection = createComponentCollection();
 
   return new Eco(
+    componentCollection,
     createEntityFactory(componentCollection),
-    componentCollection
+    createInstanceFactory(Iterator)
   );
 }
 

@@ -144,4 +144,8 @@ describe('Adding components and entities', () => {
       expect(entity.get('nonExistantComponentB')).not.toBeDefined();
     });
   });
+
+  describe("Adding components to entities using the 'with' syntax", () => {
+    it('should add the components to the entity');
+  });
 });

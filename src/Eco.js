@@ -1,7 +1,8 @@
 export default class Eco {
-  constructor(entityFactory, componentCollection) {
-    this.entityFactory = entityFactory;
+  constructor(componentCollection, entityFactory, iteratorFactory) {
     this.componentCollection = componentCollection;
+    this.entityFactory = entityFactory;
+    this.iteratorFactory = iteratorFactory;
   }
 
   /**
@@ -10,7 +11,7 @@ export default class Eco {
    * @param {string}  name  the unique name for the component
    * @param {mixed}   data  the default data for the component
    *
-   * @returns {object} the component object
+   * @returns {Component} the component object
    */
   createComponent(name, data) {
     return this.componentCollection.set(name, data);
@@ -23,5 +24,16 @@ export default class Eco {
    */
   createEntity() {
     return this.entityFactory.create();
+  }
+
+  /**
+   * Create a new iterator for the entities with all the given components
+   *
+   * @param   {array} components  the names of the components
+   *
+   * @returns {Iterator}  the iterator
+   */
+  createIterator(components) {
+    return this.iteratorFactory.create(components);
   }
 }
