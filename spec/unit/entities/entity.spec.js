@@ -1,4 +1,4 @@
-import Entity from '../../src/entities/Entity';
+import Entity from '../../../src/entities/Entity';
 
 describe('Entity', () => {
   let entity;

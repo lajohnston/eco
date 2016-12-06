@@ -1,4 +1,4 @@
-import EntityFactory from '../../src/entities/EntityFactory';
+import EntityFactory from '../../../src/entities/EntityFactory';
 
 describe('create()', () => {
   let factory;
