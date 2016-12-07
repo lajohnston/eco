@@ -34,6 +34,6 @@ export default class Eco {
    * @returns {Iterator}  the iterator
    */
   createIterator(components) {
-    return this.iteratorFactory.create(components);
+    return this.iteratorFactory.create(this.componentCollection, components);
   }
 }

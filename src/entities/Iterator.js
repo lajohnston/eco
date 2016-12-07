@@ -2,8 +2,13 @@
  * Iterates over entities that have all the given components
  */
 export default class Iterator {
-  constructor(components) {
-    this.components = components;
+  constructor(componentCollection, components) {
+    this.componentsCollection = componentCollection;
+    this.components = [];
+
+    components.forEach((componentName) => {
+      this.components.push(componentCollection.get(componentName));
+    });
   }
 
   /**
@@ -16,7 +21,26 @@ export default class Iterator {
    *                  entity
    */
   getData() {
-    return [];
+    const data = [];
+
+    this.components[0].each((entityId, firstComponentData) => {
+      const entityData = [firstComponentData];
+
+      // Check for entity in all the other components
+      for (let i = 1; i < this.components.length; i += 1) {
+        const checkComponent = this.components[i];
+
+        if (!checkComponent.has(entityId)) {
+          return; // next entity
+        }
+
+        entityData.push(checkComponent.get(entityId));
+      }
+
+      data.push(entityData);
+    });
+
+    return data;
   }
 
   /**
