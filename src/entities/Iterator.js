@@ -2,9 +2,10 @@
  * Iterates over entities that have all the given components
  */
 export default class Iterator {
-  constructor(componentCollection, components) {
+  constructor(componentCollection, components, entityFactory) {
     this.componentsCollection = componentCollection;
     this.components = [];
+    this.entityFactory = entityFactory;
 
     components.forEach((componentName) => {
       this.components.push(componentCollection.get(componentName));
@@ -36,6 +37,11 @@ export default class Iterator {
 
         entityData.push(checkComponent.get(entityId));
       }
+
+      // Add an entity proxy as the last value
+      entityData.push(
+        this.entityFactory.create(this.componentsCollection, entityId)
+      );
 
       data.push(entityData);
     });

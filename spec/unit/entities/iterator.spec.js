@@ -3,6 +3,7 @@ import Iterator from '../../../src/entities/Iterator';
 describe('Entity iterator', () => {
   let componentCollection;
   let components;
+  let entityFactory;
 
   beforeEach(() => {
     components = {
@@ -12,6 +13,8 @@ describe('Entity iterator', () => {
 
     componentCollection = jasmine.createSpyObj('componentCollection', ['get']);
     componentCollection.get.and.callFake(name => components[name]);
+
+    entityFactory = jasmine.createSpyObj('entityFactory', ['create']);
   });
 
   describe('getData()', () => {
@@ -27,7 +30,7 @@ describe('Entity iterator', () => {
       components.bar.has.and.callFake(entityId => entityId < 3);
       components.bar.get.and.callFake(entityId => `barEntity${entityId}`);
 
-      const iterator = new Iterator(componentCollection, ['foo', 'bar']);
+      const iterator = new Iterator(componentCollection, ['foo', 'bar'], entityFactory);
       const result = iterator.getData();
 
       expect(components.foo.each).toHaveBeenCalled();
@@ -43,12 +46,30 @@ describe('Entity iterator', () => {
       expect(result[1][1]).toBe('barEntity2');
     });
 
-    it('should include an entity proxy as the last value in each array');
+    it('should include an entity proxy as the last value in each array', () => {
+      const entityId = 123;
+
+      components.foo.each.and.callFake((callback) => {
+        callback(entityId, {});
+      });
+
+      components.bar.has.and.returnValue(true);
+      components.bar.get.and.returnValue({});
+
+      const entity = {};
+      entityFactory.create.and.returnValue(entity);
+
+      const iterator = new Iterator(componentCollection, ['foo', 'bar'], entityFactory);
+      const result = iterator.getData();
+
+      expect(result[0][2]).toBe(entity);
+      expect(entityFactory.create).toHaveBeenCalledWith(componentCollection, entityId);
+    });
   });
 
   describe('each()', () => {
     it('should call the callback for each record returned by getData()', () => {
-      const iterator = new Iterator(componentCollection, ['foo', 'bar']);
+      const iterator = new Iterator(componentCollection, ['foo', 'bar'], entityFactory);
       const data = [
         ['a', 'b', 'c'],
         ['d', 'e', 'f'],
