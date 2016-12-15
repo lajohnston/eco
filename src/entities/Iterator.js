@@ -2,10 +2,10 @@
  * Iterates over entities that have all the given components
  */
 export default class Iterator {
-  constructor(componentCollection, components, entityFactory) {
+  constructor(componentCollection, entityFactory, components) {
     this.componentsCollection = componentCollection;
-    this.components = [];
     this.entityFactory = entityFactory;
+    this.components = [];
 
     components.forEach((componentName) => {
       this.components.push(componentCollection.get(componentName));

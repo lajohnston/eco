@@ -43,7 +43,11 @@ describe('Eco', () => {
       iteratorFactory.create.and.returnValue(iterator);
 
       expect(eco.createIterator(['foo', 'bar'])).toBe(iterator);
-      expect(iteratorFactory.create).toHaveBeenCalledWith(componentCollection, ['foo', 'bar']);
+      expect(iteratorFactory.create).toHaveBeenCalledWith(
+        componentCollection,
+        entityFactory,
+        ['foo', 'bar']
+      );
     });
   });
 });

@@ -30,7 +30,7 @@ describe('Entity iterator', () => {
       components.bar.has.and.callFake(entityId => entityId < 3);
       components.bar.get.and.callFake(entityId => `barEntity${entityId}`);
 
-      const iterator = new Iterator(componentCollection, ['foo', 'bar'], entityFactory);
+      const iterator = new Iterator(componentCollection, entityFactory, ['foo', 'bar']);
       const result = iterator.getData();
 
       expect(components.foo.each).toHaveBeenCalled();
@@ -59,7 +59,7 @@ describe('Entity iterator', () => {
       const entity = {};
       entityFactory.create.and.returnValue(entity);
 
-      const iterator = new Iterator(componentCollection, ['foo', 'bar'], entityFactory);
+      const iterator = new Iterator(componentCollection, entityFactory, ['foo', 'bar']);
       const result = iterator.getData();
 
       expect(result[0][2]).toBe(entity);
@@ -69,7 +69,7 @@ describe('Entity iterator', () => {
 
   describe('each()', () => {
     it('should call the callback for each record returned by getData()', () => {
-      const iterator = new Iterator(componentCollection, ['foo', 'bar'], entityFactory);
+      const iterator = new Iterator(componentCollection, entityFactory, ['foo', 'bar']);
       const data = [
         ['a', 'b', 'c'],
         ['d', 'e', 'f'],
