@@ -1,8 +1,8 @@
 import { ComponentCollection } from './components/ComponentCollection';
 import { Component } from './components/Component';
 import { Eco } from './Eco';
-import { EntityFactory } from './entities/EntityFactory';
 import { Entity } from './entities/Entity';
+import { IdFactory } from './entities/IdFactory';
 import { Iterator } from './entities/Iterator';
 import { NullComponent } from './components/NullComponent';
 
@@ -24,19 +24,13 @@ function createComponentCollection() {
   return collection;
 }
 
-function createEntityFactory(componentCollection) {
-  return new EntityFactory(
-    createInstanceFactory(Entity),
-    componentCollection || createComponentCollection()
-  );
-}
-
 function createEcoInstance() {
   const componentCollection = createComponentCollection();
 
   return new Eco(
     componentCollection,
-    createEntityFactory(componentCollection),
+    new IdFactory(1),
+    createInstanceFactory(Entity),
     createInstanceFactory(Iterator)
   );
 }

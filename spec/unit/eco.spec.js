@@ -2,25 +2,32 @@ import Eco from '../../src/Eco';
 
 describe('Eco', () => {
   let eco;
+  let componentCollection;
+  let idFactory;
   let entityFactory;
   let iteratorFactory;
-  let componentCollection;
 
   beforeEach(() => {
+    componentCollection = jasmine.createSpyObj('componentCollection', ['set']);
+    idFactory = jasmine.createSpyObj('idFactory', ['create']);
     entityFactory = jasmine.createSpyObj('entityFactory', ['create']);
     iteratorFactory = jasmine.createSpyObj('iteratorFactory', ['create']);
-    componentCollection = jasmine.createSpyObj('componentCollection', ['set']);
-    eco = new Eco(componentCollection, entityFactory, iteratorFactory);
+
+    eco = new Eco(componentCollection, idFactory, entityFactory, iteratorFactory);
   });
 
   describe('createEntity()', () => {
     it('should return a new entity instance from the entity factory', () => {
       const entity = {};
 
+      idFactory.create.and.returnValue(123);
       entityFactory.create.and.returnValue(entity);
 
       expect(eco.createEntity()).toBe(entity);
-      expect(entityFactory.create).toHaveBeenCalled();
+      expect(entityFactory.create).toHaveBeenCalledWith(
+        123,
+        componentCollection
+      );
     });
   });
 

@@ -1,6 +1,7 @@
 export default class Eco {
-  constructor(componentCollection, entityFactory, iteratorFactory) {
+  constructor(componentCollection, idFactory, entityFactory, iteratorFactory) {
     this.componentCollection = componentCollection;
+    this.idFactory = idFactory;
     this.entityFactory = entityFactory;
     this.iteratorFactory = iteratorFactory;
   }
@@ -23,7 +24,10 @@ export default class Eco {
    * @returns {Entity} the new entity instance
    */
   createEntity() {
-    return this.entityFactory.create();
+    return this.entityFactory.create(
+      this.idFactory.create(),
+      this.componentCollection
+    );
   }
 
   /**
