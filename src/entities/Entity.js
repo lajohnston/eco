@@ -3,11 +3,21 @@
  * and retrieval of components for a given entity id
  */
 export default class Entity {
+  /**
+   * @param {mixed} id  the unique id, either a string or a number
+   * @param {Object}  componentCollection the component collection
+   */
   constructor(id, componentCollection) {
-    this.id = id;
+    // Convert id to string to match ids used by component collection
+    this.id = typeof id === 'number' ? id.toString() : id;
     this.components = componentCollection;
   }
 
+  /**
+   * Returns the entity's unique id
+   *
+   * @returns {string} the unique identifier
+   */
   getId() {
     return this.id;
   }

@@ -12,6 +12,16 @@ describe('Entity', () => {
     entity = new Entity(100, componentCollection);
   });
 
+  describe('getId()', () => {
+    it(
+      'should return numeric ids as strings to match the ids used by ' +
+      'the componentCollection'
+    , () => {
+      // this ensures the id matches the string ids used by componentCollection
+      expect(entity.getId()).toBe('100');
+    });
+  });
+
   describe('get()', () => {
     it('should return the component data for the entity', () => {
       const data = {};
