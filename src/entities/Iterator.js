@@ -40,7 +40,7 @@ export default class Iterator {
 
       // Add an entity proxy as the last value
       entityData.push(
-        this.entityFactory.create(this.componentsCollection, entityId)
+        this.entityFactory.create(entityId, this.componentsCollection)
       );
 
       data.push(entityData);

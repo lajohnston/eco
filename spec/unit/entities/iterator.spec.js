@@ -63,7 +63,10 @@ describe('Entity iterator', () => {
       const result = iterator.getData();
 
       expect(result[0][2]).toBe(entity);
-      expect(entityFactory.create).toHaveBeenCalledWith(componentCollection, entityId);
+      expect(entityFactory.create).toHaveBeenCalledWith(
+        entityId,
+        componentCollection
+      );
     });
   });
 

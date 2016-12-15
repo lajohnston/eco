@@ -22,9 +22,9 @@ describe('Iterating over entities', () => {
       iter.each((foo, bar, entity) => {
         const expectedEntity = matching[count];
 
-        expect(entity.getId()).toBe(expectedEntity.getId());
         expect(foo).toBe(expectedEntity.get('foo'));
         expect(bar).toBe(expectedEntity.get('bar'));
+        expect(entity.getId()).toBe(expectedEntity.getId());
 
         count += 1;
       });
