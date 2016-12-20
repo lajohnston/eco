@@ -10,17 +10,17 @@ describe('Iterating over entities', () => {
 
   describe('each()', () => {
     it('should call the callback with the component data for each entity that has all the given components', () => {
-      // Create entities with foo and bar components
-      const matching = [
+      const entities = [
         eco.createEntity().add('foo', {}).add('bar', {}),
         eco.createEntity().add('foo', {}).add('bar', {}),
       ];
 
-      let count = 0;
       const iter = eco.createIterator(['foo', 'bar']);
 
+      let count = 0;
+
       iter.each((foo, bar, entity) => {
-        const expectedEntity = matching[count];
+        const expectedEntity = entities[count];
 
         expect(foo).toBe(expectedEntity.get('foo'));
         expect(bar).toBe(expectedEntity.get('bar'));
@@ -29,12 +29,44 @@ describe('Iterating over entities', () => {
         count += 1;
       });
 
-      expect(count).toBe(2);
+      expect(count).toBe(entities.length);
     });
 
-    it('should return all the entities for a component if only one component has been given');
+    it('should return all the entities for a component if only one component has been given', () => {
+      const entities = [
+        eco.createEntity().add('foo', {}),
+        eco.createEntity().add('foo', {}),
+      ];
 
-    it('should ignore entities that do not have all the components');
+      const iter = eco.createIterator(['foo']);
+
+      let count = 0;
+
+      iter.each((foo, entity) => {
+        const expectedEntity = entities[count];
+
+        expect(foo).toBe(expectedEntity.get('foo'));
+        expect(entity.getId()).toBe(expectedEntity.getId());
+
+        count += 1;
+      });
+
+      expect(count).toBe(entities.length);
+    });
+
+    it('should ignore entities that do not have all the components', () => {
+      eco.createEntity()
+        .add('foo', {});
+
+      const iter = eco.createIterator(['foo', 'bar']);
+      let count = 0;
+
+      iter.each(() => {
+        count += 1;
+      });
+
+      expect(count).toBe(0);
+    });
 
     it('should ignore entities that have had a required component removed since the last iteration');
 
