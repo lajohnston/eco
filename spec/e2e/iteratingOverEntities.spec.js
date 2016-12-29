@@ -54,6 +54,29 @@ describe('Iterating over entities', () => {
       expect(count).toBe(entities.length);
     });
 
+    it('should iterate over all entities that have components if no components are given', () => {
+      const entities = [
+        eco.createEntity().add('foo', {}),
+        eco.createEntity().add('bar', {}),
+        eco.createEntity().add('baz', {}),
+      ];
+
+      eco.createEntity(); // entity with no components
+
+      const iter = eco.createIterator();
+
+      let count = 0;
+
+      iter.each((entity) => {
+        const expectedEntity = entities[count];
+        expect(entity.getId()).toBe(expectedEntity.getId());
+
+        count += 1;
+      });
+
+      expect(count).toBe(entities.length);
+    });
+
     it('should ignore entities that do not have all the components', () => {
       eco.createEntity()
         .add('foo', {});

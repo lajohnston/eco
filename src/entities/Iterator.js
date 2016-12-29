@@ -2,14 +2,16 @@
  * Iterates over entities that have all the given components
  */
 export default class Iterator {
-  constructor(componentCollection, entityFactory, components) {
+  constructor(componentCollection, entityFactory, componentNames) {
     this.componentsCollection = componentCollection;
     this.entityFactory = entityFactory;
     this.components = [];
 
-    components.forEach((componentName) => {
-      this.components.push(componentCollection.get(componentName));
-    });
+    if (Array.isArray(componentNames)) {
+      componentNames.forEach((componentName) => {
+        this.components.push(componentCollection.get(componentName));
+      });
+    }
   }
 
   /**
@@ -22,6 +24,10 @@ export default class Iterator {
    *                  entity
    */
   getData() {
+    if (this.components.length === 0) {
+      return [];
+    }
+
     const data = [];
 
     this.components[0].each((entityId, firstComponentData) => {

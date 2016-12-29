@@ -68,6 +68,13 @@ describe('Entity iterator', () => {
         componentCollection
       );
     });
+
+    ['string', 123, {}, function blah() {}, null, true, false, undefined].forEach((nonArray) => {
+      it('should return an empty array if no component array has been given to iterate over', () => {
+        const iterator = new Iterator(componentCollection, entityFactory, nonArray);
+        expect(iterator.getData()).toEqual([]);
+      });
+    });
   });
 
   describe('each()', () => {
