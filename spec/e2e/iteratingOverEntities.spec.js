@@ -110,8 +110,26 @@ describe('Iterating over entities', () => {
       });
     });
 
-    it('should include entities that have had a component added since the last iteration and now qualify');
+    it('should include entities that have had a component added since the last iteration and now qualify', () => {
+      const entity = eco.createEntity()
+        .add('foo');
 
-    it('should not call the callback if the component list is not an array');
+      const barIter = eco.createIterator(['bar']);
+
+      barIter.each(() => {
+        fail('Iterator callback was not expected to be called');
+      });
+
+      entity.add('bar');
+
+      let count = 0;
+
+      barIter.each((bar, entityArg) => {
+        expect(entityArg.getId()).toBe(entity.getId());
+        count += 1;
+      });
+
+      expect(count).toBe(1);
+    });
   });
 });
