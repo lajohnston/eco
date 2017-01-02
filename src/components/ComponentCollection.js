@@ -54,6 +54,40 @@ export default class ComponentCollection {
   }
 
   /**
+   * Calls the callback for each component in the collection, with the
+   * component's name as the first argument and the component itself
+   * as the second argument
+   *
+   * @param {Function}  callback called for each component in the collection
+   *
+   */
+  each(callback) {
+
+  }
+
+  /**
+   * Returns all data indexed by entity id and component name
+   *
+   * @returns {Object}  objects indexed by entity id, which contain
+   *                    componentName: data pairs
+   */
+  getDataByEntity() {
+    const entities = {};
+
+    this.each((componentName, component) => {
+      component.each((entityId, data) => {
+        if (typeof entities[entityId] === 'undefined') {
+          entities[entityId] = {};
+        }
+
+        entities[entityId][componentName] = data;
+      });
+    });
+
+    return entities;
+  }
+
+  /**
    * Indicates whether the collection contains a component with the given name
    *
    * @param   {string}  name  the component's unique name

@@ -72,4 +72,37 @@ describe('ComponentCollection', () => {
       expect(collection.getEntityIds()).toEqual(['1', '2', '3', '4']);
     });
   });
+
+  describe('getDataByEntity()', () => {
+    it('should return all component data indexed by entity id and component name', () => {
+      const fooComponent = jasmine.createSpyObj('foo', ['each']);
+      const barComponent = jasmine.createSpyObj('bar', ['each']);
+
+      // Each component
+      spyOn(collection, 'each').and.callFake((callback) => {
+        callback('foo', fooComponent);
+        callback('bar', barComponent);
+      });
+
+      fooComponent.each.and.callFake((callback) => {
+        callback('1', 'foo1');
+        callback('2', 'foo2');
+      });
+
+      barComponent.each.and.callFake((callback) => {
+        callback('1', 'bar1');
+      });
+
+      expect(collection.getDataByEntity()).toEqual({
+        1: {
+          foo: 'foo1',
+          bar: 'bar1',
+        },
+
+        2: {
+          foo: 'foo2',
+        },
+      });
+    });
+  });
 });
