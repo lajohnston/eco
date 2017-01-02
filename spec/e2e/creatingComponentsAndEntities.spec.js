@@ -150,8 +150,27 @@ describe('Adding components and entities', () => {
   });
 
   describe('Removing components from an entity', () => {
-    it('should indicate that the entity no longer has the given component');
+    it('should indicate that the entity no longer has the given component', () => {
+      eco.createComponent('foo');
 
-    it('should do nothing if the component does not exist');
+      const entity = eco.createEntity()
+        .add('foo');
+
+      expect(entity.has('foo')).toBe(true);
+
+      entity.remove('foo');
+
+      expect(entity.has('foo')).toBe(false);
+      expect(entity.get('foo')).toBe(undefined);
+    });
+
+    it('should do nothing if the component does not exist', () => {
+      const entity = eco.createEntity();
+
+      entity.remove('nonExistantComponentA');
+
+      expect(entity.has('nonExistantComponentA')).toBe(false);
+      expect(entity.get('nonExistantComponentA')).toBe(undefined);
+    });
   });
 });
