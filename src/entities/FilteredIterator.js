@@ -2,6 +2,11 @@
  * Iterates over entities that have all the given components
  */
 export default class FilteredIterator {
+  /**
+   * @param {Object}  componentCollection collection of components
+   * @param {Object}  entityFactory factory that creates entity proxies
+   * @param {Array}   components array of component names to filter by
+   */
   constructor(componentCollection, entityFactory, componentNames) {
     this.componentsCollection = componentCollection;
     this.entityFactory = entityFactory;

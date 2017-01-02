@@ -3,6 +3,7 @@ import { Component } from './components/Component';
 import { Eco } from './Eco';
 import { Entity } from './entities/Entity';
 import { IdFactory } from './entities/IdFactory';
+import { IteratorFactory } from './entities/IteratorFactory';
 import { FilteredIterator } from './entities/FilteredIterator';
 import { NullComponent } from './components/NullComponent';
 
@@ -31,7 +32,7 @@ function createEcoInstance() {
     componentCollection,
     new IdFactory(1),
     createInstanceFactory(Entity),
-    createInstanceFactory(FilteredIterator)
+    new IteratorFactory(FilteredIterator)
   );
 }
 
