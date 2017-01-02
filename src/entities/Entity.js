@@ -40,7 +40,7 @@ export default class Entity {
    * @param {string}  componentName the name of the component
    * @param {mixed}   data the data to set for the component
    *
-   * @returns {Entity} itself
+   * @returns {Object} itself
    */
   add(componentName, data) {
     this.components.get(componentName)
@@ -59,5 +59,19 @@ export default class Entity {
   has(componentName) {
     return this.components.get(componentName)
       .has(this.id);
+  }
+
+  /**
+   * Removes the specified component data for this entity
+   *
+   * @param {string}  componentName the name of the component
+   *
+   * @returns {Object} itself
+   */
+  remove(componentName) {
+    this.components.get(componentName)
+      .remove(this.id);
+
+    return this;
   }
 }

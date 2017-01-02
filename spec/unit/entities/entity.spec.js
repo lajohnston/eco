@@ -7,7 +7,7 @@ describe('Entity', () => {
 
   beforeEach(() => {
     componentCollection = jasmine.createSpyObj('ComponentCollection', ['get', 'add']);
-    component = jasmine.createSpyObj('Component', ['get', 'set', 'has']);
+    component = jasmine.createSpyObj('Component', ['get', 'set', 'has', 'remove']);
 
     entity = new Entity(100, componentCollection);
   });
@@ -59,6 +59,18 @@ describe('Entity', () => {
         expect(componentCollection.get).toHaveBeenCalledWith('foo');
         expect(component.has).toHaveBeenCalledWith(entity.getId());
       });
+    });
+  });
+
+  describe('remove()', () => {
+    it('should remove the component data for given component and return itself', () => {
+      componentCollection.get.and.returnValue(component);
+
+      const result = entity.remove('foo');
+
+      expect(result).toBe(entity);
+      expect(componentCollection.get).toHaveBeenCalledWith('foo');
+      expect(component.remove).toHaveBeenCalledWith(entity.getId());
     });
   });
 });

@@ -148,4 +148,10 @@ describe('Adding components and entities', () => {
   describe("Adding components to entities using the 'with' syntax", () => {
     it('should add the components to the entity');
   });
+
+  describe('Removing components from an entity', () => {
+    it('should indicate that the entity no longer has the given component');
+
+    it('should do nothing if the component does not exist');
+  });
 });

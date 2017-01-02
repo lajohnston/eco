@@ -83,16 +83,32 @@ describe('Iterating over entities', () => {
         .add('foo', {});
 
       const iter = eco.createIterator(['foo', 'bar']);
-      let count = 0;
 
       iter.each(() => {
-        count += 1;
+        fail('Iterator callback was not expected to be called');
       });
-
-      expect(count).toBe(0);
     });
 
-    it('should ignore entities that have had a required component removed since the last iteration');
+    it('should ignore entities that have had a required component removed since the last iteration', () => {
+      const entity = eco.createEntity()
+        .add('foo', {});
+
+      const iter = eco.createIterator(['foo']);
+
+      let firstCount = 0;
+
+      iter.each(() => {
+        firstCount += 1;
+      });
+
+      expect(firstCount).toBe(1);
+
+      entity.remove('foo');
+
+      iter.each(() => {
+        fail('Iterator callback was not expected to be called');
+      });
+    });
 
     it('should include entities that have had a component added since the last iteration and now qualify');
 
