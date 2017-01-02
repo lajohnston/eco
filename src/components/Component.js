@@ -7,7 +7,7 @@ export default class Component {
   /**
    * Get the component data belonging to a given entity
    *
-   * @param {number}  entityId  the entity's unique id
+   * @param {mixed}  entityId  the entity's unique id
    *
    * @returns {mixed} the entity's component data
    */
@@ -28,7 +28,7 @@ export default class Component {
   /**
    * Set the component data for a given entity
    *
-   * @param {number}  entityId  the entity's unique id
+   * @param {mixed}  entityId  the entity's unique id
    * @param {object}  data  the data to override the defaults
    *
    * @returns {mixed} the entity's component data
@@ -40,13 +40,22 @@ export default class Component {
   /**
    * Indicates whether the component contains data for the given entity id
    *
-   * @param   {number}  entityId  the entity's unique id
+   * @param   {mixed}  entityId  the entity's unique id
    *
    * @returns {boolean} true if the component has data for the entity,
    *                    otherwise false
    */
   has(entityId) {
     return Object.hasOwnProperty.call(this.entities, entityId);
+  }
+
+  /**
+   * Removes the data for the given entity
+   *
+   * @param   {mixed}  entityId  the entity's unique id
+   */
+  remove(entityId) {
+    delete this.entities[entityId];
   }
 
   /**

@@ -1,6 +1,13 @@
 import Component from '../../../src/components/Component';
 
 describe('Component', () => {
+  describe('get()', () => {
+    it('should return undefined if the component does not store data for the given entity', () => {
+      const component = new Component();
+      expect(component.get(1)).not.toBeDefined();
+    });
+  });
+
   describe('get() and set() with an object literal component definition', () => {
     it('should store and retrieve component data', () => {
       const component = new Component({});
@@ -126,6 +133,22 @@ describe('Component', () => {
       component.set(3);
 
       expect(component.getEntityIds()).toEqual(['1', '2', '3']);
+    });
+  });
+
+  describe('remove()', () => {
+    it('should remove the component data for the given entity id', () => {
+      const component = new Component();
+      component.set(1, {});
+      component.set(2, {});
+
+      expect(component.has(1)).toBe(true);
+
+      component.remove(1);
+
+      expect(component.has(1)).toBe(false);
+      expect(component.get(1)).not.toBeDefined();
+      expect(component.getEntityIds()).toEqual(['2']);
     });
   });
 });
