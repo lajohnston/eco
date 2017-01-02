@@ -50,5 +50,26 @@ describe('ComponentCollection', () => {
     it('should return false if the component does not exist in the collection', () => {
       expect(collection.has('foo')).toBe(false);
     });
-  })
+  });
+
+  describe('getEntityIds()', () => {
+    it('should return an array of unique entity ids that have at least one component', () => {
+      const fooComponent = jasmine.createSpyObj('foo', ['getEntityIds']);
+      const barComponent = jasmine.createSpyObj('foo', ['getEntityIds']);
+
+      let calls = 0;
+      componentFactory.create.and.callFake(() => {
+        calls += 1;
+        return calls === 1 ? fooComponent : barComponent;
+      });
+
+      collection.set('foo');
+      collection.set('bar');
+
+      fooComponent.getEntityIds.and.returnValue(['1', '2', '3']);
+      barComponent.getEntityIds.and.returnValue(['2', '3', '4']);
+
+      expect(collection.getEntityIds()).toEqual(['1', '2', '3', '4']);
+    });
+  });
 });
