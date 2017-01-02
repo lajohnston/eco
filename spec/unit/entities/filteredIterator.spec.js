@@ -1,6 +1,6 @@
-import Iterator from '../../../src/entities/Iterator';
+import Iterator from '../../../src/entities/FilteredIterator';
 
-describe('Entity iterator', () => {
+describe('Entity filtered iterator', () => {
   let componentCollection;
   let components;
   let entityFactory;

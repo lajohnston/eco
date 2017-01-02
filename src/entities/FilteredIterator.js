@@ -1,7 +1,7 @@
 /**
  * Iterates over entities that have all the given components
  */
-export default class Iterator {
+export default class FilteredIterator {
   constructor(componentCollection, entityFactory, componentNames) {
     this.componentsCollection = componentCollection;
     this.entityFactory = entityFactory;
