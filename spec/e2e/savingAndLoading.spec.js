@@ -1,6 +1,35 @@
 describe('Saving and loading', () => {
-  describe('getEntityData()', () => {
-    it('should return entity data indexed by entity id and component name');
+  let eco;
+
+  beforeEach(() => {
+    eco = new window.Eco();
+
+    eco.createComponent('foo', {});
+    eco.createComponent('bar', {});
+  });
+
+  describe('getDataByEntity()', () => {
+    it('should return entity data indexed by entity id and component name', () => {
+      eco.createEntity()
+        .add('foo', { foo: 'foo1' })
+        .add('bar', { bar: 'bar1' });
+
+      eco.createEntity()
+        .add('foo', { foo: 'foo2' })
+        .add('bar', { bar: 'bar2' });
+
+      expect(eco.getDataByEntity()).toBe({
+        1: {
+          foo: 'foo1',
+          bar: 'bar1',
+        },
+
+        2: {
+          foo: 'foo2',
+          bar: 'bar2',
+        },
+      });
+    });
   });
 
   describe('setEntityData()', () => {

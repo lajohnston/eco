@@ -44,4 +44,15 @@ export default class Eco {
       components
     );
   }
+
+  /**
+   * Returns all data indexed by entity: componentName: data
+   *
+   * @returns {Object}  data indexed by entity id. Each property is an object
+   *                    indexed by component name, with the component data as
+   *                    the value
+   */
+  getDataByEntity() {
+    return this.componentCollection.getDataByEntity();
+  }
 }

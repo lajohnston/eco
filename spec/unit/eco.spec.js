@@ -8,7 +8,7 @@ describe('Eco', () => {
   let iteratorFactory;
 
   beforeEach(() => {
-    componentCollection = jasmine.createSpyObj('componentCollection', ['set']);
+    componentCollection = jasmine.createSpyObj('componentCollection', ['set', 'getDataByEntity']);
     idFactory = jasmine.createSpyObj('idFactory', ['create']);
     entityFactory = jasmine.createSpyObj('entityFactory', ['create']);
     iteratorFactory = jasmine.createSpyObj('iteratorFactory', ['create']);
@@ -55,6 +55,15 @@ describe('Eco', () => {
         entityFactory,
         ['foo', 'bar']
       );
+    });
+  });
+
+  describe('getDataByEntity()', () => {
+    it('should return the entity data from the component collection', () => {
+      const data = {};
+      componentCollection.getDataByEntity.and.returnValue(data);
+
+      expect(eco.getDataByEntity()).toBe(data);
     });
   });
 });
