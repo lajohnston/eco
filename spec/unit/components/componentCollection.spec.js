@@ -73,6 +73,31 @@ describe('ComponentCollection', () => {
     });
   });
 
+  describe('each()', () => {
+    it('should call the callback for each component, with the component name and component object', () => {
+      // Create components
+      const components = [{}, {}];
+      let calls = 0;
+
+      componentFactory.create.and.callFake(() => {
+        calls += 1;
+        return components[calls - 1];
+      });
+
+      collection.set('foo', {});
+      collection.set('bar', {});
+
+      const result = {};
+
+      collection.each((name, component) => {
+        result[name] = component;
+      });
+
+      expect(result.foo).toBe(components[0]);
+      expect(result.bar).toBe(components[1]);
+    });
+  });
+
   describe('getDataByEntity()', () => {
     it('should return all component data indexed by entity id and component name', () => {
       const fooComponent = jasmine.createSpyObj('foo', ['each']);

@@ -4,20 +4,20 @@ describe('Saving and loading', () => {
   beforeEach(() => {
     eco = new window.Eco();
 
-    eco.createComponent('foo', {});
-    eco.createComponent('bar', {});
+    eco.createComponent('foo');
+    eco.createComponent('bar');
   });
 
   describe('getDataByEntity()', () => {
     it('should return entity data indexed by entity id and component name', () => {
       eco.createEntity()
-        .add('foo', { foo: 'foo1' })
-        .add('bar', { bar: 'bar1' });
+        .add('foo', 'foo1')
+        .add('bar', 'bar1');
 
       eco.createEntity()
-        .add('foo', { foo: 'foo2' });
+        .add('foo', 'foo2');
 
-      expect(eco.getDataByEntity()).toBe({
+      expect(eco.getDataByEntity()).toEqual({
         1: {
           foo: 'foo1',
           bar: 'bar1',

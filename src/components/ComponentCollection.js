@@ -62,7 +62,10 @@ export default class ComponentCollection {
    *
    */
   each(callback) {
-
+    Object.keys(this.components).forEach((componentName) => {
+      const component = this.components[componentName];
+      callback.call(this, componentName, component);
+    });
   }
 
   /**
