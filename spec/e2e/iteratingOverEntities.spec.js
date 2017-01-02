@@ -6,6 +6,7 @@ describe('Iterating over entities', () => {
 
     eco.createComponent('foo');
     eco.createComponent('bar');
+    eco.createComponent('baz');
   });
 
   describe('each()', () => {
@@ -54,9 +55,9 @@ describe('Iterating over entities', () => {
       expect(count).toBe(entities.length);
     });
 
-    it('should iterate over all entities that have components if no components are given', () => {
+    it('should iterate over all entities that have at least one component, if no filter components are specified', () => {
       const entities = [
-        eco.createEntity().add('foo', {}),
+        eco.createEntity().add('foo', {}).add('bar'),
         eco.createEntity().add('bar', {}),
         eco.createEntity().add('baz', {}),
       ];

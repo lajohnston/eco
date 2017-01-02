@@ -16,6 +16,16 @@ export default class Component {
   }
 
   /**
+   * Returns an array of ids of the entities for which this component stores
+   * data
+   *
+   * @returns {Array} array of entity ids
+   */
+  getEntityIds() {
+    return Object.keys(this.entities);
+  }
+
+  /**
    * Set the component data for a given entity
    *
    * @param {number}  entityId  the entity's unique id
