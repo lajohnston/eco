@@ -1,8 +1,10 @@
 export default class IteratorFactory {
   /**
-   * @param {function} FilteredIterator constructor for a filtered iterator
+   * @param {Function} EntityIterator constructor for an entity iterator
+   * @param {Function} FilteredIterator constructor for a filtered iterator
    */
-  constructor(FilteredIterator) {
+  constructor(EntityIterator, FilteredIterator) {
+    this.EntityIterator = EntityIterator;
     this.FilteredIterator = FilteredIterator;
   }
 
@@ -14,10 +16,14 @@ export default class IteratorFactory {
    * @param {Array}   components optional array of component names to filter by
    */
   create(componentCollection, entityFactory, components) {
-    return new this.FilteredIterator(
-      componentCollection,
-      entityFactory,
-      components
-    );
+    if (Array.isArray(components)) {
+      return new this.FilteredIterator(
+        componentCollection,
+        entityFactory,
+        components
+      );
+    }
+
+    return new this.EntityIterator(componentCollection, entityFactory);
   }
 }
