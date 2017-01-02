@@ -1,15 +1,17 @@
+import EntityIterator from './EntityIterator';
+
 /**
  * Iterates over entities that have all the given components
  */
-export default class FilteredIterator {
+export default class FilteredIterator extends EntityIterator {
   /**
    * @param {Object}  componentCollection collection of components
    * @param {Object}  entityFactory factory that creates entity proxies
    * @param {Array}   components array of component names to filter by
    */
   constructor(componentCollection, entityFactory, componentNames) {
-    this.componentsCollection = componentCollection;
-    this.entityFactory = entityFactory;
+    super(componentCollection, entityFactory);
+
     this.components = [];
 
     if (Array.isArray(componentNames)) {
@@ -51,25 +53,12 @@ export default class FilteredIterator {
 
       // Add an entity proxy as the last value
       entityData.push(
-        this.entityFactory.create(entityId, this.componentsCollection)
+        this.entityFactory.create(entityId, this.componentCollection)
       );
 
       data.push(entityData);
     });
 
     return data;
-  }
-
-  /**
-   * Calls the given callback for each entity containing all the components
-   * defined for this iterator. The arguments passed to the callback are
-   * defined by the getData() method
-   *
-   * @param {Function}  callback  callback to be called for each entity
-   */
-  each(callback) {
-    this.getData().forEach((set) => {
-      callback.apply(this, set);
-    });
   }
 }

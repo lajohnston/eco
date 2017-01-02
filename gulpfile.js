@@ -14,6 +14,12 @@ const plugins = require('gulp-load-plugins')(); // eslint-disable-line import/no
 const KarmaServer = require('karma').Server; // eslint-disable-line import/no-extraneous-dependencies
 const path = require('path');
 
+const src = [
+  'src/entities/EntityIterator.js',
+  'src/**/*.js',
+  'src/index.js',
+];
+
 function karmaErrorHandler(err, done) {
   if (err === 0) {
     done();
@@ -29,9 +35,9 @@ function karmaErrorHandler(err, done) {
  * Simple bundler to bundle ES6 classes into one file, without using a module system
  */
 function bundleJs() {
-  return gulp.src(['src/**/*.js', 'src/index.js'])
+  return gulp.src(src)
     .pipe(plugins.concat('eco.js'))
-    .pipe(plugins.replace(/import { .* } from '.*';/g, ''))
+    .pipe(plugins.replace(/import .* from '.*';/g, ''))
     .pipe(plugins.replace('export default class', 'class'))
     .pipe(plugins.replace(/export default .*/g, ''));
 }
