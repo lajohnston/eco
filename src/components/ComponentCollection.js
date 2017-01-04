@@ -91,6 +91,26 @@ export default class ComponentCollection {
   }
 
   /**
+   * Reset all component data to the data provided
+   *
+   * @param {object} data entityId: componentData pairs, with the componentData
+   *                      containing componentName: data pairs
+   */
+  setDataByEntity(data) {
+    // Each component
+    this.each((componentName, component) => {
+      // Each entity in the data
+      Object.keys(data).forEach((entityId) => {
+        const entityData = data[entityId];
+
+        if (Object.hasOwnProperty.call(entityData, componentName)) {
+          component.set(entityId, entityData[componentName]);
+        }
+      });
+    });
+  }
+
+  /**
    * Indicates whether the collection contains a component with the given name
    *
    * @param   {string}  name  the component's unique name

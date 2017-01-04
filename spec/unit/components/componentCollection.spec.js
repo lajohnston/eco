@@ -130,4 +130,36 @@ describe('ComponentCollection', () => {
       });
     });
   });
+
+  describe('setDataByEntity()', () => {
+    it('should set the entity data for each component', () => {
+      const data = {
+        1: {
+          foo: 'foo1',
+          bar: 'bar1',
+        },
+
+        2: {
+          foo: 'foo2',
+        },
+      };
+
+      const fooComponent = jasmine.createSpyObj('foo', ['set']);
+      const barComponent = jasmine.createSpyObj('bar', ['set']);
+
+      // Each component
+      spyOn(collection, 'each').and.callFake((callback) => {
+        callback('foo', fooComponent);
+        callback('bar', barComponent);
+      });
+
+      collection.setDataByEntity(data);
+
+      expect(fooComponent.set).toHaveBeenCalledWith('1', 'foo1');
+      expect(barComponent.set).toHaveBeenCalledWith('1', 'bar1');
+
+      expect(fooComponent.set).toHaveBeenCalledWith('2', 'foo2');
+      expect(barComponent.set).not.toHaveBeenCalledWith('2', 'bar2');
+    });
+  });
 });
