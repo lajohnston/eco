@@ -79,4 +79,15 @@ describe('Eco', () => {
       expect(componentCollection.setDataByEntity).toHaveBeenCalledWith(data);
     });
   });
+
+  describe('getEntity()', () => {
+    it('should return an entity proxy with the given id', () => {
+      const entity = {};
+      entityFactory.create.and.returnValue(entity);
+
+      const result = eco.getEntity(100);
+      expect(result).toBe(entity);
+      expect(entityFactory.create).toHaveBeenCalledWith(100, componentCollection);
+    });
+  });
 });

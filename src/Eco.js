@@ -19,15 +19,26 @@ export default class Eco {
   }
 
   /**
-   * Create a new entity with a unique id
+   * Create a new entity proxy with a unique id
+   *
+   * @param {mixed} id  (optional) id
    *
    * @returns {Entity} the new entity instance
    */
-  createEntity() {
-    return this.entityFactory.create(
-      this.idFactory.create(),
-      this.componentCollection
-    );
+  createEntity(id) {
+    const entityId = typeof id === 'undefined' ?
+      this.idFactory.create() : id;
+
+    return this.entityFactory.create(entityId, this.componentCollection);
+  }
+
+  /**
+   * Returns an entity proxy with the given id
+   *
+   * @param {mixed} id  the entity's id
+   */
+  getEntity(id) {
+    return this.createEntity(id);
   }
 
   /**
