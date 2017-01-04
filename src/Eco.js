@@ -54,4 +54,14 @@ export default class Eco {
   getDataByEntity() {
     return this.componentCollection.getDataByEntity();
   }
+
+  /**
+   * Replaces all existing component data with the data provided
+   *
+   * @param {Object}  data objects indexed by entity id, each containing
+   *                       component name: data pairs
+   */
+  setDataByEntity(data) {
+    this.componentCollection.setDataByEntity(data);
+  }
 }

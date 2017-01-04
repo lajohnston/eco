@@ -8,7 +8,11 @@ describe('Eco', () => {
   let iteratorFactory;
 
   beforeEach(() => {
-    componentCollection = jasmine.createSpyObj('componentCollection', ['set', 'getDataByEntity']);
+    componentCollection = jasmine.createSpyObj(
+      'componentCollection',
+      ['set', 'getDataByEntity', 'setDataByEntity']
+    );
+
     idFactory = jasmine.createSpyObj('idFactory', ['create']);
     entityFactory = jasmine.createSpyObj('entityFactory', ['create']);
     iteratorFactory = jasmine.createSpyObj('iteratorFactory', ['create']);
@@ -64,6 +68,15 @@ describe('Eco', () => {
       componentCollection.getDataByEntity.and.returnValue(data);
 
       expect(eco.getDataByEntity()).toBe(data);
+    });
+  });
+
+  describe('setDataByEntity()', () => {
+    it('should pass the data to the component collection', () => {
+      const data = {};
+
+      eco.setDataByEntity(data);
+      expect(componentCollection.setDataByEntity).toHaveBeenCalledWith(data);
     });
   });
 });

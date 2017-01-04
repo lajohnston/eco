@@ -8,7 +8,7 @@ describe('Saving and loading', () => {
     eco.createComponent('bar');
   });
 
-  describe('getDataByEntity()', () => {
+  describe('eco.getDataByEntity()', () => {
     it('should return entity data indexed by entity id and component name', () => {
       eco.createEntity()
         .add('foo', 'foo1')
@@ -30,10 +30,35 @@ describe('Saving and loading', () => {
     });
   });
 
-  describe('setEntityData()', () => {
+  describe('eco.setDataByEntity()', () => {
+    let data;
+
+    beforeEach(() => {
+      data = {
+        1: {
+          foo: {},
+          bar: {},
+        },
+        2: {
+          bar: {},
+        },
+      };
+    });
+
     it(
-      'should set the entity and component data from data indexed by ' +
-      'entity id and component name'
+      `should set the entity and component data from data indexed by
+      entity id and component name`,
+      () => {
+        eco.setDataByEntity(data);
+
+        const entity1 = eco.getEntity(1);
+        expect(entity1.get('foo').toBe(data[1].foo));
+        expect(entity1.get('bar').toBe(data[1].bar));
+
+        const entity2 = eco.getEntity(2);
+        expect(entity2.get('foo')).not.toBeDefined();
+        expect(entity2.get('bar')).toBe(data[2].bar);
+      }
     );
 
     it(
