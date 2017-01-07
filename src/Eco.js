@@ -34,21 +34,6 @@ export default class Eco {
   }
 
   /**
-   * Create a new iterator for the entities with all the given components
-   *
-   * @param   {Array} components  the names of the components
-   *
-   * @returns {Iterator}  the iterator
-   */
-  createIterator(components) {
-    return this.iteratorFactory.create(
-      this.componentCollection,
-      this.entityFactory,
-      components
-    );
-  }
-
-  /**
    * Iterates through each entity that contains the given set of components
    *
    * @param   {Array} components  the names of the components
@@ -62,7 +47,11 @@ export default class Eco {
       return;
     }
 
-    this.createIterator(components).each(callback);
+    this.iteratorFactory.create(
+      this.componentCollection,
+      this.entityFactory,
+      components
+    ).each(callback);
   }
 
   /**

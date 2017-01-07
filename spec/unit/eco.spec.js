@@ -56,21 +56,6 @@ describe('Eco', () => {
     });
   });
 
-  describe('createIterator()', () => {
-    it('should return a new iterator from the iterator factory', () => {
-      const iterator = {};
-
-      iteratorFactory.create.and.returnValue(iterator);
-
-      expect(eco.createIterator(['foo', 'bar'])).toBe(iterator);
-      expect(iteratorFactory.create).toHaveBeenCalledWith(
-        componentCollection,
-        entityFactory,
-        ['foo', 'bar']
-      );
-    });
-  });
-
   describe('filter()', () => {
     it(`should create an iterator using the iterator factory and pass the
       callback to its each() method`,
