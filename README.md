@@ -69,8 +69,16 @@ removed at runtime allowing behaviour to be changed dynamically.
     // Access components
     entity.get('health').amount = 100;
 
-    // Retrieve entity
-    eco.entity(123).getId();    // 123
+    // Create an entity proxy for a given id
+    eco.entity(123).getId();                                // 123
+
+Note: Eco doesn't store entity instances, only component data for entity ids.
+For convenience, the returned entity instances are proxy objects providing
+methods to work with a given entity id, and so equality comparisons should
+compare the ids rather than the proxy instances themselves
+
+    eco.entity(123) === eco.entity(123);                    // false
+    eco.entity(123).getId() === eco.entity(123).getId();    // true
 
 ## Systems
 
