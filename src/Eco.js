@@ -34,15 +34,6 @@ export default class Eco {
   }
 
   /**
-   * Returns an entity proxy with the given id
-   *
-   * @param {mixed} id  the entity's id
-   */
-  getEntity(id) {
-    return this.entity(id);
-  }
-
-  /**
    * Create a new iterator for the entities with all the given components
    *
    * @param   {array} components  the names of the components

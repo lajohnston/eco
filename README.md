@@ -69,6 +69,9 @@ removed at runtime allowing behaviour to be changed dynamically.
     // Access components
     entity.get('health').amount = 100;
 
+    // Retrieve entity
+    eco.entity(123).getId();    // 123
+
 ## Systems
 
 Systems are your game logic and behaviour. Eco provides iterators that iterate

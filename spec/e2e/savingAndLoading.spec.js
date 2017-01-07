@@ -55,11 +55,11 @@ describe('Saving and loading', () => {
       () => {
         eco.setDataByEntity(data);
 
-        const entity1 = eco.getEntity(1);
+        const entity1 = eco.entity(1);
         expect(entity1.get('foo')).toBe(data[1].foo);
         expect(entity1.get('bar')).toBe(data[1].bar);
 
-        const entity2 = eco.getEntity(2);
+        const entity2 = eco.entity(2);
         expect(entity2.get('foo')).not.toBeDefined();
         expect(entity2.get('bar')).toBe(data[2].bar);
       }

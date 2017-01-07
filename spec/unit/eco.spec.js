@@ -33,6 +33,15 @@ describe('Eco', () => {
         componentCollection
       );
     });
+
+    it('should return an entity proxy with the provided id if one is given', () => {
+      const entity = {};
+      entityFactory.create.and.returnValue(entity);
+
+      const result = eco.entity(100);
+      expect(result).toBe(entity);
+      expect(entityFactory.create).toHaveBeenCalledWith(100, componentCollection);
+    });
   });
 
   describe('createComponent()', () => {
@@ -86,17 +95,6 @@ describe('Eco', () => {
       });
 
       expect(idFactory.reserve).toHaveBeenCalledWith(['1', '2']);
-    });
-  });
-
-  describe('getEntity()', () => {
-    it('should return an entity proxy with the given id', () => {
-      const entity = {};
-      entityFactory.create.and.returnValue(entity);
-
-      const result = eco.getEntity(100);
-      expect(result).toBe(entity);
-      expect(entityFactory.create).toHaveBeenCalledWith(100, componentCollection);
     });
   });
 });
