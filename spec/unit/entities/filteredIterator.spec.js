@@ -76,4 +76,30 @@ describe('Entity filtered iterator', () => {
       });
     });
   });
+
+  describe('each()', () => {
+    it('should call the callback for each record returned by getData()', () => {
+      const data = [
+        ['a', 'b', 'c'],
+        ['d', 'e', 'f'],
+      ];
+
+      const iterator = new Iterator(componentCollection, entityFactory, ['foo', 'bar']);
+      spyOn(iterator, 'getData').and.returnValue(data);
+
+      let count = 0;
+
+      iterator.each((arg1, arg2, arg3) => {
+        const expected = data[count];
+
+        expect(arg1).toBe(expected[0]);
+        expect(arg2).toBe(expected[1]);
+        expect(arg3).toBe(expected[2]);
+
+        count += 1;
+      });
+
+      expect(count).toBe(data.length);
+    });
+  });
 });

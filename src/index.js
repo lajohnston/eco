@@ -6,8 +6,6 @@ import Eco from './Eco';
 
 import Entity from './entities/Entity';
 import IdFactory from './entities/IdFactory';
-import IteratorFactory from './entities/IteratorFactory';
-import EntityIterator from './entities/EntityIterator';
 import FilteredIterator from './entities/FilteredIterator';
 
 function createInstanceFactory(Newable) {
@@ -35,7 +33,7 @@ function createEcoInstance() {
     componentCollection,
     new IdFactory(1),
     createInstanceFactory(Entity),
-    new IteratorFactory(EntityIterator, FilteredIterator)
+    createInstanceFactory(FilteredIterator)
   );
 }
 
