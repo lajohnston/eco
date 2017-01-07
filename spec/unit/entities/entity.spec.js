@@ -20,6 +20,13 @@ describe('Entity', () => {
       // this ensures the id matches the string ids used by componentCollection
       expect(entity.getId()).toBe('100');
     });
+
+    [null, true, false, {}, function foo() {}, 'string', []].forEach((nonNumber) => {
+      it('should return a non-numeric id as-is', () => {
+        const testEntity = new Entity(nonNumber);
+        expect(testEntity.getId()).toBe(nonNumber);
+      });
+    });
   });
 
   describe('get()', () => {

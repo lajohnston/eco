@@ -15,6 +15,7 @@ module.exports = (config) => {
 
     // list of files to exclude
     exclude: [
+      'src/index.js',
     ],
 
     // preprocess matching files before serving them to the browser
