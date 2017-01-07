@@ -20,14 +20,14 @@ describe('Eco', () => {
     eco = new Eco(componentCollection, idFactory, entityFactory, iteratorFactory);
   });
 
-  describe('createEntity()', () => {
-    it('should return a new entity instance from the entity factory', () => {
+  describe('entity()', () => {
+    it('should return a new entity instance from the entity factory if no id is given', () => {
       const entity = {};
 
       idFactory.create.and.returnValue(123);
       entityFactory.create.and.returnValue(entity);
 
-      expect(eco.createEntity()).toBe(entity);
+      expect(eco.entity()).toBe(entity);
       expect(entityFactory.create).toHaveBeenCalledWith(
         123,
         componentCollection

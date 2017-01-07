@@ -25,12 +25,12 @@ describe('Adding components and entities', () => {
 
     beforeEach(() => {
       oldComponent = eco.createComponent('foo', { componentName: 'oldFoo' });
-      entityA = eco.createEntity()
+      entityA = eco.entity()
         .add('foo', { entityName: 'entityA' });
 
       newComponent = eco.createComponent('foo', { componentName: 'newFoo' });
 
-      entityB = eco.createEntity()
+      entityB = eco.entity()
         .add('foo', { entityName: 'entityB' });
     });
 
@@ -62,7 +62,7 @@ describe('Adding components and entities', () => {
 
         eco.createComponent('foo', defaultData);
 
-        const entity = eco.createEntity()
+        const entity = eco.entity()
           .add('foo', nonObject);
 
         expect(entity.get('foo')).not.toBe(defaultData); // it should be a copy
@@ -78,7 +78,7 @@ describe('Adding components and entities', () => {
 
       eco.createComponent('foo', defaultData);
 
-      const entity = eco.createEntity()
+      const entity = eco.entity()
         .add('foo', {
           barValue: 'newBarValue',
         });
@@ -98,7 +98,7 @@ describe('Adding components and entities', () => {
         return 'foo';
       });
 
-      const entity = eco.createEntity()
+      const entity = eco.entity()
         .add('foo', entityData);
 
       expect(entity.get('foo')).toBe('foo');
@@ -110,7 +110,7 @@ describe('Adding components and entities', () => {
       it('should store and return any data passed to it', () => {
         eco.createComponent('foo');
 
-        const entity = eco.createEntity()
+        const entity = eco.entity()
           .add('foo', value);
 
         expect(entity.get('foo')).toBe(value);
@@ -123,7 +123,7 @@ describe('Adding components and entities', () => {
       it('should ignore data passed to it and always return the primitive value', () => {
         eco.createComponent('foo', constantValue);
 
-        const entity = eco.createEntity()
+        const entity = eco.entity()
           .add('foo', 'this data should be ignored');
 
         expect(entity.get('foo')).toBe(constantValue);
@@ -133,7 +133,7 @@ describe('Adding components and entities', () => {
 
   describe('Adding a non-existant component to an object', () => {
     it('should act as if the component was not added', () => {
-      const entity = eco.createEntity()
+      const entity = eco.entity()
         .add('nonExistantComponentA')
         .add('nonExistantComponentB');
 
@@ -153,7 +153,7 @@ describe('Adding components and entities', () => {
     it('should indicate that the entity no longer has the given component', () => {
       eco.createComponent('foo');
 
-      const entity = eco.createEntity()
+      const entity = eco.entity()
         .add('foo');
 
       expect(entity.has('foo')).toBe(true);
@@ -165,7 +165,7 @@ describe('Adding components and entities', () => {
     });
 
     it('should do nothing if the component does not exist', () => {
-      const entity = eco.createEntity();
+      const entity = eco.entity();
 
       entity.remove('nonExistantComponentA');
 

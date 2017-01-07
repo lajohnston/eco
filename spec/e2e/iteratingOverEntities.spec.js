@@ -12,8 +12,8 @@ describe('Iterating over entities', () => {
   describe('each()', () => {
     it('should call the callback with the component data for each entity that has all the given components', () => {
       const entities = [
-        eco.createEntity().add('foo', {}).add('bar', {}),
-        eco.createEntity().add('foo', {}).add('bar', {}),
+        eco.entity().add('foo', {}).add('bar', {}),
+        eco.entity().add('foo', {}).add('bar', {}),
       ];
 
       const iter = eco.createIterator(['foo', 'bar']);
@@ -35,8 +35,8 @@ describe('Iterating over entities', () => {
 
     it('should return all the entities for a component if only one component has been given', () => {
       const entities = [
-        eco.createEntity().add('foo', {}),
-        eco.createEntity().add('foo', {}),
+        eco.entity().add('foo', {}),
+        eco.entity().add('foo', {}),
       ];
 
       const iter = eco.createIterator(['foo']);
@@ -57,12 +57,12 @@ describe('Iterating over entities', () => {
 
     it('should iterate over all entities that have at least one component, if no filter components are specified', () => {
       const entities = [
-        eco.createEntity().add('foo', {}).add('bar'),
-        eco.createEntity().add('bar', {}),
-        eco.createEntity().add('baz', {}),
+        eco.entity().add('foo', {}).add('bar'),
+        eco.entity().add('bar', {}),
+        eco.entity().add('baz', {}),
       ];
 
-      eco.createEntity(); // entity with no components
+      eco.entity(); // entity with no components
 
       const iter = eco.createIterator();
 
@@ -79,7 +79,7 @@ describe('Iterating over entities', () => {
     });
 
     it('should ignore entities that do not have all the components', () => {
-      eco.createEntity()
+      eco.entity()
         .add('foo', {});
 
       const iter = eco.createIterator(['foo', 'bar']);
@@ -90,7 +90,7 @@ describe('Iterating over entities', () => {
     });
 
     it('should ignore entities that have had a required component removed since the last iteration', () => {
-      const entity = eco.createEntity()
+      const entity = eco.entity()
         .add('foo', {});
 
       const iter = eco.createIterator(['foo']);
@@ -111,7 +111,7 @@ describe('Iterating over entities', () => {
     });
 
     it('should include entities that have had a component added since the last iteration and now qualify', () => {
-      const entity = eco.createEntity()
+      const entity = eco.entity()
         .add('foo');
 
       const barIter = eco.createIterator(['bar']);

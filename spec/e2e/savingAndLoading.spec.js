@@ -10,23 +10,27 @@ describe('Saving and loading', () => {
 
   describe('eco.getDataByEntity()', () => {
     it('should return entity data indexed by entity id and component name', () => {
-      eco.createEntity()
+      const id1 = eco.entity()
         .add('foo', 'foo1')
-        .add('bar', 'bar1');
+        .add('bar', 'bar1')
+        .getId();
 
-      eco.createEntity()
-        .add('foo', 'foo2');
+      const id2 = eco.entity()
+        .add('foo', 'foo2')
+        .getId();
 
-      expect(eco.getDataByEntity()).toEqual({
-        1: {
-          foo: 'foo1',
-          bar: 'bar1',
-        },
+      const expected = {};
 
-        2: {
-          foo: 'foo2',
-        },
-      });
+      expected[id1] = {
+        foo: 'foo1',
+        bar: 'bar1',
+      };
+
+      expected[id2] = {
+        foo: 'foo2',
+      };
+
+      expect(eco.getDataByEntity()).toEqual(expected);
     });
   });
 
@@ -67,7 +71,7 @@ describe('Saving and loading', () => {
       () => {
         eco.setDataByEntity(data);
 
-        const newEntity = eco.createEntity();
+        const newEntity = eco.entity();
         expect(newEntity.getId()).toBe('3');
       }
     );

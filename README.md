@@ -52,7 +52,7 @@ a class and return a new instance from the function.
 Entities are simply a collection of components. Components can be added and
 removed at runtime allowing behaviour to be changed dynamically.
 
-    var entity = eco.createEntity()
+    var entity = eco.entity()
         .add('isPlayer')
         .add('position', { x: 0, y: 0 })
         .add('vector', { x: 0, y: 0 })
