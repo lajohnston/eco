@@ -66,6 +66,17 @@ export default class Eco {
   }
 
   /**
+   * Get all entities that currently have at least one component
+   *
+   * @returns {Array} array of entity proxies
+   */
+  getEntities() {
+    return this.componentCollection.getEntityIds().map(
+      id => this.entity(id)
+    );
+  }
+
+  /**
    * Returns all data indexed by entity id and component name
    *
    * @returns {Object}  objects indexed by entity id, each containing

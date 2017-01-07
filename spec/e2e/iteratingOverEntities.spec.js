@@ -42,6 +42,24 @@ describe('Iterating over entities', () => {
     });
   });
 
+  describe('getEntities()', () => {
+    it('should return an array of entity proxies that have at least one component', () => {
+      const entities = [
+        eco.entity().add('foo', {}).add('bar'),
+        eco.entity().add('bar', {}),
+        eco.entity().add('baz', {}),
+      ];
+
+      eco.entity(); // entity with no components
+
+      const result = eco.getEntities();
+
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBe(entities.length);
+      expect(result.map(entity => entity.getId())).toEqual(entities.map(entity => entity.getId()));
+    });
+  });
+
   describe('createIterator()', () => {
     it('should call the callback with the component data for each entity that has all the given components', () => {
       const entities = [

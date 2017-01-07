@@ -74,8 +74,8 @@ removed at runtime allowing behaviour to be changed dynamically.
 
 ## Systems
 
-Systems contain your game logic and behaviour. To help you, Eco provides
-filters that iterate through entities containing a certain combination of
+Systems are your game logic and behaviour. Eco doesn't handle these, but
+provides methods to iterate through entities that have certain combinations of
 components.
 
     // Iterate through entities with 'position' and 'vector' components
@@ -91,3 +91,10 @@ components.
          * The entity itself is passed as the last argument
          */
     });
+
+   /**
+    * Get an array of entities that have at least one component.
+    * Eco only stores component data, so entities without any
+    * components won't be returned
+    */
+    eco.getEntities();

@@ -10,7 +10,7 @@ describe('Eco', () => {
   beforeEach(() => {
     componentCollection = jasmine.createSpyObj(
       'componentCollection',
-      ['set', 'getDataByEntity', 'setDataByEntity']
+      ['set', 'getDataByEntity', 'setDataByEntity', 'getEntityIds']
     );
 
     idFactory = jasmine.createSpyObj('idFactory', ['create', 'reserve']);
@@ -96,6 +96,27 @@ describe('Eco', () => {
       it('should do nothing if the components list if not an array', () => {
         eco.filter(nonArray, () => { });
         expect(iteratorFactory.create).not.toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('getEntities()', () => {
+    it('should call the callback with an entity proxy for each entity id returned by the componentCollection', () => {
+      const entityIds = [1, 5, 10];
+
+      componentCollection.getEntityIds.and.returnValue(entityIds);
+
+      entityFactory.create.and.callFake((id, componentArg) => {
+        expect(componentArg).toBe(componentCollection);
+
+        // Just return id for testing purposes
+        return id;
+      });
+
+      const result = eco.getEntities();
+
+      entityIds.forEach((id) => {
+        expect(result).toContain(id);
       });
     });
   });
