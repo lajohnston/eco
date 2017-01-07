@@ -76,10 +76,10 @@ through entities that contain certain combination of components.
 
     // Create an iterator for all entities that have both a position and a
     // vector component
-    var moveableEntities = eco.createIterator(['position', 'vector']);
+    var moveable = eco.createIterator(['position', 'vector']);
 
     // In your update loop
-    moveableEntities.each(function(position, vector, entity) {
+    moveable.each(function(position, vector, entity) {
         /**
          * This callback is called for each matching entity
          * The components for each entity are injected in the order you
@@ -92,12 +92,3 @@ through entities that contain certain combination of components.
         position.x += vector.getVectorX();
         position.y += vector.getVectorY();
     });
-
-    // or you can use a while loop
-    moveableEntities.reset();
-    while (var entity = moveableEntities.next()) {
-
-    }
-
-    // or just get the array of entities and iterate through them as you wish
-    var entities = moveableEntities.toArray();
