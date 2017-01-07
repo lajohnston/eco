@@ -9,7 +9,40 @@ describe('Iterating over entities', () => {
     eco.createComponent('baz');
   });
 
-  describe('each()', () => {
+  describe('eco.filter()', () => {
+    it('should call the callback with the component data for each entity that has all the given components', () => {
+      const entities = [
+        eco.entity().add('foo', {}).add('bar', {}),
+        eco.entity().add('foo', {}).add('bar', {}),
+      ];
+
+      let count = 0;
+
+      eco.filter(['foo', 'bar'], (foo, bar, entity) => {
+        const expectedEntity = entities[count];
+
+        expect(foo).toBe(expectedEntity.get('foo'));
+        expect(bar).toBe(expectedEntity.get('bar'));
+        expect(entity.getId()).toBe(expectedEntity.getId());
+
+        count += 1;
+      });
+
+      expect(count).toBe(entities.length);
+    });
+
+    [undefined, null, true, false, 1, '', {}, function foo() {}].forEach((nonArray) => {
+      it('should not call the callback if the first parameter is not an array', () => {
+        eco.entity().add('foo');
+
+        eco.filter(nonArray, () => {
+          fail('Expected callback to not be called, but it was');
+        });
+      });
+    });
+  });
+
+  describe('createIterator()', () => {
     it('should call the callback with the component data for each entity that has all the given components', () => {
       const entities = [
         eco.entity().add('foo', {}).add('bar', {}),

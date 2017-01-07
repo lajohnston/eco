@@ -36,7 +36,7 @@ export default class Eco {
   /**
    * Create a new iterator for the entities with all the given components
    *
-   * @param   {array} components  the names of the components
+   * @param   {Array} components  the names of the components
    *
    * @returns {Iterator}  the iterator
    */
@@ -46,6 +46,23 @@ export default class Eco {
       this.entityFactory,
       components
     );
+  }
+
+  /**
+   * Iterates through each entity that contains the given set of components
+   *
+   * @param   {Array} components  the names of the components
+   * @param   {Function} callback
+   *              the callback to be called for each entity, with the entity's
+   *              matching component data passed as arguments in the order
+   *              specified. The last argument is a proxy to the entity itself
+   */
+  filter(components, callback) {
+    if (!Array.isArray(components)) {
+      return;
+    }
+
+    this.createIterator(components).each(callback);
   }
 
   /**

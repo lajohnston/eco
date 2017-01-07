@@ -71,6 +71,35 @@ describe('Eco', () => {
     });
   });
 
+  describe('filter()', () => {
+    it(`should create an iterator using the iterator factory and pass the
+      callback to its each() method`,
+    () => {
+      const iterator = jasmine.createSpyObj('iterator', ['each']);
+
+      iteratorFactory.create.and.returnValue(iterator);
+
+      const callback = () => {};
+
+      eco.filter(['foo', 'bar'], callback);
+
+      expect(iteratorFactory.create).toHaveBeenCalledWith(
+        componentCollection,
+        entityFactory,
+        ['foo', 'bar']
+      );
+
+      expect(iterator.each).toHaveBeenCalledWith(callback);
+    });
+
+    [undefined, null, true, false, 1, '', {}, function foo() {}].forEach((nonArray) => {
+      it('should do nothing if the components list if not an array', () => {
+        eco.filter(nonArray, () => { });
+        expect(iteratorFactory.create).not.toHaveBeenCalled();
+      });
+    });
+  });
+
   describe('getDataByEntity()', () => {
     it('should return the entity data from the component collection', () => {
       const data = {};

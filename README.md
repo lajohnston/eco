@@ -74,24 +74,20 @@ removed at runtime allowing behaviour to be changed dynamically.
 
 ## Systems
 
-Systems are your game logic and behaviour. Eco provides iterators that iterate
-through entities that contain certain combination of components.
+Systems contain your game logic and behaviour. To help you, Eco provides
+filters that iterate through entities containing a certain combination of
+components.
 
-    // Create an iterator for all entities that have both a position and a
-    // vector component
-    var moveable = eco.createIterator(['position', 'vector']);
-
-    // In your update loop
-    moveable.each(function(position, vector, entity) {
-        /**
-         * This callback is called for each matching entity
-         * The components for each entity are injected in the order you
-         * specified when creating the iterator (position, vector)
-         *
-         * The entity itself is passed as the last argument
-         */
-
+    // Iterate through entities with 'position' and 'vector' components
+    eco.filter(['position', 'vector'], function(position, vector, entity) {
         // Update entity position based on its movement vector values
         position.x += vector.getVectorX();
         position.y += vector.getVectorY();
+
+        /**
+         * This callback is called for each matching entity
+         * The components for each entity are injected in for you
+         *
+         * The entity itself is passed as the last argument
+         */
     });
