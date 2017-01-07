@@ -62,8 +62,14 @@ describe('Saving and loading', () => {
     );
 
     it(
-      'should ensure new entities created are assigned ids higher than ' +
-      'the loaded entity with the highest id'
+      `should ensure new entities created are assigned ids higher than
+      the loaded entity with the highest id`,
+      () => {
+        eco.setDataByEntity(data);
+
+        const newEntity = eco.createEntity();
+        expect(newEntity.getId()).toBe('3');
+      }
     );
   });
 });

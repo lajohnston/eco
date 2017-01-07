@@ -74,5 +74,6 @@ export default class Eco {
    */
   setDataByEntity(data) {
     this.componentCollection.setDataByEntity(data);
+    this.idFactory.reserve(Object.keys(data));
   }
 }

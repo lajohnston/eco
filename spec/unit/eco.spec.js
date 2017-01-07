@@ -13,7 +13,7 @@ describe('Eco', () => {
       ['set', 'getDataByEntity', 'setDataByEntity']
     );
 
-    idFactory = jasmine.createSpyObj('idFactory', ['create']);
+    idFactory = jasmine.createSpyObj('idFactory', ['create', 'reserve']);
     entityFactory = jasmine.createSpyObj('entityFactory', ['create']);
     iteratorFactory = jasmine.createSpyObj('iteratorFactory', ['create']);
 
@@ -77,6 +77,15 @@ describe('Eco', () => {
 
       eco.setDataByEntity(data);
       expect(componentCollection.setDataByEntity).toHaveBeenCalledWith(data);
+    });
+
+    it('should register each id with the id factory to prevent collisions', () => {
+      eco.setDataByEntity({
+        1: {},
+        2: {},
+      });
+
+      expect(idFactory.reserve).toHaveBeenCalledWith(['1', '2']);
     });
   });
 
