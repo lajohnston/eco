@@ -1,5 +1,9 @@
-export default class Component {
+import Collection from './Collection';
+
+export default class Component extends Collection {
   constructor(definition) {
+    super();
+
     this.entities = {};
     this.factory = getFactory(definition); // eslint-disable-line no-use-before-define
   }

@@ -1,4 +1,5 @@
 import ComponentCollection from '../../../src/components/ComponentCollection';
+import Collection from '../../../src/components/Collection';
 
 describe('ComponentCollection', () => {
   let collection;
@@ -12,6 +13,10 @@ describe('ComponentCollection', () => {
   it('should define a constructor', () => {
     expect(ComponentCollection).toBeDefined();
     expect(new ComponentCollection()).toBeDefined();
+  });
+
+  it('should inherit from Collection', () => {
+    expect(new ComponentCollection() instanceof Collection).toBe(true);
   });
 
   describe('set() and get()', () => {

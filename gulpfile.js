@@ -15,6 +15,7 @@ const KarmaServer = require('karma').Server; // eslint-disable-line import/no-ex
 const path = require('path');
 
 const src = [
+  'src/components/Collection.js',
   'src/**/*.js',
   'src/index.js',
 ];

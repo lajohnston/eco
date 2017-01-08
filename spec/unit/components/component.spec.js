@@ -1,6 +1,11 @@
 import Component from '../../../src/components/Component';
+import Collection from '../../../src/components/Collection';
 
 describe('Component', () => {
+  it('should inherit from Collection', () => {
+    expect(new Component() instanceof Collection).toBe(true);
+  });
+
   describe('get()', () => {
     it('should return undefined if the component does not store data for the given entity', () => {
       const component = new Component();

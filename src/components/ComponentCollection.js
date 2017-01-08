@@ -1,5 +1,9 @@
-export default class ComponentCollection {
+import Collection from './Collection';
+
+export default class ComponentCollection extends Collection {
   constructor(componentFactory) {
+    super();
+
     this.componentFactory = componentFactory;
     this.components = {};
   }
