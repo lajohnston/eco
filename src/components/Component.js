@@ -20,15 +20,6 @@ export default class Component extends Collection {
   }
 
   /**
-   * Removes the data for the given entity
-   *
-   * @param   {mixed}  entityId  the entity's unique id
-   */
-  remove(entityId) {
-    delete this.values[entityId];
-  }
-
-  /**
    * Merge two objects, returning the merged data without affecting
    * the originals
    *

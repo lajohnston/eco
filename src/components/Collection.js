@@ -4,6 +4,15 @@ export default class Collection {
   }
 
   /**
+   * Removes the data for the given key
+   *
+   * @param   {mixed}  key
+   */
+  delete(key) {
+    delete this.values[key];
+  }
+
+  /**
    * Store data referenced by the given key
    *
    * @param {mixed}   key   the identifier for the data

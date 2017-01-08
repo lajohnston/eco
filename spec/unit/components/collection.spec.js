@@ -60,4 +60,20 @@ describe('Collection', () => {
       expect(collection.keys()).toEqual(['1', '2', '3']);
     });
   });
+
+
+  describe('delete()', () => {
+    it('should remove the component data for the given entity id', () => {
+      collection.set(1);
+      collection.set(2);
+
+      expect(collection.has(1)).toBe(true);
+
+      collection.delete(1);
+
+      expect(collection.has(1)).toBe(false);
+      expect(collection.get(1)).not.toBeDefined();
+      expect(collection.keys()).toEqual(['2']);
+    });
+  });
 });

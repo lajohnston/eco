@@ -4,7 +4,7 @@ export default class NullComponent {
 
   set() { }
 
-  remove() { }
+  delete() { }
 
   has() {
     return false;

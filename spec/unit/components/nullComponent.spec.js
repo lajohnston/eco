@@ -17,7 +17,7 @@ describe('NullComponent', () => {
     expect(nullComponent.has(1)).toBe(false);
   });
 
-  it('should define a remove function', () => {
-    nullComponent.remove(1);
+  it('should define a delete function', () => {
+    nullComponent.delete(1);
   });
 });

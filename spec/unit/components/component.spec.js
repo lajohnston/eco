@@ -87,20 +87,4 @@ describe('Component', () => {
       });
     });
   });
-
-  describe('remove()', () => {
-    it('should remove the component data for the given entity id', () => {
-      const component = new Component();
-      component.set(1, {});
-      component.set(2, {});
-
-      expect(component.has(1)).toBe(true);
-
-      component.remove(1);
-
-      expect(component.has(1)).toBe(false);
-      expect(component.get(1)).not.toBeDefined();
-      expect(component.keys()).toEqual(['2']);
-    });
-  });
 });

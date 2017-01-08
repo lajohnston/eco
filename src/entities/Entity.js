@@ -70,7 +70,7 @@ export default class Entity {
    */
   remove(componentName) {
     this.components.get(componentName)
-      .remove(this.id);
+      .delete(this.id);
 
     return this;
   }
