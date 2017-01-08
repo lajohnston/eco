@@ -41,18 +41,6 @@ export default class Component extends Collection {
   }
 
   /**
-   * Indicates whether the component contains data for the given entity id
-   *
-   * @param   {mixed}  entityId  the entity's unique id
-   *
-   * @returns {boolean} true if the component has data for the entity,
-   *                    otherwise false
-   */
-  has(entityId) {
-    return Object.hasOwnProperty.call(this.values, entityId);
-  }
-
-  /**
    * Removes the data for the given entity
    *
    * @param   {mixed}  entityId  the entity's unique id

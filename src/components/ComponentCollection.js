@@ -114,17 +114,6 @@ export default class ComponentCollection extends Collection {
   }
 
   /**
-   * Indicates whether the collection contains a component with the given name
-   *
-   * @param   {string}  name  the component's unique name
-   *
-   * @returns {boolean} true if the component exists, otherwise false
-   */
-  has(name) {
-    return Object.hasOwnProperty.call(this.values, name);
-  }
-
-  /**
    * Sets the null value to return if a component does not exist
    *
    * @param {mixed}  nullComponent the null value to return

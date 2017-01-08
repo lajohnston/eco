@@ -46,17 +46,6 @@ describe('ComponentCollection', () => {
     });
   });
 
-  describe('has()', () => {
-    it('should return true if the component exists in the collection', () => {
-      collection.set('foo');
-      expect(collection.has('foo')).toBe(true);
-    });
-
-    it('should return false if the component does not exist in the collection', () => {
-      expect(collection.has('foo')).toBe(false);
-    });
-  });
-
   describe('getEntityIds()', () => {
     it('should return an array of unique entity ids that have at least one component', () => {
       const fooComponent = jasmine.createSpyObj('foo', ['getEntityIds']);
