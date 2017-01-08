@@ -34,4 +34,20 @@ describe('Collection', () => {
       expect(collection.get('foo')).toBe(nullValue);
     });
   });
+
+  describe('forEach()', () => {
+    it('should call the callback for each component, with the component name and component object', () => {
+      collection.set('foo', {});
+      collection.set('bar', {});
+
+      const result = {};
+
+      collection.forEach((value, key) => {
+        result[key] = value;
+      });
+
+      expect(result.foo).toBe(collection.get('foo'));
+      expect(result.bar).toBe(collection.get('bar'));
+    });
+  });
 });

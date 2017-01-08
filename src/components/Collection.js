@@ -41,6 +41,18 @@ export default class Collection {
   }
 
   /**
+   * Iterates through the data in the collection
+   *
+   * @param {Function}  callback  the callback to be called for each element,
+   *                              with value, key args
+   */
+  forEach(callback) {
+    Object.keys(this.values).forEach((key) => {
+      callback(this.values[key], key);
+    });
+  }
+
+  /**
    * Sets the null value to return when retreiving data that does not exist.
    * By default the collection will return undefined
    *
