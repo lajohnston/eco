@@ -16,7 +16,7 @@ export default class Component extends Collection {
    * @returns {mixed} the entity's component data
    */
   set(entityId, data) {
-    this.values[entityId] = this.factory(data);
+    super.set(entityId, this.factory(data));
   }
 
   /**
