@@ -39,20 +39,6 @@ export default class Component extends Collection {
   }
 
   /**
-   * Iterates over each entity with data in this component.
-   *
-   * @param {Function} callback callback to be called for each entity. The
-   *                            first argument will be the entity id, and
-   *                            the second will be the component data for
-   *                            that entity
-   */
-  each(callback) {
-    Object.keys(this.values).forEach((entityId) => {
-      callback.call(this, entityId, this.values[entityId]);
-    });
-  }
-
-  /**
    * Merge two objects, returning the merged data without affecting
    * the originals
    *

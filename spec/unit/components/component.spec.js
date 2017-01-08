@@ -88,27 +88,6 @@ describe('Component', () => {
     });
   });
 
-  describe('each()', () => {
-    it('should call the callback with each entity id and data', () => {
-      const component = new Component();
-      const expectedData = [];
-
-      for (let i = 0; i < 3; i += 1) {
-        const componentData = {};
-        expectedData.push(componentData);
-        component.set(i, componentData);
-      }
-
-      let count = 0;
-
-      component.each((entityId, data) => {
-        expect(entityId).toBe(count.toString());
-        expect(data).toBe(expectedData[count]);
-        count += 1;
-      });
-    });
-  });
-
   describe('getEntityIds()', () => {
     it('should return the ids of the entities that have this component', () => {
       const component = new Component();

@@ -36,7 +36,7 @@ export default class FilteredIterator {
 
     const data = [];
 
-    this.components[0].each((entityId, firstComponentData) => {
+    this.components[0].forEach((firstComponentData, entityId) => {
       const entityData = [firstComponentData];
 
       // Check for entity in all the other components

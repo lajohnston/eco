@@ -56,8 +56,8 @@ describe('ComponentCollection', () => {
 
   describe('getDataByEntity()', () => {
     it('should return all component data indexed by entity id and component name', () => {
-      const fooComponent = jasmine.createSpyObj('foo', ['each']);
-      const barComponent = jasmine.createSpyObj('bar', ['each']);
+      const fooComponent = jasmine.createSpyObj('foo', ['forEach']);
+      const barComponent = jasmine.createSpyObj('bar', ['forEach']);
 
       // Each component
       spyOn(collection, 'forEach').and.callFake((callback) => {
@@ -65,13 +65,13 @@ describe('ComponentCollection', () => {
         callback(barComponent, 'bar');
       });
 
-      fooComponent.each.and.callFake((callback) => {
-        callback('1', 'foo1');
-        callback('2', 'foo2');
+      fooComponent.forEach.and.callFake((callback) => {
+        callback('foo1', '1');
+        callback('foo2', '2');
       });
 
-      barComponent.each.and.callFake((callback) => {
-        callback('1', 'bar1');
+      barComponent.forEach.and.callFake((callback) => {
+        callback('bar1', '1');
       });
 
       expect(collection.getDataByEntity()).toEqual({

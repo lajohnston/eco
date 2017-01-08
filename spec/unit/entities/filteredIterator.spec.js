@@ -7,8 +7,8 @@ describe('Entity filtered iterator', () => {
 
   beforeEach(() => {
     components = {
-      foo: jasmine.createSpyObj('fooComponent', ['get', 'has', 'each']),
-      bar: jasmine.createSpyObj('barComponent', ['get', 'has', 'each']),
+      foo: jasmine.createSpyObj('fooComponent', ['get', 'has', 'forEach']),
+      bar: jasmine.createSpyObj('barComponent', ['get', 'has', 'forEach']),
     };
 
     componentCollection = jasmine.createSpyObj('componentCollection', ['get']);
@@ -20,10 +20,10 @@ describe('Entity filtered iterator', () => {
   describe('getData()', () => {
     it('should return an array of arrays, each containing component data for each entity that has all components', () => {
       // It will iterate through the entities for the first component (foo)
-      components.foo.each.and.callFake((callback) => {
-        callback(1, 'fooEntity1');
-        callback(2, 'fooEntity2');
-        callback(3, 'fooEntity3');
+      components.foo.forEach.and.callFake((callback) => {
+        callback('fooEntity1', '1');
+        callback('fooEntity2', '2');
+        callback('fooEntity3', '3');
       });
 
       // The second component (bar) will have entities 1 and 2, but not 3
@@ -33,8 +33,11 @@ describe('Entity filtered iterator', () => {
       const iterator = new Iterator(componentCollection, entityFactory, ['foo', 'bar']);
       const result = iterator.getData();
 
-      expect(components.foo.each).toHaveBeenCalled();
-      expect(components.bar.get.calls.allArgs()).toEqual([[1], [2]]);
+      expect(components.foo.forEach).toHaveBeenCalled();
+      expect(components.bar.get.calls.allArgs()).toEqual([
+        ['1'],
+        ['2'],
+      ]);
       expect(result.length).toBe(2);
 
       // Entity 1
@@ -49,8 +52,8 @@ describe('Entity filtered iterator', () => {
     it('should include an entity proxy as the last value in each array', () => {
       const entityId = 123;
 
-      components.foo.each.and.callFake((callback) => {
-        callback(entityId, {});
+      components.foo.forEach.and.callFake((callback) => {
+        callback({}, entityId);
       });
 
       components.bar.has.and.returnValue(true);

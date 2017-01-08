@@ -52,7 +52,7 @@ export default class ComponentCollection extends Collection {
     const entities = {};
 
     this.forEach((component, componentName) => {
-      component.each((entityId, data) => {
+      component.forEach((data, entityId) => {
         if (typeof entities[entityId] === 'undefined') {
           entities[entityId] = {};
         }
