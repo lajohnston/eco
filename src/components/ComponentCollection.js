@@ -34,7 +34,7 @@ export default class ComponentCollection extends Collection {
 
     Object.keys(this.values).forEach((componentName) => {
       const component = this.values[componentName];
-      component.getEntityIds().forEach((id) => {
+      component.keys().forEach((id) => {
         ids[id] = true;
       });
     });

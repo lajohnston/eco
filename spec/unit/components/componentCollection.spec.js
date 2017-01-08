@@ -35,8 +35,8 @@ describe('ComponentCollection', () => {
 
   describe('getEntityIds()', () => {
     it('should return an array of unique entity ids that have at least one component', () => {
-      const fooComponent = jasmine.createSpyObj('foo', ['getEntityIds']);
-      const barComponent = jasmine.createSpyObj('foo', ['getEntityIds']);
+      const fooComponent = jasmine.createSpyObj('foo', ['keys']);
+      const barComponent = jasmine.createSpyObj('foo', ['keys']);
 
       let calls = 0;
       componentFactory.create.and.callFake(() => {
@@ -47,8 +47,8 @@ describe('ComponentCollection', () => {
       collection.set('foo');
       collection.set('bar');
 
-      fooComponent.getEntityIds.and.returnValue(['1', '2', '3']);
-      barComponent.getEntityIds.and.returnValue(['2', '3', '4']);
+      fooComponent.keys.and.returnValue(['1', '2', '3']);
+      barComponent.keys.and.returnValue(['2', '3', '4']);
 
       expect(collection.getEntityIds()).toEqual(['1', '2', '3', '4']);
     });

@@ -41,6 +41,15 @@ export default class Collection {
   }
 
   /**
+   * Returns the keys in the collection
+   *
+   * @returns {Array} array of keys
+   */
+  keys() {
+    return Object.keys(this.values);
+  }
+
+  /**
    * Iterates through the data in the collection
    *
    * @param {Function}  callback  the callback to be called for each element,

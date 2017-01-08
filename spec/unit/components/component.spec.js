@@ -88,18 +88,6 @@ describe('Component', () => {
     });
   });
 
-  describe('getEntityIds()', () => {
-    it('should return the ids of the entities that have this component', () => {
-      const component = new Component();
-
-      component.set(1);
-      component.set(2);
-      component.set(3);
-
-      expect(component.getEntityIds()).toEqual(['1', '2', '3']);
-    });
-  });
-
   describe('remove()', () => {
     it('should remove the component data for the given entity id', () => {
       const component = new Component();
@@ -112,7 +100,7 @@ describe('Component', () => {
 
       expect(component.has(1)).toBe(false);
       expect(component.get(1)).not.toBeDefined();
-      expect(component.getEntityIds()).toEqual(['2']);
+      expect(component.keys()).toEqual(['2']);
     });
   });
 });

@@ -50,4 +50,14 @@ describe('Collection', () => {
       expect(result.bar).toBe(collection.get('bar'));
     });
   });
+
+  describe('keys()', () => {
+    it('should return the keys in the collection', () => {
+      collection.set(1);
+      collection.set(2);
+      collection.set(3);
+
+      expect(collection.keys()).toEqual(['1', '2', '3']);
+    });
+  });
 });
