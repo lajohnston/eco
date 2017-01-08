@@ -6,14 +6,7 @@ describe('Component', () => {
     expect(new Component() instanceof Collection).toBe(true);
   });
 
-  describe('get()', () => {
-    it('should return undefined if the component does not store data for the given entity', () => {
-      const component = new Component();
-      expect(component.get(1)).not.toBeDefined();
-    });
-  });
-
-  describe('get() and set() with an object literal component definition', () => {
+  describe('set() with an object literal component definition', () => {
     it('should store and retrieve component data', () => {
       const component = new Component({});
 
@@ -57,7 +50,7 @@ describe('Component', () => {
     });
   });
 
-  describe('get() and set() when no component definition has been given', () => {
+  describe('set() with undefined component definition', () => {
     [undefined, null, false, true, function foo() {}, 1, '', 'foo', {}].forEach((value) => {
       it('should store and return any non-object values passed to it', () => {
         const component = new Component();
@@ -70,7 +63,7 @@ describe('Component', () => {
     });
   });
 
-  describe('get() and set() with a factory/function component definition', () => {
+  describe('set() with a factory/function component definition', () => {
     it('should call the factory when creating the object', () => {
       const componentData = {};
 
@@ -84,9 +77,9 @@ describe('Component', () => {
     });
   });
 
-  describe('get() with a non-object or function component definition', () => {
+  describe('set() when a primitive value has been passed to the constructor', () => {
     [null, false, true, 1, '', 'foo'].forEach((constantValue) => {
-      it('should return the definition value as a constant', () => {
+      it('should ignore the value store the definition value as a constant', () => {
         const component = new Component(constantValue);
 
         component.set(1, 'foo');  // it should ignore this value

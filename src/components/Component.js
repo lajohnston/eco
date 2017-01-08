@@ -8,17 +8,6 @@ export default class Component extends Collection {
   }
 
   /**
-   * Get the component data belonging to a given entity
-   *
-   * @param {mixed}  entityId  the entity's unique id
-   *
-   * @returns {mixed} the entity's component data
-   */
-  get(entityId) {
-    return this.values[entityId];
-  }
-
-  /**
    * Returns an array of ids of the entities for which this component stores
    * data
    *

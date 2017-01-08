@@ -17,10 +17,16 @@ export default class Collection {
    * Retrieve data referenced by the given key
    *
    * @param {mixed}   key   the identifier for the data
-   * @returns {mixed} the data
+   * @returns {mixed} the data if it exists. If the data does not exist, will
+   *                  either return the null value defined by setNullValue(),
+   *                  or undefined if it has not been set
    */
   get(key) {
-    return this.values[key];
+    if (this.has(key)) {
+      return this.values[key];
+    }
+
+    return this.nullValue;
   }
 
   /**
@@ -32,5 +38,16 @@ export default class Collection {
    */
   has(key) {
     return Object.hasOwnProperty.call(this.values, key);
+  }
+
+  /**
+   * Sets the null value to return when retreiving data that does not exist.
+   * By default the collection will return undefined
+   *
+   * @param {mixed}  nullValue  the null value to return from get() when a key
+   *                            does not exist in the collection
+   */
+  setNullValue(nullValue) {
+    this.nullValue = nullValue;
   }
 }

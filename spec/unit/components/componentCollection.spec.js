@@ -33,19 +33,6 @@ describe('ComponentCollection', () => {
     });
   });
 
-  describe('get()', () => {
-    it('should return undefined if the component does not exist and no null component has been set', () => {
-      expect(collection.get('foo')).not.toBeDefined();
-    });
-
-    it('should return the NullComponent if the component does not exist', () => {
-      const nullComponent = {};
-      collection.setNullObject(nullComponent);
-
-      expect(collection.get('foo')).toBe(nullComponent);
-    });
-  });
-
   describe('getEntityIds()', () => {
     it('should return an array of unique entity ids that have at least one component', () => {
       const fooComponent = jasmine.createSpyObj('foo', ['getEntityIds']);

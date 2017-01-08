@@ -25,20 +25,6 @@ export default class ComponentCollection extends Collection {
   }
 
   /**
-   * Get a component with the given name
-   *
-   * @param   {string}  componentName  the name of the component
-   * @returns {object}  the component object, or undefined
-   */
-  get(componentName) {
-    if (this.has(componentName)) {
-      return this.values[componentName];
-    }
-
-    return this.nullComponent;
-  }
-
-  /**
    * Returns an array of ids for entities that have at least one component
    *
    * @returns {Array} Array of entity ids
@@ -111,14 +97,5 @@ export default class ComponentCollection extends Collection {
         }
       });
     });
-  }
-
-  /**
-   * Sets the null value to return if a component does not exist
-   *
-   * @param {mixed}  nullComponent the null value to return
-   */
-  setNullObject(nullComponent) {
-    this.nullComponent = nullComponent;
   }
 }

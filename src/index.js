@@ -21,7 +21,7 @@ function createComponentCollection() {
     createInstanceFactory(Component)
   );
 
-  collection.setNullObject(new NullComponent());
+  collection.setNullValue(new NullComponent());
 
   return collection;
 }
