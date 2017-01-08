@@ -43,21 +43,6 @@ export default class ComponentCollection extends Collection {
   }
 
   /**
-   * Calls the callback for each component in the collection, with the
-   * component's name as the first argument and the component itself
-   * as the second argument
-   *
-   * @param {Function}  callback called for each component in the collection
-   *
-   */
-  each(callback) {
-    Object.keys(this.values).forEach((componentName) => {
-      const component = this.values[componentName];
-      callback.call(this, componentName, component);
-    });
-  }
-
-  /**
    * Returns all data indexed by entity id and component name
    *
    * @returns {Object}  objects indexed by entity id, which contain
@@ -66,7 +51,7 @@ export default class ComponentCollection extends Collection {
   getDataByEntity() {
     const entities = {};
 
-    this.each((componentName, component) => {
+    this.forEach((component, componentName) => {
       component.each((entityId, data) => {
         if (typeof entities[entityId] === 'undefined') {
           entities[entityId] = {};
@@ -87,7 +72,7 @@ export default class ComponentCollection extends Collection {
    */
   setDataByEntity(data) {
     // Each component
-    this.each((componentName, component) => {
+    this.forEach((component, componentName) => {
       // Each entity in the data
       Object.keys(data).forEach((entityId) => {
         const entityData = data[entityId];
