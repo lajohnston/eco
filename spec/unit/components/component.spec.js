@@ -95,19 +95,6 @@ describe('Component', () => {
     });
   });
 
-  describe('has()', () => {
-    it('should return true if the component contains data for the entity', () => {
-      const component = new Component({});
-      component.set(1, {});
-      expect(component.has(1)).toBe(true);
-    });
-
-    it('should return false if the component does not contain data for the entity', () => {
-      const component = new Component({});
-      expect(component.has(1)).toBe(false);
-    });
-  });
-
   describe('each()', () => {
     it('should call the callback with each entity id and data', () => {
       const component = new Component();
