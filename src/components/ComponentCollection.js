@@ -5,7 +5,6 @@ export default class ComponentCollection extends Collection {
     super();
 
     this.componentFactory = componentFactory;
-    this.components = {};
   }
 
   /**
@@ -20,7 +19,7 @@ export default class ComponentCollection extends Collection {
   set(name, definition) {
     const component = this.componentFactory.create(definition);
 
-    this.components[name] = component;
+    this.values[name] = component;
 
     return component;
   }
@@ -33,7 +32,7 @@ export default class ComponentCollection extends Collection {
    */
   get(componentName) {
     if (this.has(componentName)) {
-      return this.components[componentName];
+      return this.values[componentName];
     }
 
     return this.nullComponent;
@@ -47,8 +46,8 @@ export default class ComponentCollection extends Collection {
   getEntityIds() {
     const ids = {};
 
-    Object.keys(this.components).forEach((componentName) => {
-      const component = this.components[componentName];
+    Object.keys(this.values).forEach((componentName) => {
+      const component = this.values[componentName];
       component.getEntityIds().forEach((id) => {
         ids[id] = true;
       });
@@ -66,8 +65,8 @@ export default class ComponentCollection extends Collection {
    *
    */
   each(callback) {
-    Object.keys(this.components).forEach((componentName) => {
-      const component = this.components[componentName];
+    Object.keys(this.values).forEach((componentName) => {
+      const component = this.values[componentName];
       callback.call(this, componentName, component);
     });
   }
@@ -122,7 +121,7 @@ export default class ComponentCollection extends Collection {
    * @returns {boolean} true if the component exists, otherwise false
    */
   has(name) {
-    return Object.hasOwnProperty.call(this.components, name);
+    return Object.hasOwnProperty.call(this.values, name);
   }
 
   /**

@@ -4,7 +4,6 @@ export default class Component extends Collection {
   constructor(definition) {
     super();
 
-    this.entities = {};
     this.factory = getFactory(definition); // eslint-disable-line no-use-before-define
   }
 
@@ -16,7 +15,7 @@ export default class Component extends Collection {
    * @returns {mixed} the entity's component data
    */
   get(entityId) {
-    return this.entities[entityId];
+    return this.values[entityId];
   }
 
   /**
@@ -26,7 +25,7 @@ export default class Component extends Collection {
    * @returns {Array} array of entity ids
    */
   getEntityIds() {
-    return Object.keys(this.entities);
+    return Object.keys(this.values);
   }
 
   /**
@@ -38,7 +37,7 @@ export default class Component extends Collection {
    * @returns {mixed} the entity's component data
    */
   set(entityId, data) {
-    this.entities[entityId] = this.factory(data);
+    this.values[entityId] = this.factory(data);
   }
 
   /**
@@ -50,7 +49,7 @@ export default class Component extends Collection {
    *                    otherwise false
    */
   has(entityId) {
-    return Object.hasOwnProperty.call(this.entities, entityId);
+    return Object.hasOwnProperty.call(this.values, entityId);
   }
 
   /**
@@ -59,7 +58,7 @@ export default class Component extends Collection {
    * @param   {mixed}  entityId  the entity's unique id
    */
   remove(entityId) {
-    delete this.entities[entityId];
+    delete this.values[entityId];
   }
 
   /**
@@ -71,8 +70,8 @@ export default class Component extends Collection {
    *                            that entity
    */
   each(callback) {
-    Object.keys(this.entities).forEach((entityId) => {
-      callback.call(this, entityId, this.entities[entityId]);
+    Object.keys(this.values).forEach((entityId) => {
+      callback.call(this, entityId, this.values[entityId]);
     });
   }
 
