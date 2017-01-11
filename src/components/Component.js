@@ -4,7 +4,7 @@ export default class Component extends Collection {
   constructor(definition) {
     super();
 
-    this.factory = getFactory(definition); // eslint-disable-line no-use-before-define
+    this.factory = Component.createFactory(definition);
   }
 
   /**
@@ -43,18 +43,39 @@ export default class Component extends Collection {
 
     return instance;
   }
-}
 
-function getFactory(definition) {
-  const type = typeof definition;
+  /**
+   * Return a factory function that will transform data passed to it
+   *
+   * @param {mixed} definition  the component definition.
+   *                  An 'undefined' value will return a factory that
+   *                  always returns the value passed to it.
+   *
+   *                  A function will be returned as-is and act as the
+   *                  factory.
+   *
+   *                  A primitive value will create a factory that always
+   *                  returns that value for all instances.
+   *
+   *                  An object definition will act as a set of default fields
+   *                  and values, that will be shallow merged into any object
+   *                  passed to it.
+   */
+  static createFactory(definition) {
+    const type = typeof definition;
 
-  if (type === 'function') {
-    return definition;
-  } else if (type === 'object' && definition !== null) {
-    return data => Component.mergeObjects(definition, data);
-  } else if (type === 'undefined') {
-    return data => data;
+    if (type === 'function') {
+      // Return function as-is
+      return definition;
+    } else if (type === 'object' && definition !== null) {
+      // Return function that shallow merges objects passed to it
+      return data => Component.mergeObjects(definition, data);
+    } else if (type === 'undefined') {
+      // Return function that returns any data passed to it
+      return data => data;
+    }
+
+    // Primitive value- return function that always returns this value
+    return () => definition;
   }
-
-  return () => definition;
 }
