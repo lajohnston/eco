@@ -51,6 +51,16 @@ export default class Eco {
   }
 
   /**
+   * Removes the component with the given name and destroys the entity data it
+   * contains
+   *
+   * @param {string}  name  the name of the component
+   */
+  removeComponent(name) {
+    this.componentCollection.delete(name);
+  }
+
+  /**
    * Create an entity proxy with the given id
    *
    * @param {mixed} id  (optional) id. If none is given then a unique id will

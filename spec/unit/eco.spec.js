@@ -10,7 +10,7 @@ describe('Eco', () => {
   beforeEach(() => {
     componentCollection = jasmine.createSpyObj(
       'componentCollection',
-      ['set', 'has', 'getDataByEntity', 'setDataByEntity', 'getEntityIds']
+      ['set', 'has', 'delete', 'getDataByEntity', 'setDataByEntity', 'getEntityIds']
     );
 
     idFactory = jasmine.createSpyObj('idFactory', ['create', 'reserve']);
@@ -78,6 +78,13 @@ describe('Eco', () => {
 
       expect(componentCollection.has).toHaveBeenCalledWith(name);
       expect(componentCollection.set).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('removeComponent()', () => {
+    it('should remove the component from the component collection', () => {
+      eco.removeComponent('foo');
+      expect(componentCollection.delete).toHaveBeenCalledWith('foo');
     });
   });
 
