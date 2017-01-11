@@ -19,6 +19,38 @@ export default class Eco {
   }
 
   /**
+   * Adds a component definition with the given name
+   *
+   * @param {string}  name  the unique name for the component
+   * @param {mixed}   factoryDefinition an optional definition that will used to
+   *                  transform data when adding a component to an entity.
+   *
+   *                  An undefined value will store the entity data as-is
+   *
+   *                  A function will have instance data passed to it and the
+   *                  returned value will be stored for the entity
+   *
+   *                  A primitive value will create a component that always
+   *                  returns that value as a constant
+   *
+   *                  An object definition will act as a set of default fields
+   *                  and values that will be shallow merged into any object
+   *                  passed to it
+   *
+   * @returns {boolean} false if a component with that name already exists,
+   *                    otherwise true
+   */
+  addComponent(name, factoryDefinition) {
+    if (this.componentCollection.has(name)) {
+      return false;
+    }
+
+    this.componentCollection.set(name, factoryDefinition);
+
+    return true;
+  }
+
+  /**
    * Create an entity proxy with the given id
    *
    * @param {mixed} id  (optional) id. If none is given then a unique id will

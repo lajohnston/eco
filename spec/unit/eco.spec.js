@@ -10,7 +10,7 @@ describe('Eco', () => {
   beforeEach(() => {
     componentCollection = jasmine.createSpyObj(
       'componentCollection',
-      ['set', 'getDataByEntity', 'setDataByEntity', 'getEntityIds']
+      ['set', 'has', 'getDataByEntity', 'setDataByEntity', 'getEntityIds']
     );
 
     idFactory = jasmine.createSpyObj('idFactory', ['create', 'reserve']);
@@ -53,6 +53,31 @@ describe('Eco', () => {
 
       expect(eco.createComponent('foo', data)).toBe(result);
       expect(componentCollection.set).toHaveBeenCalledWith('foo', data);
+    });
+  });
+
+  describe('addComponent()', () => {
+    it('should add the component to the component collection and return true if it is not already defined', () => {
+      const data = {};
+      const name = 'foo';
+
+      componentCollection.has.and.returnValue(false);
+
+      expect(eco.addComponent('foo', data)).toBe(true);
+
+      expect(componentCollection.has).toHaveBeenCalledWith(name);
+      expect(componentCollection.set).toHaveBeenCalledWith('foo', data);
+    });
+
+    it('should return false without adding the component if the name is already defined', () => {
+      const name = 'foo';
+
+      componentCollection.has.and.returnValue(true);
+
+      expect(eco.addComponent('foo')).toBe(false);
+
+      expect(componentCollection.has).toHaveBeenCalledWith(name);
+      expect(componentCollection.set).not.toHaveBeenCalled();
     });
   });
 
