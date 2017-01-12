@@ -7,18 +7,6 @@ export default class Eco {
   }
 
   /**
-   * Creates a component definition
-   *
-   * @param {string}  name  the unique name for the component
-   * @param {mixed}   data  the default data for the component
-   *
-   * @returns {Component} the component object
-   */
-  createComponent(name, data) {
-    return this.componentCollection.set(name, data);
-  }
-
-  /**
    * Adds a component definition with the given name
    *
    * @param {string}  name  the unique name for the component

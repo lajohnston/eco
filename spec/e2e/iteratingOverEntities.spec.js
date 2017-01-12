@@ -4,9 +4,9 @@ describe('Iterating over entities', () => {
   beforeEach(() => {
     eco = new window.Eco();
 
-    eco.createComponent('foo');
-    eco.createComponent('bar');
-    eco.createComponent('baz');
+    eco.addComponent('foo');
+    eco.addComponent('bar');
+    eco.addComponent('baz');
   });
 
   describe('eco.filter()', () => {

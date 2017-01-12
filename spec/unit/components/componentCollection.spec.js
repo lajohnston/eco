@@ -25,10 +25,9 @@ describe('ComponentCollection', () => {
       componentFactory.create.and.returnValue(component);
 
       const definition = {};
-      const result = collection.set('foo', definition);
+      collection.set('foo', definition);
 
       expect(componentFactory.create).toHaveBeenCalledWith(definition);
-      expect(result).toBe(component);
       expect(collection.get('foo')).toBe(component);
     });
   });

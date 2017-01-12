@@ -17,11 +17,7 @@ export default class ComponentCollection extends Collection {
    *                    or false if it was invalid or already exists
    */
   set(name, definition) {
-    const component = this.componentFactory.create(definition);
-
-    this.values[name] = component;
-
-    return component;
+    super.set(name, this.componentFactory.create(definition));
   }
 
   /**

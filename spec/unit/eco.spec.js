@@ -44,18 +44,6 @@ describe('Eco', () => {
     });
   });
 
-  describe('createComponent()', () => {
-    it('should add the component to the component collection and return the result', () => {
-      const data = {};
-      const result = {};
-
-      componentCollection.set.and.returnValue(result);
-
-      expect(eco.createComponent('foo', data)).toBe(result);
-      expect(componentCollection.set).toHaveBeenCalledWith('foo', data);
-    });
-  });
-
   describe('addComponent()', () => {
     it('should add the component to the component collection and return true if it is not already defined', () => {
       const data = {};
