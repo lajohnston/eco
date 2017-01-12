@@ -1,4 +1,4 @@
-describe('Saving and loading', () => {
+describe('Getting and setting all data', () => {
   let eco;
 
   beforeEach(() => {
@@ -8,7 +8,7 @@ describe('Saving and loading', () => {
     eco.createComponent('bar');
   });
 
-  describe('eco.getDataByEntity()', () => {
+  describe('using eco.getDataByEntity()', () => {
     it('should return entity data indexed by entity id and component name', () => {
       const id1 = eco.entity()
         .add('foo', 'foo1')
@@ -34,7 +34,7 @@ describe('Saving and loading', () => {
     });
   });
 
-  describe('eco.setDataByEntity()', () => {
+  describe('using eco.setDataByEntity()', () => {
     let data;
 
     beforeEach(() => {
