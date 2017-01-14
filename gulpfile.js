@@ -9,16 +9,32 @@
  *      gulp test:e2e
  */
 
-const gulp = require('gulp'); // eslint-disable-line import/no-extraneous-dependencies
-const plugins = require('gulp-load-plugins')(); // eslint-disable-line import/no-extraneous-dependencies
-const KarmaServer = require('karma').Server; // eslint-disable-line import/no-extraneous-dependencies
+/* eslint-disable import/no-extraneous-dependencies */
+const gulp = require('gulp');
+const plugins = require('gulp-load-plugins')();
+const KarmaServer = require('karma').Server;
 const path = require('path');
+const moment = require('moment');
 
 const src = [
   'src/components/Collection.js',
   'src/**/*.js',
   'src/index.js',
 ];
+
+const now = moment();
+const packageJson = require('./package.json');
+
+const header = `/*!
+ * eco.js - v${packageJson.version}
+ * Built ${now.format('ddd, MMM YYYY HH:mm:ss UTC')}
+ *
+ * https://github.com/lajohnston/eco
+ *
+ * eco.js is licensed under the MIT License.
+ * http://www.opensource.org/licenses/mit-license
+ */
+`;
 
 function karmaErrorHandler(err, done) {
   if (err === 0) {
@@ -56,8 +72,8 @@ gulp.task('build', gulp.parallel('lint', () => {
       presets: ['es2015'],
     }))
     .pipe(plugins.wrap(wrapper))
-    .pipe(gulp.dest('dist'))
     .pipe(plugins.uglify())
+    .pipe(plugins.wrap(`${header} <%= contents %>`))
     .pipe(plugins.rename('eco.min.js'))
     .pipe(gulp.dest('dist'));
 }));
