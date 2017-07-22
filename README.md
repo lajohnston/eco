@@ -1,96 +1,178 @@
-# Ecos Entity-Component-System microframework
+# Eco Entity Component Framework
 
-Ecos is a lightweight, entity-component-system framework. Its purpose is to allow you to define your game data and logic using plain JavaScript organised into components and systems,
-decoupled from both this framework and the game framework you wish to use with it.
+Eco is an entity-component framework for JavaScript/HTML5 games that lets you
+define your components and game logic as decoupled POJO/Vanilla JS.
+
+You can use it as part of a custom game engine, and also as a glue layer to
+keep your game logic decoupled from the game framework and libraries of your
+choice. I currently use it alongside PIXI.js.
+
+The framework is under development, but the API described below is feature
+complete. I'm using this for personal projects and honing the API. Once the
+API is refined I'll begin work on optimisation and performance.
+
+## Overview
+
+    // Define 'position' and movement 'vector' components, with default values
+    var eco = new Eco();
+    eco.addComponent('position', { x: 0, y: 0 });
+    eco.addComponent('vector', { x: 0, y: 0 });
+
+    // Create a system that will update each entity that has these components
+    var movement = eco.system('position', 'vector', function (position, vector, entity) {
+        // For each entity that has both a 'position' and a 'vector' component,
+        // update entity position based on the movement vector
+        position.x += vector.x;
+        position.y += vector.y;
+    });
+
+    // Create an entity and add these components to it
+    eco.entity()
+        .add('position', { x: 100 })
+        .add('vector',   { x: 1 });
+
+    // In your game update loop
+    movement.update();
 
 ## Components
 
-Components are data structures. They don't need to contain any logic, so you can define them as simple objects containing default attributes and values:
+Components are data structures, focussed more on data storage and retrieval than
+game logic. The game logic can be handled by Systems, described later.
 
-    var ecos = new Ecos();
-    ecos.components.add(
-        'position',     // the name of the component
-        {               // the component's default values
-            x: 0,
-            y: 0
-        }
-    );
+Eco lets you define multiple types using the eco.addComponent() method:
 
-Components can also be classes if you wish to add some data encapsulation and processing:
+### Simple components
 
-    var Vector = function (x, y, speed) {
+Defining a component with just a name creates a component that stores whatever
+data is passed to it.
+
+    eco.addComponent('foo');
+
+    eco.entity()
+        .add('foo', 'bar')
+        .get('foo')                     // 'bar'
+
+    eco.entity()
+        .add('foo', { bar: 'baz' })
+        .get('foo')                     // { bar: 'baz' }
+
+### Factory components
+
+Defining components with a function creates a factory component. When a
+component is added to an entity, the data will be passed to the given
+function and the returned data will be stored.
+
+    // Create a class
+    function Vector(x, y) {
         this.x = x || 0;
         this.y = y || 0;
-        this.speed = speed || 1;
     }
 
-    Vector.prototype.getVectorX = function () {
-        return this.x * this.speed;
-    }
-
-    // The function will be called when the component is added to an entity
-    ecos.components.add('vector', function (data) {
+    // Define a factory component that returns an instance of the class
+    eco.addComponent('vector', function (data) {
         return new Vector(data.x, data.y);
     });
 
+    var entity = eco.entity()
+        .add('vector', { x: 1, y: 0 });
+
+    (entity.get('vector') instanceof Vector)  // true
+
+### Object template components
+
+Defining components with an object literal defines a default set of values.
+When a component is added to an entity, the data is shallow merged into the
+defaults and the result is stored.
+
+    eco.addComponent('position', {
+        x: 0,
+        y: 0
+    };
+
+    var entity = eco.entity()
+        .add('position', { x: 100 });
+
+    entity.get('position').x    //  100
+    entity.get('position').y    //  0
+
+### Constant components
+
+Defining a component with a primitive value (string, number, boolean) will
+treat the value as a constant that is returned for all instances.
+
+    eco.addComponent('foo', true);  // component value will always be true
+
+    eco.entity()
+        .add('foo')
+        .get('foo')             // true
+
+    eco.entity()
+        .add('isPlayer', 'foo') // 'foo' will be ignored
+        .get('isPlayer')        // true
+
 ## Entities
 
-Entities are simply bags of components. Components can be added and removed at runtime allowing behaviour to be changed dynamically.
+Entities are simply collections of components. Components can be added and
+removed at runtime allowing behaviour to be changed dynamically.
 
-    ecos.entities.add({
-        isPlayer: { value: true },
-        position: { x: 0, y: 0 },
-        vector: { x: 0, y: 0] },
-        friction: { value: -1 },
-        gravity: { value: -1 },
-        health: { value: 5 }
+    var entity = eco.entity()
+        .add('position', { x: 0, y: 0 })
+        .add('vector', { x: 0, y: 0 })
+        .add('friction', { value: 1 })
+        .add('health', { amount: 1 })
+        .add('gravity', { value: 1 });
+
+    // Add components
+    entity.add('gravity');
+    entity.has('gravity');      // true
+
+    // Remove components
+    entity.remove('gravity');
+    entity.has('gravity');      // false
+
+    // Get components
+    entity.get('health').amount = 100;
+
+    // Remove all components
+    entity.removeAll();
+
+    // Iterate through all components
+    entity.forEach(function (data, componentName) {
+        ...
     });
 
 ## Systems
 
-Systems provide the logic. Each system defines what components it's interested in and only listens for entities that contain all of these components.
+Systems define your game logic and behaviour. Each system updates entities that
+have a certain combination of components.
 
-    var systems = ecos.systems('ingame');
+    // Create a system that will iterate through entities that contain a
+    // 'position' component and a 'vector' component
+    var movement = eco.system('position', 'vector', function (position, vector, entity) {
+        /**
+         * Each time the system's update() method is called, this callback will
+         * run for each matching entity
+         *
+         * The relevant components for each entity are passed in for you, and
+         * the entity itself is passed as the last argument
+         */
 
-    systems.add(
-        'VectorMovement',           // the name of the system
-        ['position', 'vector'],     // only listen for entities with both the 'position' and 'vector' components
-        function (position, vector, entity) {
-            /**
-             * This callback is called for each matching entity, each update cycle.
-             * Each entity's 'position' and 'vector' components are injected in for you
-             * in the order you provided in the second argument
-             */
-            position.x += vector.getVectorX();
-            position.y += vector.getVectorY();
-        }
-    );
+        // Update entity position based on its movement vector values
+        position.x += vector.getVectorX();
+        position.y += vector.getVectorY();
+    });
 
-    // This calls each system in turn, in the order they were registered
-    systems.update();
+    // In your update loop
+    movement.update();
 
-You can group systems into named categories and update them independently:
+You can also iterate through entities using filters:
 
-    var logicSystems  = ecos.systems('logic');
-    var renderSystems = ecos.systems('render');
+    var fooBarFilter = eco.filter('foo', 'bar');
 
-    logicSystems.update();
-    renderSystems.update();
+    fooBarFilter.each(function (entity) => {
+        entity.has('foo'); // true
+        entity.has('bar'); // true
+    });
 
-A system's callback can of course be a method in a plain JavaScript class.
-
-    var Counter = function () {
-        this.counter = 0;
-    }
-
-    Counter.prototype.update = function (foo) {
-        this.counter++;
-        foo.frameCount = this.counter;
-    }
-
-    var counter = new Counter();
-    ecos.systems('logic').add(
-        'Counter',      // the name of the system
-        ['foo'],        // listen for foo components
-        counter.update  // the method to call for each matching entity
-    );
+    // Get all entities that currently have at least one component
+    var allEntities = eco.getEntities();
