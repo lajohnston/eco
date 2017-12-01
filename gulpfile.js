@@ -9,14 +9,17 @@
  *      gulp test:e2e
  */
 
-/* eslint-disable import/no-extraneous-dependencies */
+/* global require __dirname */
+const path = require("path");
 const gulp = require("gulp");
 const plugins = require("gulp-load-plugins")();
 const KarmaServer = require("karma").Server;
-const path = require("path");
 const moment = require("moment");
 
-const src = ["src/**/*.js", "src/index.js"];
+const rollup = require("rollup-stream");
+const rollupBabel = require("rollup-plugin-babel");
+const sourceStream = require("vinyl-source-stream");
+const buffer = require("vinyl-buffer");
 
 const now = moment();
 const packageJson = require("./package.json");
@@ -45,18 +48,6 @@ function karmaErrorHandler(err, done) {
   );
 }
 
-/**
- * Simple bundler to bundle ES6 classes into one file, without using a module system
- */
-function bundleJs() {
-  return gulp
-    .src(src)
-    .pipe(plugins.concat("eco.js"))
-    .pipe(plugins.replace(/import .* from '.*';/g, ""))
-    .pipe(plugins.replace("export default class", "class"))
-    .pipe(plugins.replace(/export default .*/g, ""));
-}
-
 gulp.task("lint", () =>
   gulp
     .src("src/**/*.js")
@@ -67,19 +58,28 @@ gulp.task("lint", () =>
 gulp.task(
   "build",
   gulp.parallel("lint", () => {
-    const wrapper =
-      "(function() { <%= contents %> window.Eco = function () { return createEcoInstance(); };})();";
+    return rollup({
+      name: "Eco",
+      input: "./src/index.js",
+      format: "iife",
 
-    return bundleJs()
+      plugins: [
+        rollupBabel({
+          exclude: "node_modules/**",
+          externalHelpersWhitelist: ["classCallCheck"]
+        })
+      ]
+    })
+      .pipe(sourceStream("eco.min.js"))
+      .pipe(buffer())
       .pipe(
-        plugins.babel({
-          presets: ["es2015"]
+        plugins.uglify({
+          mangle: {
+            except: ["Eco"]
+          }
         })
       )
-      .pipe(plugins.wrap(wrapper))
-      .pipe(plugins.uglify())
       .pipe(plugins.wrap(`${header} <%= contents %>`))
-      .pipe(plugins.rename("eco.min.js"))
       .pipe(gulp.dest("dist"));
   })
 );
