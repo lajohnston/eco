@@ -71,6 +71,8 @@ entity.position.y; // 200
 entity.remove("position");
 entity.has("position"); // false
 entity.position; // undefined
+
+entity.removeAll();
 ```
 
 ## Filters
