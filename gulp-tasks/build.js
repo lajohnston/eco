@@ -18,27 +18,42 @@ const header = `/*!
  */
 `;
 
-module.exports = (gulp, plugins) => () =>
-  rollup({
-    name: "Eco",
-    input: "./src/index.js",
-    format: "iife",
+module.exports = (gulp, plugins) => {
+  /**
+   * Builds the ./src directory into ./dist/eco.min.js
+   */
+  function build() {
+    return rollup({
+      name: "Eco",
+      input: "./src/index.js",
+      format: "iife",
 
-    plugins: [
-      rollupBabel({
-        exclude: "node_modules/**",
-        externalHelpersWhitelist: ["classCallCheck"]
-      })
-    ]
-  })
-    .pipe(sourceStream("eco.min.js"))
-    .pipe(buffer())
-    .pipe(
-      plugins.uglify({
-        mangle: {
-          except: ["Eco"]
-        }
-      })
-    )
-    .pipe(plugins.wrap(`${header} <%= contents %>`))
-    .pipe(gulp.dest("dist"));
+      plugins: [
+        rollupBabel({
+          exclude: "node_modules/**",
+          externalHelpersWhitelist: ["classCallCheck"]
+        })
+      ]
+    })
+      .pipe(sourceStream("eco.min.js"))
+      .pipe(buffer())
+      .pipe(
+        plugins.uglify({
+          mangle: {
+            except: ["Eco"]
+          }
+        })
+      )
+      .pipe(plugins.wrap(`${header} <%= contents %>`))
+      .pipe(gulp.dest("dist"));
+  }
+
+  /**
+   * Watches the ./src directory and rebuild if changes are made
+   */
+  function watch() {
+    return gulp.watch("./src/**/*", build);
+  }
+
+  return { build, watch };
+};

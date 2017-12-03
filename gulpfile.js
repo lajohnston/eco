@@ -1,13 +1,10 @@
 /**
  * Eco gulpfile
- *
- * Available tasks:
- *      gulp.lint
- *      gulp build
- *      gulp test:e2e
  */
 
 /* global require */
+
+// For auto-transpiling spec files
 require("babel-register")({
   presets: ["es2015"]
 });
@@ -23,7 +20,16 @@ function getTask(task) {
 gulp.task("lint", getTask("lint"));
 
 // Builds the project into dist/eco.min.js
-gulp.task("build", gulp.parallel("lint", getTask("build")));
+gulp.task("build", gulp.parallel("lint", getTask("build").build));
 
-// Runs e2e browser tests
-gulp.task("e2e", gulp.series("build", getTask("e2e")));
+// Builds the project and rebuilds when changes are made
+gulp.task("watch", gulp.series("build", getTask("build").watch));
+
+// Runs the ./spec/e2e tests within browsers and reruns if changes are made
+gulp.task(
+  "e2e",
+  gulp.series("build", gulp.parallel("watch", getTask("test").e2e))
+);
+
+// Runs the ./spec/unit tests in node.js and reruns if changes are made
+gulp.task("unit", getTask("test").watchUnitTests);

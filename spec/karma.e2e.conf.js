@@ -15,6 +15,7 @@ module.exports = config => {
       "**/*.js": ["babel"]
     },
 
+    // Pre-process spec files
     babelPreprocessor: {
       options: {
         presets: ["es2015"],
@@ -34,7 +35,7 @@ module.exports = config => {
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: true,
+    singleRun: false,
 
     // Concurrency level
     // how many browser should be started simultaneous
