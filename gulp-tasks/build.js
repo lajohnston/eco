@@ -5,6 +5,7 @@ const rollup = require("rollup-stream");
 const rollupBabel = require("rollup-plugin-babel");
 const sourceStream = require("vinyl-source-stream");
 const buffer = require("vinyl-buffer");
+const babelHelpersList = require("babel-helpers").list;
 
 const now = moment();
 const header = `/*!
@@ -30,8 +31,21 @@ module.exports = (gulp, plugins) => {
 
       plugins: [
         rollupBabel({
+          presets: [
+            [
+              "es2015",
+              {
+                modules: false
+              }
+            ]
+          ],
+          plugins: ["external-helpers"],
           exclude: "node_modules/**",
-          externalHelpersWhitelist: ["classCallCheck"]
+
+          // fix rollup regression, remove when rollup/rollup#1595 gets resolved
+          externalHelpersWhitelist: babelHelpersList.filter(
+            helperName => helperName !== "asyncGenerator"
+          )
         })
       ]
     })
