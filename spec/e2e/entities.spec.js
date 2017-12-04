@@ -4,6 +4,7 @@ describe("Entities", () => {
   it("should hold component data", () => {
     const eco = new Eco();
     eco.component("foo", x => x);
+    eco.component("bar", x => x);
 
     const entityA = eco
       .entity()

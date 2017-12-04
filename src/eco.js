@@ -3,7 +3,7 @@
  */
 export default class Eco {
   /**
-   * @param {function} Entity prototype to create entities
+   * @param {function} Entity class to use to create entities
    * @param {function} Entity.defineComponent function that takes a component
    *  name
    */
