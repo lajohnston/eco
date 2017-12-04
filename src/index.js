@@ -1,8 +1,8 @@
+import AbstractEntity from "./abstractEntity";
 import Eco from "./eco";
-import BaseEntity from "./baseEntity";
 
 function createEco() {
-  return new Eco(BaseEntity);
+  return new Eco(AbstractEntity);
 }
 
 window.Eco = createEco;
