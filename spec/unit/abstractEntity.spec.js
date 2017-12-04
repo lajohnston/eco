@@ -66,4 +66,54 @@ describe("Entity", () => {
     const entity = new AbstractEntity();
     expect(entity.remove("foo")).toBe(entity);
   });
+
+  it("should be able to remove all its components", () => {
+    const Entity = class extends AbstractEntity {
+      static createComponent(name) {
+        return name;
+      }
+    };
+
+    Entity.defineComponent("foo");
+    Entity.defineComponent("bar");
+    Entity.defineComponent("baz");
+
+    const entity = new Entity()
+      .add("foo")
+      .add("bar")
+      .add("baz");
+
+    entity.removeAll();
+
+    expect(entity.has("foo")).toBe(false);
+    expect(entity.has("bar")).toBe(false);
+    expect(entity.has("baz")).toBe(false);
+  });
+
+  it("should return an object of its components", () => {
+    const Entity = class extends AbstractEntity {
+      static createComponent(name) {
+        return name;
+      }
+    };
+
+    Entity.defineComponent("foo");
+    Entity.defineComponent("bar");
+    Entity.defineComponent("baz");
+
+    const entity = new Entity()
+      .add("foo")
+      .add("bar")
+      .add("baz");
+
+    const components = entity.getComponents();
+    expect(components).toEqual({
+      foo: "foo",
+      bar: "bar",
+      baz: "baz"
+    });
+
+    components.foo = undefined;
+    expect(entity.foo).toBe("foo");
+  });
 });

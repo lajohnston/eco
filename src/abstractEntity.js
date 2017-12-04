@@ -46,6 +46,31 @@ export default class AbstractEntity {
   }
 
   /**
+   * Removes all the components from this entity
+   */
+  removeAll() {
+    Object.keys(this.components).forEach(name => {
+      this.remove(name);
+    });
+
+    return this;
+  }
+
+  /**
+   * Returns an object containing all the entity's components indexed by name
+   *
+   * @returns {Object} object of components indexed by name
+   */
+  getComponents() {
+    const components = {};
+    Object.keys(this.components).forEach(name => {
+      components[name] = this.components[name];
+    });
+
+    return components;
+  }
+
+  /**
    * Adds an accessor property to the class for accessing the given component,
    * i.e. component 'foo' is accessible on instances using entity.foo
    *
