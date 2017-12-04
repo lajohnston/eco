@@ -1,5 +1,10 @@
 import AbstractEntity from "./abstractEntity";
 import Eco from "./eco";
+import Filter from "./filter";
+
+function createFilter(entities, criteria) {
+  return new Filter(entities, criteria);
+}
 
 function createEco() {
   let eco;
@@ -12,7 +17,7 @@ function createEco() {
   };
 
   // Create eco instance
-  eco = new Eco(Entity);
+  eco = new Eco(Entity, createFilter);
   return eco;
 }
 

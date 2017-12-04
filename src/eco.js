@@ -7,8 +7,9 @@ export default class Eco {
    * @param {function} Entity.defineComponent function that takes a component
    *  name
    */
-  constructor(Entity) {
+  constructor(Entity, createFilter) {
     this.Entity = Entity;
+    this.createFilterInstance = createFilter;
 
     this.components = Object.create(null, {});
     this.entities = [];
@@ -46,5 +47,18 @@ export default class Eco {
     const entity = new this.Entity();
     this.entities.push(entity);
     return entity;
+  }
+
+  /**
+   * Returns a new entity filter instance
+   *
+   * @param {Array<string>|function} criteria an array of component
+   *  identifiers, or a function that returns true if a given entity should be
+   *  included
+   *
+   * @returns {Filter}  filter instance
+   */
+  createFilter(components) {
+    return this.createFilterInstance(this.entities, components);
   }
 }

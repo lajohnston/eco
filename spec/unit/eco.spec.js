@@ -43,4 +43,17 @@ describe("Eco", () => {
 
     expect(eco.entities).toEqual([entityA, entityB]);
   });
+
+  it("should create and return filter instances", () => {
+    const Entity = function() {};
+    const createFilter = jasmine.createSpy("createFilter");
+    const eco = new Eco(Entity, createFilter);
+
+    const filter = {};
+    const componentArray = ["foo", "bar"];
+    createFilter.and.returnValue(filter);
+
+    expect(eco.createFilter(componentArray)).toBe(filter);
+    expect(createFilter).toHaveBeenCalledWith(eco.entities, componentArray);
+  });
 });
