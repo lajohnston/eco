@@ -51,7 +51,7 @@ describe("Entities", () => {
     const eco = new Eco();
     eco.component("foo", () => ({}));
     eco.component("bar", () => ({}));
-    eco.component("bar", () => ({}));
+    eco.component("baz", () => ({}));
 
     const entity = eco
       .entity()

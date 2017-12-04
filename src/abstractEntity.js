@@ -31,7 +31,18 @@ export default class AbstractEntity {
    * @returns {boolean} true if the entity has the component, otherwise false
    */
   has(componentName) {
-    return this.components.hasOwnProperty(componentName);
+    return typeof this.components[componentName] !== "undefined";
+  }
+
+  /**
+   * Removes the component with the given name from this entity
+   *
+   * @param {string} componentName the component identifier
+   * @returns {Object} self
+   */
+  remove(componentName) {
+    this.components[componentName] = undefined;
+    return this;
   }
 
   /**

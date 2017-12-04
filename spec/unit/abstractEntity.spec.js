@@ -45,4 +45,25 @@ describe("Entity", () => {
     expect(entityA.has("foo")).toBe(true);
     expect(entityB.has("foo")).toBe(false);
   });
+
+  it("should be able to remove a component", () => {
+    const Entity = class extends AbstractEntity {
+      static createComponent() {
+        return "bar";
+      }
+    };
+
+    Entity.defineComponent("foo");
+
+    const entity = new Entity();
+    entity.add("foo");
+    entity.remove("foo");
+    expect(entity.has("foo")).toBe(false);
+    expect(entity.foo).not.toBeDefined();
+  });
+
+  it("should return itself after removing a component", () => {
+    const entity = new AbstractEntity();
+    expect(entity.remove("foo")).toBe(entity);
+  });
 });
