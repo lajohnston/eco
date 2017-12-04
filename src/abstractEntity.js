@@ -4,7 +4,7 @@
  */
 export default class AbstractEntity {
   constructor() {
-    this.components = Object.create(null, {});
+    this.components = {};
   }
 
   /**
@@ -22,6 +22,16 @@ export default class AbstractEntity {
     );
 
     return this;
+  }
+
+  /**
+   * Indicates whether the entity has the given component
+   *
+   * @param {string} componentName the component identifier
+   * @returns {boolean} true if the entity has the component, otherwise false
+   */
+  has(componentName) {
+    return this.components.hasOwnProperty(componentName);
   }
 
   /**

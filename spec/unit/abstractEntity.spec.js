@@ -1,6 +1,6 @@
 import AbstractEntity from "../../src/abstractEntity";
 
-describe("AbstractEntity", () => {
+describe("Entity", () => {
   it("should return itself when adding components", () => {
     const entity = new AbstractEntity();
     expect(entity.add("foo")).toBe(entity);
@@ -28,5 +28,21 @@ describe("AbstractEntity", () => {
     const entity = new Entity();
     entity.foo = "bar";
     expect(entity.foo).toBe("bar");
+  });
+
+  it("should state whether it has a component", () => {
+    const Entity = class extends AbstractEntity {
+      static createComponent() {
+        return "bar";
+      }
+    };
+
+    Entity.defineComponent("foo");
+
+    const entityA = new Entity().add("foo");
+    const entityB = new Entity();
+
+    expect(entityA.has("foo")).toBe(true);
+    expect(entityB.has("foo")).toBe(false);
   });
 });
