@@ -9,7 +9,9 @@ export default class Eco {
    */
   constructor(Entity) {
     this.Entity = Entity;
+
     this.components = Object.create(null, {});
+    this.entities = [];
   }
 
   /**
@@ -41,6 +43,8 @@ export default class Eco {
    * @returns {Entity} the entity
    */
   entity() {
-    return new this.Entity();
+    const entity = new this.Entity();
+    this.entities.push(entity);
+    return entity;
   }
 }

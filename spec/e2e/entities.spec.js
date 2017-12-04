@@ -98,12 +98,11 @@ describe("Entities", () => {
     expect(result.bar).toBe(entity.bar);
   });
 
-  describe("eco.getEntities()", () => {
-    const eco = new Eco();
-
-    it("should return an array of all entities", () => {
+  describe("eco.entities", () => {
+    it("should provide an array of all entities", () => {
+      const eco = new Eco();
       const entities = [eco.entity(), eco.entity(), eco.entity()];
-      const result = eco.getAll();
+      const result = eco.entities;
 
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(entities.length);

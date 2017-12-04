@@ -33,4 +33,14 @@ describe("Eco", () => {
     const eco = new Eco(Entity);
     expect(eco.createComponent("foo")).not.toBeDefined();
   });
+
+  it("should return an array of all its entities", () => {
+    const Entity = function() {};
+    const eco = new Eco(Entity);
+
+    const entityA = eco.entity();
+    const entityB = eco.entity();
+
+    expect(eco.entities).toEqual([entityA, entityB]);
+  });
 });
