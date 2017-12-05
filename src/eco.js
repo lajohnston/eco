@@ -58,7 +58,28 @@ export default class Eco {
    *
    * @returns {Filter}  filter instance
    */
-  createFilter(components) {
-    return this.createFilterInstance(this.entities, components);
+  createFilter(criteria) {
+    return this.createFilterInstance(this.entities, criteria);
+  }
+
+  /**
+   * Returns a function that when called, will call the given function for each
+   * matching entity. The entity will be the first argument passed to the each
+   * function, followed by any additional arguments passed to the system
+   *
+   * @param {Array<string>|function} criteria an array of component
+   *  identifiers, or a function that returns true if a given entity should be
+   *  included
+   * @param {function} each function to call for each matching entity
+   *
+   * @returns {function} update function
+   */
+  system(criteria, each) {
+    const filter = this.createFilter(criteria);
+    return function(...args) {
+      filter.forEach(entity => {
+        each(entity, ...args);
+      });
+    };
   }
 }

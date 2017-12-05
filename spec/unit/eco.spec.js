@@ -56,4 +56,48 @@ describe("Eco", () => {
     expect(eco.createFilter(componentArray)).toBe(filter);
     expect(createFilter).toHaveBeenCalledWith(eco.entities, componentArray);
   });
+
+  it("should return system function that utilise filters", () => {
+    const Entity = function() {};
+    const filter = jasmine.createSpyObj("filter", ["forEach"]);
+    const createFilter = jasmine
+      .createSpy("createFilter")
+      .and.returnValue(filter);
+
+    const eco = new Eco(Entity, createFilter);
+
+    const componentArray = ["foo", "bar"];
+    const callback = jasmine.createSpy();
+    const system = eco.system(componentArray, callback);
+
+    const entities = [{}, {}];
+    filter.forEach.and.callFake(cb => entities.forEach(cb));
+    system("baz");
+
+    expect(createFilter).toHaveBeenCalledWith(eco.entities, componentArray);
+    expect(callback).toHaveBeenCalledWith(entities[0], "baz");
+    expect(callback).toHaveBeenCalledWith(entities[1], "baz");
+  });
+
+  it("should pass additional arguments to the system callback", done => {
+    const Entity = function() {};
+    const filter = jasmine.createSpyObj("filter", ["forEach"]);
+    const createFilter = jasmine
+      .createSpy("createFilter")
+      .and.returnValue(filter);
+
+    const eco = new Eco(Entity, createFilter);
+
+    const entity = {};
+    filter.forEach.and.callFake(cb => cb(entity));
+
+    const system = eco.system(["foo"], (entityArg, arg2, arg3) => {
+      expect(entityArg).toBe(entity);
+      expect(arg2).toBe("bar");
+      expect(arg3).toBe("baz");
+      done();
+    });
+
+    system("bar", "baz");
+  });
 });
