@@ -13,38 +13,34 @@ export default class AbstractEntity {
   /**
    * Creates a component instance and adds it to this entity
    *
-   * @param {string} componentName the name of the component to add
+   * @param {string} name the identifier of the component to add
    * @param {...mixed} args the arguments to pass to the component factory
    *
    * @returns {Object} self
    */
-  add(componentName, ...args) {
-    this.components[componentName] = this.constructor.createComponent(
-      componentName,
-      ...args
-    );
-
+  add(name, ...args) {
+    this[name] = this.constructor.createComponent(name, ...args);
     return this;
   }
 
   /**
    * Indicates whether the entity has the given component
    *
-   * @param {string} componentName the component identifier
+   * @param {string} name the component identifier
    * @returns {boolean} true if the entity has the component, otherwise false
    */
-  has(componentName) {
-    return typeof this.components[componentName] !== "undefined";
+  has(name) {
+    return typeof this.components[name] !== "undefined";
   }
 
   /**
    * Removes the component with the given name from this entity
    *
-   * @param {string} componentName the component identifier
+   * @param {string} name the component identifier
    * @returns {Object} self
    */
-  remove(componentName) {
-    this.components[componentName] = undefined;
+  remove(name) {
+    this[name] = undefined;
     return this;
   }
 
@@ -80,14 +76,18 @@ export default class AbstractEntity {
    * @param {string} name the name of the component
    */
   static defineComponent(name) {
-    Object.defineProperty(this.prototype, name, {
+    const prototype = this.prototype;
+
+    Object.defineProperty(prototype, name, {
       enumerable: true,
       configurable: true,
       get: function() {
         return this.components[name];
       },
       set: function(newValue) {
+        const oldValue = this.components[name];
         this.components[name] = newValue;
+        this.constructor.emit(this, name, newValue, oldValue);
       }
     });
   }
@@ -100,4 +100,14 @@ export default class AbstractEntity {
    * @returns {mixed} component instance
    */
   static createComponent(name, ...args) {} // eslint-disable-line
+
+  /**
+   * Abtract method. Called when a component is set or removed
+   *
+   * @param {Object} entity the entity that has changed
+   * @param {string} componentName the name of the component that has changed
+   * @param {mixed}  newValue the new component value
+   * @param {mixed}  oldValue the previous component value
+   */
+  static emit(entity, componentName, newValue, oldValue) {} // eslint-disable-line
 }

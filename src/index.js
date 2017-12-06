@@ -11,8 +11,14 @@ function createEco() {
 
   // Extend entity class to apply to this eco instance
   const Entity = class extends AbstractEntity {
+    // Overrides AbstractEntitiy.createComponent
     static createComponent(name, ...args) {
       return eco.createComponent(name, ...args);
+    }
+
+    // Overrides AbstractEntity.emit
+    static emit(...args) {
+      eco.onChange(...args);
     }
   };
 

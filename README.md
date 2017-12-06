@@ -105,7 +105,7 @@ added, removed, or set to an entity.
 const eco = new Eco();
 
 // Set the eco.onComponent function
-eco.onComponent = (entity, componentName, newValue, oldValue) => {
+eco.onChange = (entity, componentName, newValue, oldValue) => {
   // this will be called whenever a change occurs
 };
 ```

@@ -1,5 +1,9 @@
 /**
  * Eco API
+ *
+ * @property {function} [onChange] called whenever an entity has a component
+ *  added, removed or changed. Called with: entity, componentName, newValue,
+ *  oldValue
  */
 export default class Eco {
   /**
@@ -13,6 +17,8 @@ export default class Eco {
 
     this.components = Object.create(null, {});
     this.entities = [];
+
+    this.onChange = () => {};
   }
 
   /**

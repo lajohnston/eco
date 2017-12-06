@@ -116,4 +116,52 @@ describe("Entity", () => {
     components.foo = undefined;
     expect(entity.foo).toBe("foo");
   });
+
+  it("should call the emit callback when a component is added", done => {
+    let entity;
+
+    const Entity = class extends AbstractEntity {
+      static createComponent(name, arg1) {
+        return arg1;
+      }
+
+      static emit(entityArg, componentName, newValue, oldValue) {
+        expect(entityArg).toBe(entity);
+        expect(componentName).toBe("foo");
+        expect(newValue).toBe("bar");
+        expect(oldValue).not.toBeDefined();
+        done();
+      }
+    };
+
+    Entity.defineComponent("foo");
+
+    entity = new Entity();
+    entity.add("foo", "bar");
+  });
+
+  it("should call the emit callback when a component is removed", done => {
+    let entity;
+
+    const Entity = class extends AbstractEntity {
+      static createComponent(name, arg1) {
+        return arg1;
+      }
+
+      static emit(entityArg, componentName, newValue, oldValue) {
+        if (newValue === "bar") return; // when component is added
+
+        expect(entityArg).toBe(entity);
+        expect(componentName).toBe("foo");
+        expect(newValue).not.toBeDefined();
+        expect(oldValue).toBe("bar");
+        done();
+      }
+    };
+
+    Entity.defineComponent("foo");
+
+    entity = new Entity();
+    entity.add("foo", "bar").remove("foo");
+  });
 });
