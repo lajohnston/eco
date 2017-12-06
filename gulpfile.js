@@ -31,5 +31,8 @@ gulp.task(
   gulp.series("build", gulp.parallel("watch", getTask("test").e2e))
 );
 
+// Runs the benchmark test suite
+gulp.task("bench", gulp.series("build", getTask("test").benchmark));
+
 // Runs the ./spec/unit tests in node.js and reruns if changes are made
 gulp.task("unit", getTask("test").watchUnitTests);
