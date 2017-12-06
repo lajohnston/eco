@@ -1,10 +1,13 @@
+// Prototype-less components object, improves performance
+const Components = Object.create(null, {});
+
 /**
  * Abstract entity class
  * The createComponent function should be extended for the class to be usuable
  */
 export default class AbstractEntity {
   constructor() {
-    this.components = {};
+    this.components = Object.create(Components, {});
   }
 
   /**
@@ -96,5 +99,5 @@ export default class AbstractEntity {
    * @param {...args} args arguments to pass to the component factory
    * @returns {mixed} component instance
    */
-  static createComponent(name, ...args) {}
+  static createComponent(name, ...args) {} // eslint-disable-line
 }
