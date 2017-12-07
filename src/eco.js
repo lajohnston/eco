@@ -32,18 +32,6 @@ export default class Eco {
   }
 
   /**
-   * Return s a new component instance
-   *
-   * @param {string} name the component identifier
-   * @param {...*} args arguments to pass to the component factory
-   * @returns {mixed} the component
-   */
-  createComponent(name, ...args) {
-    const factory = this.components[name];
-    return factory ? factory(...args) : undefined;
-  }
-
-  /**
    * Returns a new entity instance
    *
    * @returns {Entity} the entity
