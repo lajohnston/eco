@@ -1,6 +1,6 @@
 function createEco() {
   const eco = new window.Eco();
-  eco.component("foo", x => x);
+  eco.defineComponents(["foo"]);
 
   return eco;
 }
@@ -19,38 +19,23 @@ describe("eco.onChange", () => {
       done();
     };
 
-    entity.add("foo", value);
+    entity.foo = value;
   });
 
   it("should be called when a component is removed from an entity", done => {
     const eco = createEco();
-    const value = "bar";
-    const entity = eco.entity().add("foo", value);
+    const oldValue = "bar";
+    const entity = eco.entity();
+    entity.foo = oldValue;
 
     eco.onChange = (entityArg, componentArg, newValueArg, oldValueArg) => {
       expect(entityArg).toBe(entity);
       expect(componentArg).toBe("foo");
       expect(newValueArg).not.toBeDefined();
-      expect(oldValueArg).toBe("bar");
+      expect(oldValueArg).toBe(oldValue);
       done();
     };
 
-    entity.remove("foo");
-  });
-
-  it("should be called when a component is set using a component accessor", done => {
-    const eco = createEco();
-    const entity = eco.entity();
-    entity.foo = "originalValue";
-
-    eco.onChange = (entityArg, componentArg, newValueArg, oldValueArg) => {
-      expect(entityArg).toBe(entity);
-      expect(componentArg).toBe("foo");
-      expect(newValueArg).toBe("newValue");
-      expect(oldValueArg).toBe("originalValue");
-      done();
-    };
-
-    entity.foo = "newValue";
+    entity.foo = undefined;
   });
 });

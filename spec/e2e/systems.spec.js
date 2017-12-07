@@ -1,8 +1,6 @@
 function createEco() {
   const eco = new window.Eco();
-  eco.component("foo", () => "foo");
-  eco.component("bar", () => "bar");
-
+  eco.defineComponents(["foo", "bar"]);
   return eco;
 }
 
@@ -15,17 +13,16 @@ describe("Systems", () => {
       matches.push(entity);
     });
 
-    const entityA = eco
-      .entity()
-      .add("foo")
-      .add("bar");
+    const entityA = eco.entity();
+    entityA.foo = "foo";
+    entityA.bar = "bar";
 
-    const entityB = eco
-      .entity()
-      .add("foo")
-      .add("bar");
+    const entityB = eco.entity();
+    entityB.foo = "foo";
+    entityB.bar = "bar";
 
-    const entityC = eco.entity().add("foo");
+    const entityC = eco.entity();
+    entityC.foo = "foo";
 
     system();
 
@@ -37,10 +34,9 @@ describe("Systems", () => {
   it("should ignore entities that have had a required component removed since the last iteration", () => {
     const eco = createEco();
 
-    const entity = eco
-      .entity()
-      .add("foo")
-      .add("bar");
+    const entity = eco.entity();
+    entity.foo = "foo";
+    entity.bar = "bar";
 
     let matches = [];
     const system = eco.system(["foo", "bar"], entityMatch => {
@@ -54,14 +50,15 @@ describe("Systems", () => {
 
     // Second run
     matches = [];
-    entity.remove("foo");
+    entity.foo = undefined;
     system();
     expect(matches.length).toBe(0);
   });
 
   it("should include entities that have had a required component added since the last iteration and now qualify", () => {
     const eco = createEco();
-    const entity = eco.entity().add("foo");
+    const entity = eco.entity();
+    entity.foo = "foo";
 
     let matches = [];
     const system = eco.system(["foo", "bar"], entityMatch => {
@@ -73,7 +70,7 @@ describe("Systems", () => {
     expect(matches.length).toBe(0);
 
     // Second run
-    entity.add("bar");
+    entity.bar = "bar";
     matches = [];
     system();
     expect(matches.length).toBe(1);
@@ -82,7 +79,8 @@ describe("Systems", () => {
 
   it("should pass additional arguments to the system callback", done => {
     const eco = createEco();
-    const entity = eco.entity().add("foo");
+    const entity = eco.entity();
+    entity.foo = "foo";
 
     const system = eco.system(["foo"], (entityArg, arg2, arg3) => {
       expect(entityArg).toBe(entity);

@@ -15,21 +15,20 @@ export default class Eco {
     this.Entity = Entity;
     this.createFilterInstance = createFilter;
 
-    this.components = Object.create(null, {});
     this.entities = [];
-
     this.onChange = () => {};
   }
 
   /**
-   * Defines a new component type
+   * Defines one or more component identifiers. This sets up components so they
+   * can be accessed on the entities using standard dot notation
    *
-   * @param {string} name the component identifier
-   * @param {function} factory function that returns a component instance
+   * @param {Array.<string>} names the component identifiers
    */
-  component(name, factory) {
-    this.components[name] = factory;
-    this.Entity.defineComponent(name);
+  defineComponents(names) {
+    names.forEach(name => {
+      this.Entity.defineComponent(name);
+    });
   }
 
   /**

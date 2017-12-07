@@ -2,15 +2,15 @@
 
 function createEcoFilter(entityCount) {
   const eco = new Eco();
-  eco.component("foo", () => "foo");
-  eco.component("bar", () => "bar");
+  eco.defineComponents(["foo", "bar"]);
 
   for (let i = 0; i < entityCount; i++) {
-    const ecoEntity = eco.entity().add("foo");
+    const ecoEntity = eco.entity();
+    ecoEntity.foo = "foo";
 
     // Add 'bar' component to every other entity
     if (i % 2 === 0) {
-      ecoEntity.add("bar");
+      ecoEntity.bar = "bar";
     }
   }
 

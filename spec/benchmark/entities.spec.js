@@ -36,12 +36,13 @@ suite("Adding and removing components", () => {
   benchmark(
     "Eco",
     function() {
-      this.ecoEntity.add("foo").remove("foo");
+      this.ecoEntity.foo = "foo";
+      this.ecoEntity.foo = undefined;
     },
     {
       setup: function() {
         const eco = new Eco();
-        eco.component("foo", () => "foo");
+        eco.defineComponents(["foo"]);
         this.ecoEntity = eco.entity();
       },
       teardown: function() {

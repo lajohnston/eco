@@ -2,9 +2,7 @@ const Eco = window.Eco;
 
 function createEco() {
   const eco = new Eco();
-  eco.component("foo", () => "foo");
-  eco.component("bar", () => "bar");
-  eco.component("baz", () => "baz");
+  eco.defineComponents(["foo", "bar", "baz"]);
 
   return eco;
 }
@@ -16,13 +14,12 @@ describe("Filters", () => {
       const filter = eco.createFilter(entity => entity.foo && entity.bar);
 
       // Non matching
-      eco.entity().add("foo");
+      eco.entity().foo = "foo";
 
       // Matching
-      const matching = eco
-        .entity()
-        .add("foo")
-        .add("bar");
+      const matching = eco.entity();
+      matching.foo = "foo";
+      matching.bar = "bar";
 
       filter.forEach((entity, index, array) => {
         expect(entity).toBe(matching);
@@ -36,13 +33,12 @@ describe("Filters", () => {
       const filter = eco.createFilter(["foo", "bar"]);
 
       // Non matching
-      eco.entity().add("foo");
+      eco.entity().foo = "foo";
 
       // Matching
-      const matching = eco
-        .entity()
-        .add("foo")
-        .add("bar");
+      const matching = eco.entity();
+      matching.foo = "foo";
+      matching.bar = "bar";
 
       filter.forEach((entity, index, array) => {
         expect(entity).toBe(matching);
@@ -53,7 +49,9 @@ describe("Filters", () => {
 
     it("should ignore entities that have had a required component removed since the last iteration", () => {
       const eco = createEco();
-      const entity = eco.entity().add("foo", {});
+      const entity = eco.entity();
+      entity.foo = "foo";
+
       const filter = eco.createFilter(["foo"]);
 
       let initialCount = 0;
@@ -63,7 +61,7 @@ describe("Filters", () => {
 
       expect(initialCount).toBe(1);
 
-      entity.remove("foo");
+      entity.foo = undefined;
 
       filter.forEach(() => {
         fail("Filter callback was not expected to be called");
@@ -72,14 +70,16 @@ describe("Filters", () => {
 
     it("should include entities that have had a component added since the last iteration and now qualify", () => {
       const eco = createEco();
-      const entity = eco.entity().add("foo");
+      const entity = eco.entity();
+      entity.foo = "foo";
+
       const filter = eco.createFilter(["bar"]);
 
       filter.forEach(() => {
         fail("Filter callback was not expected to be called");
       });
 
-      entity.add("bar");
+      entity.bar = "bar";
 
       let count = 0;
       filter.forEach(entityArg => {

@@ -1,26 +1,6 @@
 import AbstractEntity from "../../src/abstractEntity";
 
 describe("Entity", () => {
-  it("should return itself when adding components", () => {
-    const entity = new AbstractEntity();
-    expect(entity.add("foo")).toBe(entity);
-  });
-
-  it("should store components accessible with a property", () => {
-    const Entity = class extends AbstractEntity {
-      static createComponent(name, ...args) {
-        if (name === "foo") return [...args];
-      }
-    };
-
-    Entity.defineComponent("foo");
-
-    const entity = new Entity();
-    entity.add("foo", "bar", "baz");
-
-    expect(entity.foo).toEqual(["bar", "baz"]);
-  });
-
   it("should allow components to be set by property", () => {
     const Entity = class extends AbstractEntity {};
     Entity.defineComponent("foo");
@@ -31,59 +11,41 @@ describe("Entity", () => {
   });
 
   it("should state whether it has a component", () => {
-    const Entity = class extends AbstractEntity {
-      static createComponent() {
-        return "bar";
-      }
-    };
-
+    const Entity = class extends AbstractEntity {};
     Entity.defineComponent("foo");
+    Entity.defineComponent("bar");
 
-    const entityA = new Entity().add("foo");
-    const entityB = new Entity();
+    const entity = new Entity();
+    entity.foo = "foo";
 
-    expect(entityA.has("foo")).toBe(true);
-    expect(entityB.has("foo")).toBe(false);
+    expect(entity.has("foo")).toBe(true);
+    expect(entity.has("bar")).toBe(false);
   });
 
   it("should be able to remove a component", () => {
-    const Entity = class extends AbstractEntity {
-      static createComponent() {
-        return "bar";
-      }
-    };
-
+    const Entity = class extends AbstractEntity {};
     Entity.defineComponent("foo");
 
     const entity = new Entity();
-    entity.add("foo");
-    entity.remove("foo");
+    entity.foo = "foo";
+    entity.foo = undefined;
     expect(entity.has("foo")).toBe(false);
     expect(entity.foo).not.toBeDefined();
   });
 
-  it("should return itself after removing a component", () => {
-    const entity = new AbstractEntity();
-    expect(entity.remove("foo")).toBe(entity);
-  });
-
   it("should be able to remove all its components", () => {
-    const Entity = class extends AbstractEntity {
-      static createComponent(name) {
-        return name;
-      }
-    };
-
+    const Entity = class extends AbstractEntity {};
     Entity.defineComponent("foo");
     Entity.defineComponent("bar");
     Entity.defineComponent("baz");
 
-    const entity = new Entity()
-      .add("foo")
-      .add("bar")
-      .add("baz");
+    const entity = new Entity();
+    entity.foo = "foo";
+    entity.bar = "bar";
+    entity.baz = "baz";
 
-    entity.removeAll();
+    const result = entity.removeAll();
+    expect(result).toBe(entity);
 
     expect(entity.has("foo")).toBe(false);
     expect(entity.has("bar")).toBe(false);
@@ -91,40 +53,28 @@ describe("Entity", () => {
   });
 
   it("should return an object of its components", () => {
-    const Entity = class extends AbstractEntity {
-      static createComponent(name) {
-        return name;
-      }
-    };
-
+    const Entity = class extends AbstractEntity {};
     Entity.defineComponent("foo");
     Entity.defineComponent("bar");
-    Entity.defineComponent("baz");
 
-    const entity = new Entity()
-      .add("foo")
-      .add("bar")
-      .add("baz");
+    const entity = new Entity();
+    entity.foo = "foo";
+    entity.bar = "bar";
 
     const components = entity.getComponents();
     expect(components).toEqual({
       foo: "foo",
-      bar: "bar",
-      baz: "baz"
+      bar: "bar"
     });
 
+    // Changing the returned list shouldn't affect the entity
     components.foo = undefined;
     expect(entity.foo).toBe("foo");
   });
 
   it("should call the emit callback when a component is added", done => {
     let entity;
-
     const Entity = class extends AbstractEntity {
-      static createComponent(name, arg1) {
-        return arg1;
-      }
-
       static emit(entityArg, componentName, newValue, oldValue) {
         expect(entityArg).toBe(entity);
         expect(componentName).toBe("foo");
@@ -137,17 +87,13 @@ describe("Entity", () => {
     Entity.defineComponent("foo");
 
     entity = new Entity();
-    entity.add("foo", "bar");
+    entity.foo = "bar";
   });
 
   it("should call the emit callback when a component is removed", done => {
     let entity;
 
     const Entity = class extends AbstractEntity {
-      static createComponent(name, arg1) {
-        return arg1;
-      }
-
       static emit(entityArg, componentName, newValue, oldValue) {
         if (newValue === "bar") return; // when component is added
 
@@ -162,6 +108,7 @@ describe("Entity", () => {
     Entity.defineComponent("foo");
 
     entity = new Entity();
-    entity.add("foo", "bar").remove("foo");
+    entity.foo = "bar";
+    entity.foo = undefined;
   });
 });

@@ -17,21 +17,9 @@ describe("Eco", () => {
     const Entity = mockEntityPrototype();
     const eco = new Eco(Entity);
 
-    eco.component("foo");
+    eco.defineComponents(["foo", "bar"]);
     expect(Entity.defineComponent).toHaveBeenCalledWith("foo");
-  });
-
-  it("should store component factories", () => {
-    const Entity = mockEntityPrototype();
-    const eco = new Eco(Entity);
-    eco.component("foo", x => x);
-    expect(eco.createComponent("foo", "bar")).toBe("bar");
-  });
-
-  it("should return undefined if a component factory does not exist", () => {
-    const Entity = mockEntityPrototype();
-    const eco = new Eco(Entity);
-    expect(eco.createComponent("foo")).not.toBeDefined();
+    expect(Entity.defineComponent).toHaveBeenCalledWith("bar");
   });
 
   it("should return an array of all its entities", () => {

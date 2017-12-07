@@ -3,18 +3,15 @@ const Eco = window.Eco;
 describe("Entities", () => {
   it("should hold component data", () => {
     const eco = new Eco();
-    eco.component("foo", x => x);
-    eco.component("bar", x => x);
+    eco.defineComponents(["foo", "bar"]);
 
-    const entityA = eco
-      .entity()
-      .add("foo", "fooA")
-      .add("bar", "barA");
+    const entityA = eco.entity();
+    entityA.foo = "fooA";
+    entityA.bar = "barA";
 
-    const entityB = eco
-      .entity()
-      .add("foo", "fooB")
-      .add("bar", "barB");
+    const entityB = eco.entity();
+    entityB.foo = "fooB";
+    entityB.bar = "barB";
 
     expect(entityA.foo).toBe("fooA");
     expect(entityA.bar).toBe("barA");
@@ -25,77 +22,42 @@ describe("Entities", () => {
 
   it("should state whether they have a component or not", () => {
     const eco = new Eco();
-    eco.component("foo", () => "foo");
-    eco.component("bar", () => "bar");
+    eco.defineComponents(["foo", "bar"]);
 
-    const entity = eco.entity().add("foo");
+    const entity = eco.entity();
+    entity.foo = "foo";
 
     expect(entity.has("foo")).toBe(true);
     expect(entity.has("bar")).toBe(false);
-  });
-
-  it("should allow their components to be removed", () => {
-    const eco = new Eco();
-    eco.component("foo", () => "foo");
-
-    const entity = eco.entity().add("foo");
-
-    expect(entity.has("foo")).toBe(true);
-    entity.remove("foo");
-
-    expect(entity.has("foo")).toBe(false);
-    expect(entity.foo).not.toBeDefined();
-  });
-
-  it("should allow chaining of add and remove commands", () => {
-    const eco = new Eco();
-    eco.component("foo", () => ({}));
-    eco.component("bar", () => ({}));
-    eco.component("baz", () => ({}));
-
-    const entity = eco
-      .entity()
-      .add("foo")
-      .remove("foo")
-      .add("bar")
-      .remove("bar")
-      .add("baz");
-
-    expect(entity.has("foo")).toBe(false);
-    expect(entity.has("bar")).toBe(false);
-    expect(entity.has("baz")).toBe(true);
   });
 
   it("should allow the removal of all its components", () => {
     const eco = new Eco();
-    eco.component("foo", () => ({}));
-    eco.component("bar", () => ({}));
+    eco.defineComponents(["foo", "bar"]);
 
-    const entity = eco
-      .entity()
-      .add("foo")
-      .add("bar");
+    const entity = eco.entity();
+    entity.foo = "foo";
+    entity.bar = "bar";
 
     entity.removeAll();
-
     expect(entity.has("foo")).toBe(false);
     expect(entity.has("bar")).toBe(false);
   });
 
   it("should return an object of its components", () => {
     const eco = new Eco();
-    eco.component("foo", () => ({}));
-    eco.component("bar", () => ({}));
+    eco.defineComponents(["foo", "bar"]);
 
-    const entity = eco
-      .entity()
-      .add("foo", {})
-      .add("bar", {});
+    const entity = eco.entity();
+    entity.foo = "foo";
+    entity.bar = "bar";
 
     const result = entity.getComponents();
 
-    expect(result.foo).toBe(entity.foo);
-    expect(result.bar).toBe(entity.bar);
+    expect(result).toEqual({
+      foo: "foo",
+      bar: "bar"
+    });
   });
 
   describe("eco.entities", () => {
