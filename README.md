@@ -44,10 +44,10 @@ const updateMovement = eco.system(
   })
 );
 
-// Your update function
-window.requestAnimationFrame(() => {
-  updateMovement(); // you can pass any number of custome arguments
-});
+// Your update function in the main loop
+function update() {
+  updateMovement(); // you can pass any number of custom arguments
+};
 ```
 
 The updateMovement system maintains a cached list of relevant entities and only
