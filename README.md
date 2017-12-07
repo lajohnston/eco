@@ -18,7 +18,7 @@ removed at runtime to change entity behaviour on the fly.
 
 * Components - data structures (position, movement, appearance etc.)
 * Entities - objects with components
-* Systems - logic that update entities
+* Systems - logic that updates entities
 
 ## Basic usage
 
@@ -77,7 +77,7 @@ entity.has("position"); // false
 entity.removeAll();
 ```
 
-## Filters and Systems
+## Systems and Filters
 
 Filters and systems allow you to iterate over a subset of entities, similar to
 using Array.filter and Array.forEach. In later versions they will cache the
@@ -94,7 +94,7 @@ Provide the filter criteria as the first argument, and the forEach update
 function as the second.
 
 ```javascript
-// Filter callback syntax
+// Filter function syntax
 const fooNotBar = eco.system(
   entity => entity.foo && !entity.bar,
   entity => {
@@ -103,7 +103,7 @@ const fooNotBar = eco.system(
   }
 );
 
-// Array syntax- specify component names the entities must have to qualify
+// Array syntax- specify the components entities must have to qualify
 const updateMovement = eco.system(["position", "movement"], entity => {
   entity.has("position"); // true
   entity.has("movement"); // true
@@ -117,7 +117,7 @@ updateMovement();
 
 Systems provide a convenient wrapper around filters, but if you need more
 control you can use filters directly. Like systems they can accept either an
-array of a function callback to filter entities.
+array or a function callback to filter entities.
 
 ```javascript
 const fooBar = eco.createFilter(["foo", "bar"]);
@@ -138,8 +138,9 @@ fooNoBar.forEach(entity => {
 
 ## Events
 
-Eco provides a basic callback system to notify you each time a component value
-is changed
+Eco provides a basic callback that is called each time a component value is set.
+An example use-case is if you're using a collision algorithm such as a QuadTree
+or Grid, and wish to update it when an entity position changes.
 
 ```javascript
 const eco = new Eco();
@@ -152,17 +153,18 @@ eco.onChange = (entity, componentName, newValue, oldValue) => {
 // The following examples will trigger the callback
 entity.position = {};
 entity.position = undefined;
+entity.position = entity.position;
 
 // ...but editing component properties will not
 entity.position.x = 100; // will not trigger
-entity.position = entity.position; // doing this will, though
+```
 
-/**
- * For deep change detection, you may consider read-only immutable components
- * that return new instances of themselves when changed. The altered value will
- * therefore have to be explicitly set to the entity and this will trigger the
- * onChange event. This is a minimal example:
- */
+For deep change detection, you may consider read-only immutable components that
+return new instances of themselves when changed. The altered value will
+therefore have to be explicitly set to the entity and this will trigger the
+onChange event. This is a minimal example:
+
+```javascript
 function Vector2(x, y) {
   this._x = x;
   this._y = y;
