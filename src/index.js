@@ -7,19 +7,9 @@ function createFilter(entities, criteria) {
 }
 
 function createEco() {
-  let eco;
-
-  // Extend entity class to apply to this eco instance
-  const Entity = class extends AbstractEntity {
-    // Overrides AbstractEntity.emit
-    static emit(...args) {
-      eco.onChange(...args);
-    }
-  };
-
-  // Create eco instance
-  eco = new Eco(Entity, createFilter);
-  return eco;
+  // Extend entity class so each Eco instance can define its own components
+  const Entity = class extends AbstractEntity {};
+  return new Eco(Entity, createFilter);
 }
 
 window.Eco = createEco;

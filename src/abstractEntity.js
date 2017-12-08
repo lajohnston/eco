@@ -1,13 +1,17 @@
-// Prototype-less components object, improves performance
-const Components = Object.create(null, {});
+// Prototype-less components object to extend from, improves performance
+const Components = Object.create(null);
 
 /**
- * Abstract entity class
- * The createComponent function should be extended for the class to be usuable
+ * Abstract entity class. Should be extended for each Eco instance so each can
+ * define its own components
  */
 export default class AbstractEntity {
-  constructor() {
-    this.components = Object.create(Components, {});
+  /**
+   * @param {Eco} eco the eco instance that manages the entity
+   */
+  constructor(eco) {
+    this.eco = eco;
+    this.components = Object.create(Components);
   }
 
   /**
@@ -17,9 +21,7 @@ export default class AbstractEntity {
    * @param {string} name the name of the component
    */
   static defineComponent(name) {
-    const prototype = this.prototype;
-
-    Object.defineProperty(prototype, name, {
+    Object.defineProperty(this.prototype, name, {
       enumerable: true,
       configurable: true,
       get: function() {
@@ -28,7 +30,7 @@ export default class AbstractEntity {
       set: function(newValue) {
         const oldValue = this.components[name];
         this.components[name] = newValue;
-        this.constructor.emit(this, name, newValue, oldValue);
+        this.eco.onComponentChanged(this, name, newValue, oldValue);
       }
     });
   }
@@ -68,14 +70,4 @@ export default class AbstractEntity {
 
     return components;
   }
-
-  /**
-   * Abtract method. Called when a component is set or removed
-   *
-   * @param {Object} entity the entity that has changed
-   * @param {string} componentName the name of the component that has changed
-   * @param {mixed}  newValue the new component value
-   * @param {mixed}  oldValue the previous component value
-   */
-  static emit(entity, componentName, newValue, oldValue) {} // eslint-disable-line
 }

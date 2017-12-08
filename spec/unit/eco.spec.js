@@ -13,6 +13,26 @@ describe("Eco", () => {
     expect(instance instanceof Entity).toBeTruthy();
   });
 
+  it("should call the onChange function property if a component changes", done => {
+    const Entity = function() {};
+    const eco = new Eco(Entity);
+
+    const entity = {};
+    const component = "foo";
+    const newValue = {};
+    const oldValue = {};
+
+    eco.onChange = function(a, b, c, d) {
+      expect(a).toBe(entity);
+      expect(b).toBe(component);
+      expect(c).toBe(newValue);
+      expect(d).toBe(oldValue);
+      done();
+    };
+
+    eco.onComponentChanged(entity, component, newValue, oldValue);
+  });
+
   it("should inform the entity prototype to set up component accessors", () => {
     const Entity = mockEntityPrototype();
     const eco = new Eco(Entity);

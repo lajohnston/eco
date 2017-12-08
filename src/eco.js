@@ -20,6 +20,18 @@ export default class Eco {
   }
 
   /**
+   * Called by entities when one of their component's has changed values
+   *
+   * @param {Object} entity the entity that was changed
+   * @param {string} component the name of the component that was set
+   * @param {mixed} newValue the new component value
+   * @param {mixed} oldValue the previous component value
+   */
+  onComponentChanged(entity, component, newValue, oldValue) {
+    this.onChange(entity, component, newValue, oldValue);
+  }
+
+  /**
    * Defines one or more component identifiers. This sets up components so they
    * can be accessed on the entities using standard dot notation
    *
@@ -37,7 +49,7 @@ export default class Eco {
    * @returns {Entity} the entity
    */
   entity() {
-    const entity = new this.Entity();
+    const entity = new this.Entity(this);
     this.entities.push(entity);
     return entity;
   }
