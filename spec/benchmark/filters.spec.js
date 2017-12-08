@@ -1,6 +1,6 @@
 /* global Eco, suite, benchmark */
 
-function createEcoFilter(entityCount) {
+function createEcoFilter(entityCount, criteria) {
   const eco = new Eco();
   eco.defineComponents(["foo", "bar"]);
 
@@ -14,18 +14,33 @@ function createEcoFilter(entityCount) {
     }
   }
 
-  return eco.createFilter(["foo", "bar"]);
+  return eco.createFilter(criteria);
 }
 
 suite("Filters", function() {
   benchmark(
-    "Eco",
+    "Eco, array filter",
     function() {
-      this.filter.forEach(() => {});
+      this.filter.forEach(entity => entity);
     },
     {
       setup: function() {
-        this.filter = createEcoFilter(1000);
+        this.filter = createEcoFilter(1000, ["foo", "bar"]);
+      },
+      teardown: function() {
+        this.filter = undefined;
+      }
+    }
+  );
+
+  benchmark(
+    "Eco, function filter",
+    function() {
+      this.filter.forEach(entity => entity);
+    },
+    {
+      setup: function() {
+        this.filter = createEcoFilter(1000, entity => entity.foo && entity.bar);
       },
       teardown: function() {
         this.filter = undefined;
@@ -38,7 +53,7 @@ suite("Filters", function() {
     function() {
       this.entities
         .filter(entity => entity.foo && entity.bar)
-        .forEach(() => {});
+        .forEach(entity => entity);
     },
     {
       setup: function() {
