@@ -48,7 +48,10 @@ export default class AbstractEntity {
       set: function(newValue) {
         const oldValue = this.components[name];
         this.components[name] = newValue;
-        this.eco.onComponentChanged(this, name, newValue, oldValue);
+
+        if (this._enabled) {
+          this.eco.onComponentChanged(this, name, newValue, oldValue);
+        }
       }
     });
   }

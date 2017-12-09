@@ -38,4 +38,16 @@ describe("eco.onChange", () => {
 
     entity.foo = undefined;
   });
+
+  it("should not be called for entities that have been disabled", () => {
+    const eco = createEco();
+    const entity = eco.entity();
+    entity.enabled = false;
+
+    eco.onChange = () => {
+      fail("onChange callback was not expecting to be called");
+    };
+
+    entity.foo = "foo";
+  });
 });

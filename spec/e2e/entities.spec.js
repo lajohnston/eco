@@ -60,11 +60,11 @@ describe("Entities", () => {
     });
   });
 
-  describe("eco.entities", () => {
+  describe("eco.all", () => {
     it("should provide an array of all entities", () => {
       const eco = new Eco();
       const entities = [eco.entity(), eco.entity(), eco.entity()];
-      const result = eco.entities;
+      const result = eco.all;
 
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(entities.length);

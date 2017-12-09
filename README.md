@@ -1,6 +1,6 @@
 # Eco Entity Component System
 
-Eco is a lightweight, optimised, entity-component-system library for
+Eco is a lightweight, optimised, entity-component-system framework for
 JavaScript/HTML5 games that lets you define your components and game logic as
 decoupled POJO/Vanilla JS. The API described below is in development, but a
 fully functional earlier version is available under the releases tab.
@@ -10,11 +10,11 @@ game logic decoupled from the game framework and libraries of your choice.
 
 ## Overview
 
-In the ECS pattern, in-game objects aren't identified by a hierarchical type
-(such as "Player", "Enemy", "FlyingEnemy", "FlyingEnemyWithGun" ...), but rather
-by what components they possess. This allows you to assemble many variations
-using the same component parts, and even allows components to be added or
-removed at runtime to change entity behaviour on the fly.
+In the ECS design pattern, in-game objects aren't identified by a hierarchical
+type (such as "Player", "Enemy", "FlyingEnemy", "FlyingEnemyWithGun" ...), but
+rather by what components they possess. This allows you to assemble many
+variations using the same component parts, and even allows components to be
+added or removed at runtime to change entity behaviour on the fly.
 
 * Components - data structures (position, movement, appearance etc.)
 * Entities - objects with components
@@ -58,6 +58,7 @@ function update(delta) {
 const eco = new Eco();
 eco.defineComponents(["position"]);
 
+// Create an empty entity
 const entity = eco.entity();
 
 // Add or replace component using standard dot notation
@@ -181,4 +182,25 @@ entity.position.add(100, 50); // returns a new instance; entity.position unchang
 
 // you have to explictly set it back to the entity, and this trigger the change
 entity.position = entity.position.add(100, 50);
+```
+
+## Enable, Disable and Destroy Entities
+
+Setting an entity's 'enabled' property to false allows you to deactivate it.
+This removes the entity from eco's entity list so it won't appear in any filter
+or system results.
+
+Unless you're storing your own reference to the entity, it will eventually be
+garbage collected and permanently destroyed. If you do keep a reference then you
+can just set the enabled property back to true to re-enable it at a later time.
+
+```javascript
+entity.enabled = false; // removes entity from eco
+entity.enabled = true; // add entity back to eco
+
+// You can still work with deactivated entities, but they won't invoke the
+// eco.onChange callback. They operate as normal but in a detached state
+entity.enabled = false;
+entity.foo = "bar"; // will not invoke the eco.onChange method
+entity.foo; // 'bar'
 ```

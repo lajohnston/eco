@@ -112,6 +112,18 @@ describe("Entity", () => {
     );
   });
 
+  it("should not call eco's onComponentChanged handler if the entity is disabled", () => {
+    const Entity = class extends AbstractEntity {};
+    Entity.defineComponent("foo");
+
+    const eco = mockEco();
+    const entity = new Entity(eco);
+    entity.enabled = false;
+    entity.foo = "foo";
+
+    expect(eco.onComponentChanged).not.toHaveBeenCalled();
+  });
+
   it("should inform the eco instance when the entity is disabled", () => {
     const Entity = class extends AbstractEntity {};
     const eco = mockEco(Entity);

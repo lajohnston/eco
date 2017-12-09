@@ -7,16 +7,23 @@
  */
 export default class Eco {
   /**
-   * @param {function} Entity class to use to create entities
-   * @param {function} Entity.defineComponent function that takes a component
-   *  name
+   * @param {function}  Entity class to use to create entities
+   * @param {Object}    entityCollection collection to hold entities
+   * @param {function}  createFilter function that returns a filter instance
    */
-  constructor(Entity, createFilter) {
+  constructor(Entity, entities, createFilter) {
     this.Entity = Entity;
+    this.entities = entities;
     this.createFilterInstance = createFilter;
 
-    this.entities = [];
     this.onChange = () => {};
+  }
+
+  /**
+   * @type {Array} array of all entities
+   */
+  get all() {
+    return this.entities.entities;
   }
 
   /**
@@ -26,7 +33,13 @@ export default class Eco {
    * @param {boolean} enabled true if the entity has been enabled, otherwise
    *  false
    */
-  onEntityStatusChanged(entity, enabled) {}
+  onEntityStatusChanged(entity, enabled) {
+    if (enabled) {
+      this.entities.add(entity);
+    } else {
+      this.entities.remove(entity);
+    }
+  }
 
   /**
    * Called by entities when one of their component's has changed values
@@ -59,7 +72,7 @@ export default class Eco {
    */
   entity() {
     const entity = new this.Entity(this);
-    this.entities.push(entity);
+    this.entities.add(entity);
     return entity;
   }
 

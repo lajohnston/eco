@@ -4,13 +4,19 @@ function mockEntityPrototype() {
   return jasmine.createSpyObj("Entity", ["defineComponent"]);
 }
 
+function mockEntityCollection() {
+  return jasmine.createSpyObj("entityCollection", ["add", "remove"]);
+}
+
 describe("Eco", () => {
   it("should return entity instances", () => {
     const Entity = function() {};
-    const eco = new Eco(Entity);
+    const entityCollection = mockEntityCollection();
+    const eco = new Eco(Entity, entityCollection);
 
     const instance = eco.entity();
     expect(instance instanceof Entity).toBeTruthy();
+    expect(entityCollection.add).toHaveBeenCalledWith(instance);
   });
 
   it("should call the onChange function property if a component changes", done => {
@@ -44,35 +50,34 @@ describe("Eco", () => {
 
   it("should return an array of all its entities", () => {
     const Entity = function() {};
-    const eco = new Eco(Entity);
-
-    const entityA = eco.entity();
-    const entityB = eco.entity();
-
-    expect(eco.entities).toEqual([entityA, entityB]);
+    const entityCollection = mockEntityCollection();
+    const eco = new Eco(Entity, entityCollection);
+    expect(eco.all).toBe(entityCollection.entities);
   });
 
   it("should create and return filter instances", () => {
     const Entity = function() {};
+    const entityCollection = mockEntityCollection();
     const createFilter = jasmine.createSpy("createFilter");
-    const eco = new Eco(Entity, createFilter);
+    const eco = new Eco(Entity, entityCollection, createFilter);
 
     const filter = {};
     const componentArray = ["foo", "bar"];
     createFilter.and.returnValue(filter);
 
     expect(eco.createFilter(componentArray)).toBe(filter);
-    expect(createFilter).toHaveBeenCalledWith(eco.entities, componentArray);
+    expect(createFilter).toHaveBeenCalledWith(entityCollection, componentArray);
   });
 
   it("should return system function that utilise filters", () => {
     const Entity = function() {};
+    const entityCollection = mockEntityCollection();
     const filter = jasmine.createSpyObj("filter", ["forEach"]);
     const createFilter = jasmine
       .createSpy("createFilter")
       .and.returnValue(filter);
 
-    const eco = new Eco(Entity, createFilter);
+    const eco = new Eco(Entity, entityCollection, createFilter);
 
     const componentArray = ["foo", "bar"];
     const callback = jasmine.createSpy();
@@ -82,7 +87,7 @@ describe("Eco", () => {
     filter.forEach.and.callFake(cb => entities.forEach(cb));
     system("baz");
 
-    expect(createFilter).toHaveBeenCalledWith(eco.entities, componentArray);
+    expect(createFilter).toHaveBeenCalledWith(entityCollection, componentArray);
     expect(callback).toHaveBeenCalledWith(entities[0], "baz");
     expect(callback).toHaveBeenCalledWith(entities[1], "baz");
   });
@@ -94,7 +99,7 @@ describe("Eco", () => {
       .createSpy("createFilter")
       .and.returnValue(filter);
 
-    const eco = new Eco(Entity, createFilter);
+    const eco = new Eco(Entity, {}, createFilter);
 
     const entity = {};
     filter.forEach.and.callFake(cb => cb(entity));
@@ -107,5 +112,26 @@ describe("Eco", () => {
     });
 
     system("bar", "baz");
+  });
+
+  it("should remove entities that have been disabled", () => {
+    const Entity = function() {};
+    const entityCollection = mockEntityCollection();
+    const eco = new Eco(Entity, entityCollection);
+    const entity = eco.entity();
+
+    eco.onEntityStatusChanged(entity, false);
+    expect(entityCollection.remove).toHaveBeenCalledWith(entity);
+  });
+
+  it("should re-add entities that have been re-enabled", () => {
+    const Entity = function() {};
+    const entityCollection = mockEntityCollection();
+    const eco = new Eco(Entity, entityCollection);
+    const entity = eco.entity();
+
+    eco.onEntityStatusChanged(entity, false);
+    eco.onEntityStatusChanged(entity, true);
+    expect(entityCollection.add.calls.allArgs()).toEqual([[entity], [entity]]);
   });
 });
