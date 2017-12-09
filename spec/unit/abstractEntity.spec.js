@@ -1,7 +1,10 @@
 import AbstractEntity from "../../src/abstractEntity";
 
 function mockEco() {
-  return jasmine.createSpyObj("eco", ["onComponentChanged"]);
+  return jasmine.createSpyObj("eco", [
+    "onComponentChanged",
+    "onEntityStatusChanged"
+  ]);
 }
 
 describe("Entity", () => {
@@ -107,5 +110,53 @@ describe("Entity", () => {
       undefined,
       "bar"
     );
+  });
+
+  it("should inform the eco instance when the entity is disabled", () => {
+    const Entity = class extends AbstractEntity {};
+    const eco = mockEco(Entity);
+    const entity = new Entity(eco);
+    entity.enabled = false;
+
+    expect(eco.onEntityStatusChanged).toHaveBeenCalledWith(entity, false);
+  });
+
+  it("should inform the eco instance when the entity is enabled", () => {
+    const Entity = class extends AbstractEntity {};
+    const eco = mockEco(Entity);
+    const entity = new Entity(eco);
+    entity.enabled = false;
+    entity.enabled = true;
+
+    expect(eco.onEntityStatusChanged).toHaveBeenCalledWith(entity, true);
+  });
+
+  it("should not reinform the eco instance when the entity is disabled twice", () => {
+    const Entity = class extends AbstractEntity {};
+    const eco = mockEco(Entity);
+    const entity = new Entity(eco);
+    entity.enabled = false;
+    entity.enabled = false;
+
+    expect(eco.onEntityStatusChanged.calls.count()).toBe(1);
+  });
+
+  it("should not reinform the eco instance when the entity is enabled twice", () => {
+    const Entity = class extends AbstractEntity {};
+    const eco = mockEco(Entity);
+    const entity = new Entity(eco);
+    entity.enabled = true;
+
+    expect(eco.onEntityStatusChanged.calls.count()).toBe(0);
+  });
+
+  it("should state whether it is enabled or not", () => {
+    const Entity = class extends AbstractEntity {};
+    const eco = mockEco(Entity);
+    const entity = new Entity(eco);
+
+    expect(entity.enabled).toBe(true);
+    entity.enabled = false;
+    expect(entity.enabled).toBe(false);
   });
 });

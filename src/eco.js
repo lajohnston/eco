@@ -20,6 +20,15 @@ export default class Eco {
   }
 
   /**
+   * Called by entities when they are enabled or disabled
+   *
+   * @param {Object}  entity the entity whose status has changed
+   * @param {boolean} enabled true if the entity has been enabled, otherwise
+   *  false
+   */
+  onEntityStatusChanged(entity, enabled) {}
+
+  /**
    * Called by entities when one of their component's has changed values
    *
    * @param {Object} entity the entity that was changed

@@ -12,6 +12,24 @@ export default class AbstractEntity {
   constructor(eco) {
     this.eco = eco;
     this.components = Object.create(Components);
+    this._enabled = true;
+  }
+
+  /**
+   * @type {boolean} true if the entity is enabled, otherwise false
+   */
+  get enabled() {
+    return this._enabled;
+  }
+
+  set enabled(status) {
+    const oldStatus = this._enabled;
+    const newStatus = status ? true : false;
+
+    if (oldStatus !== newStatus) {
+      this._enabled = newStatus;
+      this.eco.onEntityStatusChanged(this, this._enabled);
+    }
   }
 
   /**

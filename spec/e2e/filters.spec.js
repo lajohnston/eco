@@ -90,4 +90,34 @@ describe("Filters", () => {
       expect(count).toBe(1);
     });
   });
+
+  it("should ignore entities that have been disabled since the last iteration", () => {
+    const eco = createEco();
+    const entity = eco.entity();
+    entity.foo = "foo";
+
+    const filter = eco.createFilter(["foo"]);
+    filter.forEach(() => {});
+
+    entity.enabled = false;
+
+    filter.forEach(() => {
+      fail("Filter callback was not expected to be called");
+    });
+  });
+
+  it("should include relevant entities that have been re-enabled since the last iteration", done => {
+    const eco = createEco();
+    const entity = eco.entity();
+    entity.foo = "foo";
+    entity.enabled = false;
+
+    const filter = eco.createFilter(["foo"]);
+    filter.forEach(() => {});
+
+    entity.enabled = true;
+    filter.forEach(() => {
+      done();
+    });
+  });
 });
