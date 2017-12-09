@@ -31,4 +31,35 @@ describe("EntityCollection", () => {
 
     expect(result).toEqual([entityB]);
   });
+
+  it("should update its version when requested", () => {
+    const collection = new EntityCollection();
+    const oldVersion = collection.version;
+    collection.incVersion();
+
+    expect(collection.version).not.toEqual(oldVersion);
+    expect(oldVersion.next).toBe(collection.version);
+  });
+
+  it("should update its version when a new item is added", () => {
+    const collection = new EntityCollection();
+    const oldVersion = collection.version;
+    const entity = {};
+    collection.add(entity);
+
+    expect(collection.version).not.toEqual(oldVersion);
+    expect(oldVersion.next).toBe(collection.version);
+  });
+
+  it("should update its version when an item is removed", () => {
+    const collection = new EntityCollection();
+    const entity = {};
+    collection.add(entity);
+
+    const oldVersion = collection.version;
+    collection.remove(entity);
+
+    expect(collection.version).not.toEqual(oldVersion);
+    expect(oldVersion.next).toBe(collection.version);
+  });
 });

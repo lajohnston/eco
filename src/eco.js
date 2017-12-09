@@ -50,6 +50,13 @@ export default class Eco {
    * @param {mixed} oldValue the previous component value
    */
   onComponentChanged(entity, component, newValue, oldValue) {
+    if (
+      (typeof newValue === "undefined" || typeof oldValue === "undefined") &&
+      newValue !== oldValue
+    ) {
+      this.entities.incVersion();
+    }
+
     this.onChange(entity, component, newValue, oldValue);
   }
 

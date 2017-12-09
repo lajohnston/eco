@@ -19,6 +19,27 @@ function createEcoFilter(entityCount, criteria) {
 
 suite("Filters", function() {
   benchmark(
+    "Native",
+    function() {
+      this.entities
+        .filter(entity => entity.foo && entity.bar)
+        .forEach(entity => entity);
+    },
+    {
+      setup: function() {
+        this.entities = [];
+
+        for (let i = 0; i < 1000; i++) {
+          this.entities.push({
+            foo: "foo",
+            bar: i % 2 === 0 ? "bar" : undefined
+          });
+        }
+      }
+    }
+  );
+
+  benchmark(
     "Eco, array filter",
     function() {
       this.filter.forEach(entity => entity);
@@ -49,22 +70,17 @@ suite("Filters", function() {
   );
 
   benchmark(
-    "Native",
+    "Eco, array filter, second pass, no changes",
     function() {
-      this.entities
-        .filter(entity => entity.foo && entity.bar)
-        .forEach(entity => entity);
+      this.filter.forEach(entity => entity); // second pass
     },
     {
       setup: function() {
-        this.entities = [];
-
-        for (let i = 0; i < 1000; i++) {
-          this.entities.push({
-            foo: "foo",
-            bar: i % 2 === 0 ? "bar" : undefined
-          });
-        }
+        this.filter = createEcoFilter(1000, ["foo", "bar"]);
+        this.filter.forEach(entity => entity); // first pass
+      },
+      teardown: function() {
+        this.filter = undefined;
       }
     }
   );

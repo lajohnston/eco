@@ -7,6 +7,10 @@ function mockEntity(components = []) {
   return entity;
 }
 
+function mockEntityCollection() {
+  return jasmine.createSpyObj("entityCollection", ["filter"]);
+}
+
 describe("Filter", () => {
   it("should filter entities using the given filter function", () => {
     const filterFunction = jasmine
@@ -40,5 +44,18 @@ describe("Filter", () => {
     });
 
     expect(result).toEqual([entities[2]]);
+  });
+
+  it("should not re-filter entities if the entities version has not changed", () => {
+    const entityCollection = mockEntityCollection();
+    entityCollection.version = {};
+    entityCollection.filter.and.returnValue([]);
+
+    const filter = new Filter(entityCollection, ["foo"]);
+
+    filter.forEach(() => {}); // first-pass
+    filter.forEach(() => {}); // second-pass
+
+    expect(entityCollection.filter.calls.count()).toBe(1);
   });
 });

@@ -5,7 +5,11 @@ function mockEntityPrototype() {
 }
 
 function mockEntityCollection() {
-  return jasmine.createSpyObj("entityCollection", ["add", "remove"]);
+  return jasmine.createSpyObj("entityCollection", [
+    "add",
+    "remove",
+    "incVersion"
+  ]);
 }
 
 describe("Eco", () => {
@@ -21,7 +25,7 @@ describe("Eco", () => {
 
   it("should call the onChange function property if a component changes", done => {
     const Entity = function() {};
-    const eco = new Eco(Entity);
+    const eco = new Eco(Entity, mockEntityCollection());
 
     const entity = {};
     const component = "foo";
@@ -37,6 +41,33 @@ describe("Eco", () => {
     };
 
     eco.onComponentChanged(entity, component, newValue, oldValue);
+  });
+
+  it("should increment the entityCollection version when a component is added", () => {
+    const Entity = function() {};
+    const entityCollection = mockEntityCollection();
+    const eco = new Eco(Entity, entityCollection);
+
+    eco.onComponentChanged({}, "foo", "bar", undefined);
+    expect(entityCollection.incVersion).toHaveBeenCalled();
+  });
+
+  it("should increment the entityCollection version when a component is removed", () => {
+    const Entity = function() {};
+    const entityCollection = mockEntityCollection();
+    const eco = new Eco(Entity, entityCollection);
+
+    eco.onComponentChanged({}, "foo", undefined, "bar");
+    expect(entityCollection.incVersion).toHaveBeenCalled();
+  });
+
+  it("should not increment the entityCollection version if a component value has changed", () => {
+    const Entity = function() {};
+    const entityCollection = mockEntityCollection();
+    const eco = new Eco(Entity, entityCollection);
+
+    eco.onComponentChanged({}, "foo", "foo", "bar");
+    expect(entityCollection.incVersion).not.toHaveBeenCalled();
   });
 
   it("should inform the entity prototype to set up component accessors", () => {
