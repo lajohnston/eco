@@ -27,7 +27,7 @@ added or removed at runtime to change entity behaviour on the fly.
 const eco = new Eco();
 eco.defineComponents(['position', 'movement']);
 
-// Create an entity and add some component data
+// Create an entity and add components using dot notation
 const entity = eco.entity();
 entity.position = { x: 100, y: 200 };
 entity.movement = { x: 1, y: 0, speed: 2 };
@@ -35,10 +35,9 @@ entity.movement = { x: 1, y: 0, speed: 2 };
 // Create a 'system' to update entity movement
 const updateMovement = eco.system(
   ["position", "movement"], // filter only entities with these components
-  ({ position, movement }, customArg1) => { // args are passed after the entity
-    // Will update each entity's position by its movement vector
-    position.x += movement.x * movement.speed;
-    position.y += movement.y * movement.speed;
+  ({ position, movement }, delta) => { // args are passed after the entity
+    position.x += movement.x * movement.speed * delta;
+    position.y += movement.y * movement.speed * delta;
   })
 );
 
@@ -81,13 +80,10 @@ entity.removeAll();
 ## Systems and Filters
 
 Filters and systems allow you to iterate over a subset of entities, similar to
-using Array.filter and Array.forEach. In later versions they will cache the
-filter stage and only refresh when relevant entities or components have been
-added or removed, which in prototypes has given a significant speed advantage
-for large numbers of entities.
-
-For this reason, the API has been designed so that you create them in advance
-and call them in the update loop.
+using Array.filter and Array.forEach. They utilise caching to ensure the
+filtering step is only performed when a relevant change has occured, so to make
+use of this it's therefore best to create them at the setup stage and call them
+within the update loop.
 
 ### Systems
 
@@ -95,41 +91,52 @@ Provide the filter criteria as the first argument, and the forEach update
 function as the second.
 
 ```javascript
-// Filter function syntax
-const fooNotBar = eco.system(
-  entity => entity.foo && !entity.bar,
-  entity => {
-    entity.has("foo"); // true
-    entity.has("bar"); // false
-  }
-);
-
-// Array syntax- specify the components entities must have to qualify
 const updateMovement = eco.system(["position", "movement"], entity => {
   entity.has("position"); // true
   entity.has("movement"); // true
 });
 
 // In the main loop
-updateMovement();
+updateMovement(); // updates all relevant entities
+```
+
+If you provide three arguments, the second one acts as a filter function, and
+the third acts as the forEach.
+
+```javascript
+const fooNoBar = eco.system(
+  ['foo', 'bar'] // the components it is concerned with
+  (entity) => entity.has('foo') && !entity.has('bar') // custom filter function,
+  (entity) => {
+    // will run for all entities that have foo, but not bar
+  }
+);
+
+fooNoBar();
 ```
 
 ### Filters
 
 Systems provide a convenient wrapper around filters, but if you need more
-control you can use filters directly. Like systems they can accept either an
-array or a function callback to filter entities.
+control you can use filters directly.
 
 ```javascript
+// Filter only entities which have foo AND bar components
 const fooBar = eco.createFilter(["foo", "bar"]);
-const fooNoBar = eco.createFilter(
-  entity => entity.has("foo") && !entity.has("bar")
-);
-
 fooBar.forEach(entity => {
   entity.has("foo"); // true
   entity.has("bar"); // true
 });
+
+/**
+ * An optional second parameter lets you specify a custom filter function. You
+ * must still provide the array of components as the first argument as this is
+ * used by the caching system to determine what changes are relevant to it
+ */
+const fooNoBar = eco.createFilter(
+  ["foo", "bar"], // relevant components
+  entity => entity.has("foo") && !entity.has("bar")
+);
 
 fooNoBar.forEach(entity => {
   entity.has("foo"); // true
@@ -137,11 +144,11 @@ fooNoBar.forEach(entity => {
 });
 ```
 
-## Events
+## Callbacks
 
-Eco provides a basic callback that is called each time a component value is set.
-An example use-case is if you're using a collision algorithm such as a QuadTree
-or Grid, and wish to update it when an entity position changes.
+Eco provides a basic callback system that it calls each time a component value
+is set. An example use-case is if you're using a collision algorithm such as a
+QuadTree or Grid, and wish to update it when an entity position changes.
 
 ```javascript
 const eco = new Eco();
@@ -152,37 +159,18 @@ eco.onChange = (entity, componentName, newValue, oldValue) => {
 };
 
 // The following examples will trigger the callback
-entity.position = {};
-entity.position = undefined;
-entity.position = entity.position;
+entity.position = {}; // oldValue = undefined; newValue = {}
+entity.position = undefined; // oldValue = {}; newValue = undefined
 
 // ...but editing component properties will not
-entity.position.x = 100; // will not trigger
+entity.position.x = 100; // will not trigger eco.onChange
+entity.position = entity.position; // you'd have to do this to manually trigger
 ```
 
 For deep change detection, you may consider read-only immutable components that
 return new instances of themselves when changed. The altered value will
-therefore have to be explicitly set to the entity and this will trigger the
-onChange event. This is a minimal example:
-
-```javascript
-function Vector2(x, y) {
-  this._x = x;
-  this._y = y;
-}
-
-Vector2.prototype.add = function(x, y) {
-  return new Vector2(this._x + x, this._y + y);
-};
-
-entity.position = new Vector2(100, 200);
-
-// entity.position won't actually be changed by this:
-entity.position.add(100, 50); // returns a new instance; entity.position unchanged
-
-// you have to explictly set it back to the entity, and this trigger the change
-entity.position = entity.position.add(100, 50);
-```
+therefore have to be explicitly set back to the entity and this will trigger the
+onChange event.
 
 ## Enable, Disable and Destroy Entities
 
@@ -202,5 +190,5 @@ entity.enabled = true; // add entity back to eco
 // eco.onChange callback. They operate as normal but in a detached state
 entity.enabled = false;
 entity.foo = "bar"; // will not invoke the eco.onChange method
-entity.foo; // 'bar'
+entity.foo; // 'bar' - value is still set
 ```

@@ -91,4 +91,26 @@ describe("Systems", () => {
 
     system("bar", "baz");
   });
+
+  it("should create a filter with the given filter function if three parameters are given", () => {
+    const eco = createEco();
+    const entityA = eco.entity();
+    entityA.foo = "foo";
+
+    const entityB = eco.entity();
+    entityB.foo = "foo";
+    entityB.bar = "bar";
+
+    const matches = [];
+    const system = eco.system(
+      ["foo", "bar"],
+      entity => entity.has("foo") && !entity.has("bar"),
+      entityMatch => {
+        matches.push(entityMatch);
+      }
+    );
+
+    system();
+    expect(matches).toEqual([entityA]);
+  });
 });

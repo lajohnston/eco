@@ -93,14 +93,38 @@ describe("Eco", () => {
     const eco = new Eco(Entity, entityCollection, createFilter);
 
     const filter = {};
-    const componentArray = ["foo", "bar"];
     createFilter.and.returnValue(filter);
 
+    const componentArray = ["foo", "bar"];
     expect(eco.createFilter(componentArray)).toBe(filter);
-    expect(createFilter).toHaveBeenCalledWith(entityCollection, componentArray);
+    expect(createFilter).toHaveBeenCalledWith(
+      entityCollection,
+      componentArray,
+      undefined
+    );
   });
 
-  it("should return system function that utilise filters", () => {
+  it("should create and return filter instances with custom filter functions", () => {
+    const Entity = function() {};
+    const entityCollection = mockEntityCollection();
+    const createFilter = jasmine.createSpy("createFilter");
+    const eco = new Eco(Entity, entityCollection, createFilter);
+
+    const filter = {};
+    createFilter.and.returnValue(filter);
+
+    const componentArray = ["foo", "bar"];
+    const filterFunc = function() {};
+
+    expect(eco.createFilter(componentArray, filterFunc)).toBe(filter);
+    expect(createFilter).toHaveBeenCalledWith(
+      entityCollection,
+      componentArray,
+      filterFunc
+    );
+  });
+
+  it("should return system functions that utilise filters", () => {
     const Entity = function() {};
     const entityCollection = mockEntityCollection();
     const filter = jasmine.createSpyObj("filter", ["forEach"]);
@@ -118,9 +142,35 @@ describe("Eco", () => {
     filter.forEach.and.callFake(cb => entities.forEach(cb));
     system("baz");
 
-    expect(createFilter).toHaveBeenCalledWith(entityCollection, componentArray);
+    expect(createFilter).toHaveBeenCalledWith(
+      entityCollection,
+      componentArray,
+      undefined
+    );
     expect(callback).toHaveBeenCalledWith(entities[0], "baz");
     expect(callback).toHaveBeenCalledWith(entities[1], "baz");
+  });
+
+  it("should return system functions that utilise custom filter functions, if three arguments are given", () => {
+    const Entity = function() {};
+    const entityCollection = mockEntityCollection();
+    const filter = jasmine.createSpyObj("filter", ["forEach"]);
+    const createFilter = jasmine
+      .createSpy("createFilter")
+      .and.returnValue(filter);
+
+    const eco = new Eco(Entity, entityCollection, createFilter);
+
+    const componentArray = ["foo", "bar"];
+    const filterFunc = function() {};
+    const callback = jasmine.createSpy();
+
+    eco.system(componentArray, filterFunc, callback);
+    expect(createFilter).toHaveBeenCalledWith(
+      entityCollection,
+      componentArray,
+      filterFunc
+    );
   });
 
   it("should pass additional arguments to the system callback", done => {

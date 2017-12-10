@@ -18,17 +18,19 @@ function arrayFilter(entity, components) {
 export default class Filter {
   /**
    * @param {EntityCollection} entities collection of all entities
-   * @param {Array.<string>|function} criteria criteria to filter by, either an
-   *  array of component names, or a function that returns true if the entity
-   *  matches a custom criteria
+   * @param {string[]} components components the filter is concerned with
+   * @param {function} [filterFunc] custom filter function that should return
+   *  false if a given entity should not be included
    */
-  constructor(entities, criteria) {
+  constructor(entities, components, filterFunc) {
     this.entities = entities;
-    this.criteria = Array.isArray(criteria)
-      ? entity => arrayFilter(entity, criteria)
-      : criteria;
+    this.components = components;
 
-    this.cacheVersion = null;
+    this.criteria = filterFunc
+      ? filterFunc
+      : entity => arrayFilter(entity, components);
+
+    this.cacheVersion = {};
     this.cached = [];
   }
 
@@ -36,6 +38,7 @@ export default class Filter {
    * @type {Array}  array of entities that match the criteria
    */
   get filtered() {
+    // Refresh cache if version isn't up to date
     if (this.cacheVersion !== this.entities.version) {
       this.cached = this.entities.filter(this.criteria);
       this.cacheVersion = this.entities.version;

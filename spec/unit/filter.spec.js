@@ -18,7 +18,7 @@ describe("Filter", () => {
       .and.callFake(x => x > 2);
 
     const entities = [1, 2, 3, 4];
-    const filter = new Filter(entities, filterFunction);
+    const filter = new Filter(entities, [], filterFunction);
 
     const result = [];
 
@@ -29,7 +29,7 @@ describe("Filter", () => {
     expect(result).toEqual([3, 4]);
   });
 
-  it("should filter entities using the given array of component names", () => {
+  it("should filter entities using the given array of component names if no filter function is given", () => {
     const entities = [
       mockEntity(["foo"]),
       mockEntity(["bar"]),

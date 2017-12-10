@@ -42,7 +42,7 @@ export default class Eco {
   }
 
   /**
-   * Called by entities when one of their component's has changed values
+   * Called by entities when one of their components has changed values
    *
    * @param {Object} entity the entity that was changed
    * @param {string} component the name of the component that was set
@@ -86,30 +86,37 @@ export default class Eco {
   /**
    * Returns a new entity filter instance
    *
-   * @param {Array<string>|function} criteria an array of component
-   *  identifiers, or a function that returns true if a given entity should be
-   *  included
+   * @param {string[]} components components the filter is concerned with
+   * @param {function} [filterFunc] custom filter function accepts an entity
+   *  and should return false if the entity should be excluded
    *
    * @returns {Filter}  filter instance
    */
-  createFilter(criteria) {
-    return this.createFilterInstance(this.entities, criteria);
+  createFilter(components, filterFunc) {
+    return this.createFilterInstance(this.entities, components, filterFunc);
   }
 
   /**
    * Returns a function that when called, will call the given function for each
    * matching entity. The entity will be the first argument passed to the each
-   * function, followed by any additional arguments passed to the system
+   * function, followed by any additional arguments passed to the update
+   * function
    *
-   * @param {Array<string>|function} criteria an array of component
-   *  identifiers, or a function that returns true if a given entity should be
-   *  included
-   * @param {function} each function to call for each matching entity
+   * @param {string[]} criteria an array of components the filter is concerned with
+   * @param {function} arg1 either custom filter function, or function to call
+   *  for each entity
+   * @param {function} [arg2] if provided, arg1 is the custom filter function,
+   *  and this is the 'each' function
    *
    * @returns {function} update function
    */
-  system(criteria, each) {
-    const filter = this.createFilter(criteria);
+  system(...args) {
+    const components = args[0];
+    const filterFunc = args.length === 3 ? args[1] : undefined;
+    const each = args.length === 3 ? args[2] : args[1];
+
+    const filter = this.createFilter(components, filterFunc);
+
     return function(...args) {
       filter.forEach(entity => {
         each(entity, ...args);

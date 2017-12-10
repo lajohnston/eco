@@ -7,8 +7,8 @@ function createEntityCollection() {
   return new EntityCollection();
 }
 
-function createFilter(entities, criteria) {
-  return new Filter(entities, criteria);
+function createFilter(entities, components, filterFunc) {
+  return new Filter(entities, components, filterFunc);
 }
 
 function createEco() {

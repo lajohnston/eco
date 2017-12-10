@@ -11,7 +11,10 @@ describe("Filters", () => {
   describe("forEach", () => {
     it("should filter entities with the given filter function", done => {
       const eco = createEco();
-      const filter = eco.createFilter(entity => entity.foo && entity.bar);
+      const filter = eco.createFilter(
+        ["foo", "bar"],
+        entity => entity.foo && entity.bar
+      );
 
       // Non matching
       eco.entity().foo = "foo";
