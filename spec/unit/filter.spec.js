@@ -58,4 +58,42 @@ describe("Filter", () => {
 
     expect(entityCollection.filter.calls.count()).toBe(1);
   });
+
+  it("should not re-filter entities if only an irrelevant component has been changed since the last update", () => {
+    const entityCollection = mockEntityCollection();
+    entityCollection.filter.and.returnValue([]);
+
+    const startVersion = {};
+    entityCollection.version = startVersion;
+
+    const filter = new Filter(entityCollection, ["foo"]);
+
+    filter.forEach(() => {}); // first-pass
+    const newVersion = { component: "bar" };
+    startVersion.next = newVersion;
+    entityCollection.version = newVersion;
+
+    filter.forEach(() => {}); // second-pass
+
+    expect(entityCollection.filter.calls.count()).toBe(1);
+  });
+
+  it("should re-filter entities if one has been added or removed since the last update", () => {
+    const entityCollection = mockEntityCollection();
+    entityCollection.filter.and.returnValue([]);
+
+    const startVersion = {};
+    entityCollection.version = startVersion;
+
+    const filter = new Filter(entityCollection, ["foo"]);
+
+    filter.forEach(() => {}); // first-pass
+    const newVersion = { component: undefined };
+    startVersion.next = newVersion;
+    entityCollection.version = newVersion;
+
+    filter.forEach(() => {}); // second-pass
+
+    expect(entityCollection.filter.calls.count()).toBe(2);
+  });
 });

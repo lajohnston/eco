@@ -54,7 +54,7 @@ export default class Eco {
       (typeof newValue === "undefined" || typeof oldValue === "undefined") &&
       newValue !== oldValue
     ) {
-      this.entities.incVersion();
+      this.entities.incVersion(entity, component);
     }
 
     this.onChange(entity, component, newValue, oldValue);

@@ -35,23 +35,31 @@ describe("EntityCollection", () => {
   it("should update its version when requested", () => {
     const collection = new EntityCollection();
     const oldVersion = collection.version;
-    collection.incVersion();
 
-    expect(collection.version).not.toEqual(oldVersion);
+    const entity = {};
+    const component = "foo";
+    collection.incVersion(entity, component);
+
+    const newVersion = collection.version;
+    expect(newVersion).not.toEqual(oldVersion);
+    expect(newVersion.entity).toBe(entity);
+    expect(newVersion.component).toBe(component);
+
     expect(oldVersion.next).toBe(collection.version);
   });
 
-  it("should update its version when a new item is added", () => {
+  it("should update its version when a new entity is added", () => {
     const collection = new EntityCollection();
     const oldVersion = collection.version;
     const entity = {};
     collection.add(entity);
 
     expect(collection.version).not.toEqual(oldVersion);
+    expect(collection.version.entity).toBe(entity);
     expect(oldVersion.next).toBe(collection.version);
   });
 
-  it("should update its version when an item is removed", () => {
+  it("should update its version when an entity is removed", () => {
     const collection = new EntityCollection();
     const entity = {};
     collection.add(entity);
@@ -60,6 +68,7 @@ describe("EntityCollection", () => {
     collection.remove(entity);
 
     expect(collection.version).not.toEqual(oldVersion);
+    expect(collection.version.entity).toBe(entity);
     expect(oldVersion.next).toBe(collection.version);
   });
 });

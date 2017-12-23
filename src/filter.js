@@ -24,7 +24,11 @@ export default class Filter {
    */
   constructor(entities, components, filterFunc) {
     this.entities = entities;
-    this.components = components;
+
+    this.componentMap = Object.create(null);
+    components.forEach(component => {
+      this.componentMap[component] = true;
+    });
 
     this.criteria = filterFunc
       ? filterFunc
@@ -38,6 +42,16 @@ export default class Filter {
    * @type {Array}  array of entities that match the criteria
    */
   get filtered() {
+    // Walk versions until a cache-breaking change is found
+    while (this.cacheVersion.next) {
+      const next = this.cacheVersion.next;
+
+      if (!next.component) break; // an entity has been added or removed
+      if (this.componentMap[next.component]) break; // relevant component changed
+
+      this.cacheVersion = next;
+    }
+
     // Refresh cache if version isn't up to date
     if (this.cacheVersion !== this.entities.version) {
       this.cached = this.entities.filter(this.criteria);

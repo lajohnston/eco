@@ -1,17 +1,4 @@
 /**
- * Linked versioning
- */
-function Version() {
-  this.next = undefined;
-}
-
-Version.prototype.supersede = function() {
-  const newVersion = new Version();
-  this.next = newVersion;
-  return newVersion;
-};
-
-/**
  * Maintains a list of entities
  *
  * @property {Object} version the current version object, which is replaced
@@ -37,7 +24,7 @@ export default class EntityCollection {
    */
   add(entity) {
     this.entities.push(entity);
-    this.incVersion();
+    this.incVersion(entity);
   }
 
   /**
@@ -50,14 +37,36 @@ export default class EntityCollection {
       return test !== entity;
     });
 
-    this.incVersion();
+    this.incVersion(entity);
   }
 
   /**
    * Supersedes the current version property with a new version, to mark that
    * a change has occured
    */
-  incVersion() {
-    this.version = this.version.supersede();
+  incVersion(entity, component) {
+    this.version = this.version.supersede(entity, component);
   }
 }
+
+/**
+ * Linked list of versions that log entity changes
+ */
+function Version(entity, component) {
+  this.entity = entity;
+  this.component = component;
+  this.next = undefined;
+}
+
+/**
+ * Creates a new version and links the previous version to it
+ *
+ * @param {Entity} entity the entity that has changed
+ * @param {string} [component] name of the component that has changed, if any
+ * @returns {Version} the new version
+ */
+Version.prototype.supersede = function(entity, component) {
+  const newVersion = new Version(entity, component);
+  this.next = newVersion;
+  return newVersion;
+};

@@ -1,8 +1,8 @@
 /* global Eco, suite, benchmark */
 
-function createEcoFilter(entityCount, criteria) {
+function createEcoFilter(entityCount, components, filter) {
   const eco = new Eco();
-  eco.defineComponents(["foo", "bar"]);
+  eco.defineComponents(["foo", "bar", "baz"]);
 
   for (let i = 0; i < entityCount; i++) {
     const ecoEntity = eco.entity();
@@ -14,7 +14,7 @@ function createEcoFilter(entityCount, criteria) {
     }
   }
 
-  return eco.createFilter(criteria);
+  return eco.createFilter(components, filter);
 }
 
 suite("Filters", function() {
@@ -61,7 +61,11 @@ suite("Filters", function() {
     },
     {
       setup: function() {
-        this.filter = createEcoFilter(1000, entity => entity.foo && entity.bar);
+        this.filter = createEcoFilter(
+          1000,
+          ["foo", "bar"],
+          entity => entity.foo && entity.bar
+        );
       },
       teardown: function() {
         this.filter = undefined;
@@ -81,6 +85,30 @@ suite("Filters", function() {
       },
       teardown: function() {
         this.filter = undefined;
+      }
+    }
+  );
+
+  benchmark(
+    "Eco, array filter, second pass, changes to an irrelevant component",
+    function() {
+      // Add or remove irrelevant component
+      const baz = this.entity.baz;
+      this.entity.baz = baz ? undefined : "baz"; // toggle
+
+      // Second pass
+      this.filter.forEach(entity => entity);
+    },
+    {
+      setup: function() {
+        this.filter = createEcoFilter(1000, ["foo", "bar"]);
+
+        // run first pass and get first entity
+        this.entity = this.filter.filtered[0];
+      },
+      teardown: function() {
+        this.filter = undefined;
+        this.entity = undefined;
       }
     }
   );

@@ -48,8 +48,9 @@ describe("Eco", () => {
     const entityCollection = mockEntityCollection();
     const eco = new Eco(Entity, entityCollection);
 
-    eco.onComponentChanged({}, "foo", "bar", undefined);
-    expect(entityCollection.incVersion).toHaveBeenCalled();
+    const entity = {};
+    eco.onComponentChanged(entity, "foo", "bar", undefined);
+    expect(entityCollection.incVersion).toHaveBeenCalledWith(entity, "foo");
   });
 
   it("should increment the entityCollection version when a component is removed", () => {
@@ -57,8 +58,9 @@ describe("Eco", () => {
     const entityCollection = mockEntityCollection();
     const eco = new Eco(Entity, entityCollection);
 
-    eco.onComponentChanged({}, "foo", undefined, "bar");
-    expect(entityCollection.incVersion).toHaveBeenCalled();
+    const entity = {};
+    eco.onComponentChanged(entity, "foo", undefined, "bar");
+    expect(entityCollection.incVersion).toHaveBeenCalledWith(entity, "foo");
   });
 
   it("should not increment the entityCollection version if a component value has changed", () => {
