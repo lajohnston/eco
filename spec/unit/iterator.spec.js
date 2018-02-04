@@ -1,4 +1,4 @@
-import Filter from "../../src/filter";
+import Iterator from "../../src/iterator";
 
 function mockEntity(components = []) {
   const entity = jasmine.createSpyObj("entity", ["has"]);
@@ -18,11 +18,11 @@ describe("Filter", () => {
       .and.callFake(x => x > 2);
 
     const entities = [1, 2, 3, 4];
-    const filter = new Filter(entities, [], filterFunction);
+    const iterator = new Iterator(entities, [], filterFunction);
 
     const result = [];
 
-    filter.forEach(entity => {
+    iterator.forEach(entity => {
       result.push(entity);
     });
 
@@ -36,10 +36,10 @@ describe("Filter", () => {
       mockEntity(["foo", "bar"])
     ];
 
-    const filter = new Filter(entities, ["foo", "bar"]);
+    const iterator = new Iterator(entities, ["foo", "bar"]);
     const result = [];
 
-    filter.forEach(entity => {
+    iterator.forEach(entity => {
       result.push(entity);
     });
 
@@ -51,10 +51,10 @@ describe("Filter", () => {
     entityCollection.version = {};
     entityCollection.filter.and.returnValue([]);
 
-    const filter = new Filter(entityCollection, ["foo"]);
+    const iterator = new Iterator(entityCollection, ["foo"]);
 
-    filter.forEach(() => {}); // first-pass
-    filter.forEach(() => {}); // second-pass
+    iterator.forEach(() => {}); // first-pass
+    iterator.forEach(() => {}); // second-pass
 
     expect(entityCollection.filter.calls.count()).toBe(1);
   });
@@ -66,14 +66,14 @@ describe("Filter", () => {
     const startVersion = {};
     entityCollection.version = startVersion;
 
-    const filter = new Filter(entityCollection, ["foo"]);
+    const iterator = new Iterator(entityCollection, ["foo"]);
 
-    filter.forEach(() => {}); // first-pass
+    iterator.forEach(() => {}); // first-pass
     const newVersion = { component: "bar" };
     startVersion.next = newVersion;
     entityCollection.version = newVersion;
 
-    filter.forEach(() => {}); // second-pass
+    iterator.forEach(() => {}); // second-pass
 
     expect(entityCollection.filter.calls.count()).toBe(1);
   });
@@ -85,14 +85,14 @@ describe("Filter", () => {
     const startVersion = {};
     entityCollection.version = startVersion;
 
-    const filter = new Filter(entityCollection, ["foo"]);
+    const iterator = new Iterator(entityCollection, ["foo"]);
 
-    filter.forEach(() => {}); // first-pass
+    iterator.forEach(() => {}); // first-pass
     const newVersion = { component: undefined };
     startVersion.next = newVersion;
     entityCollection.version = newVersion;
 
-    filter.forEach(() => {}); // second-pass
+    iterator.forEach(() => {}); // second-pass
 
     expect(entityCollection.filter.calls.count()).toBe(2);
   });

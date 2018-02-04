@@ -9,12 +9,12 @@ export default class Eco {
   /**
    * @param {function}  Entity class to use to create entities
    * @param {Object}    entityCollection collection to hold entities
-   * @param {function}  createFilter function that returns a filter instance
+   * @param {function}  createIterator function that returns an interator instance
    */
-  constructor(Entity, entities, createFilter) {
+  constructor(Entity, entities, createIterator) {
     this.Entity = Entity;
     this.entities = entities;
-    this.createFilterInstance = createFilter;
+    this.createIterator = createIterator;
 
     this.onChange = () => {};
   }
@@ -84,16 +84,16 @@ export default class Eco {
   }
 
   /**
-   * Returns a new entity filter instance
+   * Returns a new entity iterator instance
    *
-   * @param {string[]} components components the filter is concerned with
+   * @param {string[]} components components the iterator is concerned with
    * @param {function} [filterFunc] custom filter function accepts an entity
    *  and should return false if the entity should be excluded
    *
-   * @returns {Filter}  filter instance
+   * @returns {Iterator}  iterator instance
    */
-  createFilter(components, filterFunc) {
-    return this.createFilterInstance(this.entities, components, filterFunc);
+  iterator(components, filterFunc) {
+    return this.createIterator(this.entities, components, filterFunc);
   }
 
   /**
@@ -115,7 +115,7 @@ export default class Eco {
     const filterFunc = args.length === 3 ? args[1] : undefined;
     const each = args.length === 3 ? args[2] : args[1];
 
-    const filter = this.createFilter(components, filterFunc);
+    const filter = this.iterator(components, filterFunc);
 
     return function(...args) {
       filter.forEach(entity => {

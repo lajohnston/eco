@@ -88,18 +88,18 @@ describe("Eco", () => {
     expect(eco.all).toBe(entityCollection.entities);
   });
 
-  it("should create and return filter instances", () => {
+  it("should create and return iterator instances", () => {
     const Entity = function() {};
     const entityCollection = mockEntityCollection();
-    const createFilter = jasmine.createSpy("createFilter");
-    const eco = new Eco(Entity, entityCollection, createFilter);
+    const createIterator = jasmine.createSpy("createIterator");
+    const eco = new Eco(Entity, entityCollection, createIterator);
 
     const filter = {};
-    createFilter.and.returnValue(filter);
+    createIterator.and.returnValue(filter);
 
     const componentArray = ["foo", "bar"];
-    expect(eco.createFilter(componentArray)).toBe(filter);
-    expect(createFilter).toHaveBeenCalledWith(
+    expect(eco.iterator(componentArray)).toBe(filter);
+    expect(createIterator).toHaveBeenCalledWith(
       entityCollection,
       componentArray,
       undefined
@@ -109,17 +109,17 @@ describe("Eco", () => {
   it("should create and return filter instances with custom filter functions", () => {
     const Entity = function() {};
     const entityCollection = mockEntityCollection();
-    const createFilter = jasmine.createSpy("createFilter");
-    const eco = new Eco(Entity, entityCollection, createFilter);
+    const createIterator = jasmine.createSpy("createIterator");
+    const eco = new Eco(Entity, entityCollection, createIterator);
 
     const filter = {};
-    createFilter.and.returnValue(filter);
+    createIterator.and.returnValue(filter);
 
     const componentArray = ["foo", "bar"];
     const filterFunc = function() {};
 
-    expect(eco.createFilter(componentArray, filterFunc)).toBe(filter);
-    expect(createFilter).toHaveBeenCalledWith(
+    expect(eco.iterator(componentArray, filterFunc)).toBe(filter);
+    expect(createIterator).toHaveBeenCalledWith(
       entityCollection,
       componentArray,
       filterFunc
@@ -130,11 +130,11 @@ describe("Eco", () => {
     const Entity = function() {};
     const entityCollection = mockEntityCollection();
     const filter = jasmine.createSpyObj("filter", ["forEach"]);
-    const createFilter = jasmine
-      .createSpy("createFilter")
+    const createIterator = jasmine
+      .createSpy("createIterator")
       .and.returnValue(filter);
 
-    const eco = new Eco(Entity, entityCollection, createFilter);
+    const eco = new Eco(Entity, entityCollection, createIterator);
 
     const componentArray = ["foo", "bar"];
     const callback = jasmine.createSpy();
@@ -144,7 +144,7 @@ describe("Eco", () => {
     filter.forEach.and.callFake(cb => entities.forEach(cb));
     system("baz");
 
-    expect(createFilter).toHaveBeenCalledWith(
+    expect(createIterator).toHaveBeenCalledWith(
       entityCollection,
       componentArray,
       undefined
@@ -157,18 +157,18 @@ describe("Eco", () => {
     const Entity = function() {};
     const entityCollection = mockEntityCollection();
     const filter = jasmine.createSpyObj("filter", ["forEach"]);
-    const createFilter = jasmine
-      .createSpy("createFilter")
+    const createIterator = jasmine
+      .createSpy("createIterator")
       .and.returnValue(filter);
 
-    const eco = new Eco(Entity, entityCollection, createFilter);
+    const eco = new Eco(Entity, entityCollection, createIterator);
 
     const componentArray = ["foo", "bar"];
     const filterFunc = function() {};
     const callback = jasmine.createSpy();
 
     eco.system(componentArray, filterFunc, callback);
-    expect(createFilter).toHaveBeenCalledWith(
+    expect(createIterator).toHaveBeenCalledWith(
       entityCollection,
       componentArray,
       filterFunc
@@ -178,11 +178,11 @@ describe("Eco", () => {
   it("should pass additional arguments to the system callback", done => {
     const Entity = function() {};
     const filter = jasmine.createSpyObj("filter", ["forEach"]);
-    const createFilter = jasmine
-      .createSpy("createFilter")
+    const createIterator = jasmine
+      .createSpy("createIterator")
       .and.returnValue(filter);
 
-    const eco = new Eco(Entity, {}, createFilter);
+    const eco = new Eco(Entity, {}, createIterator);
 
     const entity = {};
     filter.forEach.and.callFake(cb => cb(entity));
