@@ -95,32 +95,4 @@ export default class Eco {
   iterator(components, filterFunc) {
     return this.createIterator(this.entities, components, filterFunc);
   }
-
-  /**
-   * Returns a function that when called, will call the given function for each
-   * matching entity. The entity will be the first argument passed to the each
-   * function, followed by any additional arguments passed to the update
-   * function
-   *
-   * @param {string[]} criteria an array of components the filter is concerned with
-   * @param {function} arg1 either custom filter function, or function to call
-   *  for each entity
-   * @param {function} [arg2] if provided, arg1 is the custom filter function,
-   *  and this is the 'each' function
-   *
-   * @returns {function} update function
-   */
-  system(...args) {
-    const components = args[0];
-    const filterFunc = args.length === 3 ? args[1] : undefined;
-    const each = args.length === 3 ? args[2] : args[1];
-
-    const filter = this.iterator(components, filterFunc);
-
-    return function(...args) {
-      filter.forEach(entity => {
-        each(entity, ...args);
-      });
-    };
-  }
 }
