@@ -130,8 +130,8 @@ onChange event.
 ## Enable, Disable and Destroy Entities
 
 Setting an entity's 'enabled' property to false allows you to deactivate it.
-This removes the entity from eco's entity list so it won't appear in any filter
-or system results.
+This removes the entity from eco's entity list so it won't appear in any
+iterator results
 
 Unless you're storing your own reference to the entity, it will eventually be
 garbage collected and permanently destroyed. If you do keep a reference then you
