@@ -1,6 +1,6 @@
 /* global Eco, suite, benchmark */
 
-function createEcoFilter(entityCount, components, filter) {
+function createEcoIterator(entityCount, components, filter) {
   const eco = new Eco();
   eco.defineComponents(["foo", "bar", "baz"]);
 
@@ -14,7 +14,7 @@ function createEcoFilter(entityCount, components, filter) {
     }
   }
 
-  return eco.createFilter(components, filter);
+  return eco.iterator(components, filter);
 }
 
 suite("Filters", function() {
@@ -42,14 +42,14 @@ suite("Filters", function() {
   benchmark(
     "Eco, array filter",
     function() {
-      this.filter.forEach(entity => entity);
+      this.iterator.forEach(entity => entity);
     },
     {
       setup: function() {
-        this.filter = createEcoFilter(1000, ["foo", "bar"]);
+        this.iterator = createEcoIterator(1000, ["foo", "bar"]);
       },
       teardown: function() {
-        this.filter = undefined;
+        this.iterator = undefined;
       }
     }
   );
@@ -57,18 +57,18 @@ suite("Filters", function() {
   benchmark(
     "Eco, function filter",
     function() {
-      this.filter.forEach(entity => entity);
+      this.iterator.forEach(entity => entity);
     },
     {
       setup: function() {
-        this.filter = createEcoFilter(
+        this.iterator = createEcoIterator(
           1000,
           ["foo", "bar"],
           entity => entity.foo && entity.bar
         );
       },
       teardown: function() {
-        this.filter = undefined;
+        this.iterator = undefined;
       }
     }
   );
@@ -76,15 +76,15 @@ suite("Filters", function() {
   benchmark(
     "Eco, array filter, second pass, no changes",
     function() {
-      this.filter.forEach(entity => entity); // second pass
+      this.iterator.forEach(entity => entity); // second pass
     },
     {
       setup: function() {
-        this.filter = createEcoFilter(1000, ["foo", "bar"]);
-        this.filter.forEach(entity => entity); // first pass
+        this.iterator = createEcoIterator(1000, ["foo", "bar"]);
+        this.iterator.forEach(entity => entity); // first pass
       },
       teardown: function() {
-        this.filter = undefined;
+        this.iterator = undefined;
       }
     }
   );
@@ -97,17 +97,17 @@ suite("Filters", function() {
       this.entity.baz = baz ? undefined : "baz"; // toggle
 
       // Second pass
-      this.filter.forEach(entity => entity);
+      this.iterator.forEach(entity => entity);
     },
     {
       setup: function() {
-        this.filter = createEcoFilter(1000, ["foo", "bar"]);
+        this.iterator = createEcoIterator(1000, ["foo", "bar"]);
 
         // run first pass and get first entity
-        this.entity = this.filter.filtered[0];
+        this.entity = this.iterator.filtered[0];
       },
       teardown: function() {
-        this.filter = undefined;
+        this.iterator = undefined;
         this.entity = undefined;
       }
     }
