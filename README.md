@@ -31,7 +31,7 @@ entity.position = { x: 100, y: 200 };
 entity.movement = { x: 1, y: 0, speed: 2 };
 
 /**
- * Create an interator for entities with position && movement components.
+ * Create an iterator for entities with position && movement components.
  * The iterator listens for changes and only updates when necessary
  */
 const moveable = eco.iterator(["position", "movement"]);
@@ -39,6 +39,7 @@ const moveable = eco.iterator(["position", "movement"]);
 // Your update function in the main loop
 function update(delta) {
   moveable.forEach(entity => {
+    // Add movement to position
     entity.position.x += entity.movement.x * entity.movement.speed * delta;
     entity.position.y += entity.movement.y * entity.movement.speed * delta;
   });
@@ -53,18 +54,16 @@ const entity = eco.entity();
 
 // Add or replace components using standard dot notation
 entity.position = { x: 100, y: 200 };
-entity.has("position"); // true
-
-// Access components
 entity.position.x; // 100
 entity.position.y; // 200
+entity.has("position"); // true
 
 // Remove a component
 entity.position = undefined;
 entity.position; // undefined
 entity.has("position"); // false
 
-// Remove all components
+// Remove all components from an entity
 entity.removeAll();
 ```
 
@@ -72,7 +71,7 @@ entity.removeAll();
 
 Iterators iterate over a subset of entities, similar to using Array.filter and
 Array.forEach. They utilise caching to ensure the filtering step is only
-performed when a relevant change has occured.
+performed when a relevant change has occurred.
 
 ```javascript
 // Filter only entities which have foo AND bar components
