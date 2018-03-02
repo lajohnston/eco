@@ -11,9 +11,11 @@ function createIterator(entities, components, filterFunc) {
   return new Iterator(entities, components, filterFunc);
 }
 
-function createEco() {
+function createEco(components = []) {
   // Extend entity class so each Eco instance can define its own components
   const Entity = class extends AbstractEntity {};
+  components.forEach(name => Entity.defineComponent(name));
+
   return new Eco(Entity, createEntityCollection(), createIterator);
 }
 

@@ -72,15 +72,6 @@ describe("Eco", () => {
     expect(entityCollection.incVersion).not.toHaveBeenCalled();
   });
 
-  it("should inform the entity prototype to set up component accessors", () => {
-    const Entity = mockEntityPrototype();
-    const eco = new Eco(Entity);
-
-    eco.defineComponents(["foo", "bar"]);
-    expect(Entity.defineComponent).toHaveBeenCalledWith("foo");
-    expect(Entity.defineComponent).toHaveBeenCalledWith("bar");
-  });
-
   it("should return an array of all its entities", () => {
     const Entity = function() {};
     const entityCollection = mockEntityCollection();

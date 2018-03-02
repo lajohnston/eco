@@ -1,10 +1,7 @@
 const Eco = window.Eco;
 
 function createEco() {
-  const eco = new Eco();
-  eco.defineComponents(["foo", "bar", "baz"]);
-
-  return eco;
+  return new Eco(["foo", "bar", "baz"]);
 }
 
 describe("Iterators", () => {

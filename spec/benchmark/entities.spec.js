@@ -41,8 +41,7 @@ suite("Adding and removing components", () => {
     },
     {
       setup: function() {
-        const eco = new Eco();
-        eco.defineComponents(["foo"]);
+        const eco = new Eco(["foo"]);
         this.ecoEntity = eco.entity();
       },
       teardown: function() {

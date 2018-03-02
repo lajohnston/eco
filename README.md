@@ -20,10 +20,8 @@ removed to change entity behaviour at runtime.
 ## Basic usage
 
 ```javascript
-const eco = new Eco();
-
-// Define the component names
-eco.defineComponents(["position", "movement"]);
+// Create an instance with a list of component names
+const eco = new Eco(["position", "movement"]);
 
 // Create an entity. Add components using dot notation
 const entity = eco.entity();
@@ -105,8 +103,6 @@ is set. An example use-case is if you're using a collision algorithm such as a
 QuadTree or Grid, and wish to update it when an entity position changes.
 
 ```javascript
-const eco = new Eco();
-
 // Set the eco.onChange function
 eco.onChange = (entity, componentName, newValue, oldValue) => {
   // this will be called whenever a component value is set

@@ -2,8 +2,7 @@ const Eco = window.Eco;
 
 describe("Entities", () => {
   it("should hold component data", () => {
-    const eco = new Eco();
-    eco.defineComponents(["foo", "bar"]);
+    const eco = new Eco(["foo", "bar"]);
 
     const entityA = eco.entity();
     entityA.foo = "fooA";
@@ -21,8 +20,7 @@ describe("Entities", () => {
   });
 
   it("should state whether they have a component or not", () => {
-    const eco = new Eco();
-    eco.defineComponents(["foo", "bar"]);
+    const eco = new Eco(["foo", "bar"]);
 
     const entity = eco.entity();
     entity.foo = "foo";
@@ -32,8 +30,7 @@ describe("Entities", () => {
   });
 
   it("should allow the removal of all its components", () => {
-    const eco = new Eco();
-    eco.defineComponents(["foo", "bar"]);
+    const eco = new Eco(["foo", "bar"]);
 
     const entity = eco.entity();
     entity.foo = "foo";
@@ -45,8 +42,7 @@ describe("Entities", () => {
   });
 
   it("should return an object of its components", () => {
-    const eco = new Eco();
-    eco.defineComponents(["foo", "bar"]);
+    const eco = new Eco(["foo", "bar"]);
 
     const entity = eco.entity();
     entity.foo = "foo";

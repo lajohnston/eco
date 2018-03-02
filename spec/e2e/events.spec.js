@@ -1,8 +1,5 @@
 function createEco() {
-  const eco = new window.Eco();
-  eco.defineComponents(["foo"]);
-
-  return eco;
+  return new window.Eco(["foo"]);
 }
 
 describe("eco.onChange", () => {

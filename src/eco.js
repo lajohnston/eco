@@ -61,18 +61,6 @@ export default class Eco {
   }
 
   /**
-   * Defines one or more component identifiers. This sets up components so they
-   * can be accessed on the entities using standard dot notation
-   *
-   * @param {Array.<string>} names the component identifiers
-   */
-  defineComponents(names) {
-    names.forEach(name => {
-      this.Entity.defineComponent(name);
-    });
-  }
-
-  /**
    * Returns a new entity instance
    *
    * @returns {Entity} the entity
