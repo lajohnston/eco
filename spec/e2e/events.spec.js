@@ -1,5 +1,5 @@
 function createEco() {
-  return new window.Eco(["foo"]);
+  return window.Eco.create(["foo"]);
 }
 
 describe("eco.onChange", () => {

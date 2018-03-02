@@ -1,8 +1,15 @@
 describe("Eco", () => {
-  it("should expose an Eco variable on the global window object", () => {
+  it("should expose an Eco variable with a create function", () => {
     const Eco = window.Eco;
 
     expect(Eco).toBeDefined();
-    expect(new Eco()).toBeDefined();
+    expect(Eco.create).toBeDefined();
+  });
+
+  it("should expose an Eco variable with a container function", () => {
+    const Eco = window.Eco;
+
+    expect(Eco).toBeDefined();
+    expect(Eco.container).toBeDefined();
   });
 });

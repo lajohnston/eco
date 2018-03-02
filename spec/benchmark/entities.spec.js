@@ -8,7 +8,7 @@ suite("Adding entities", function() {
     },
     {
       setup: function() {
-        this.eco = new Eco();
+        this.eco = Eco.create();
       },
       teardown: function() {
         this.eco = undefined;
@@ -41,7 +41,7 @@ suite("Adding and removing components", () => {
     },
     {
       setup: function() {
-        const eco = new Eco(["foo"]);
+        const eco = Eco.create(["foo"]);
         this.ecoEntity = eco.entity();
       },
       teardown: function() {

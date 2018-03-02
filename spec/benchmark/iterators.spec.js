@@ -1,7 +1,7 @@
 /* global Eco, suite, benchmark */
 
 function createEcoIterator(entityCount, components, filter) {
-  const eco = new Eco(["foo", "bar", "baz"]);
+  const eco = Eco.create(["foo", "bar", "baz"]);
 
   for (let i = 0; i < entityCount; i++) {
     const ecoEntity = eco.entity();

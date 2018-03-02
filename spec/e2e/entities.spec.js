@@ -2,7 +2,7 @@ const Eco = window.Eco;
 
 describe("Entities", () => {
   it("should hold component data", () => {
-    const eco = new Eco(["foo", "bar"]);
+    const eco = Eco.create(["foo", "bar"]);
 
     const entityA = eco.entity();
     entityA.foo = "fooA";
@@ -20,7 +20,7 @@ describe("Entities", () => {
   });
 
   it("should state whether they have a component or not", () => {
-    const eco = new Eco(["foo", "bar"]);
+    const eco = Eco.create(["foo", "bar"]);
 
     const entity = eco.entity();
     entity.foo = "foo";
@@ -30,7 +30,7 @@ describe("Entities", () => {
   });
 
   it("should allow the removal of all its components", () => {
-    const eco = new Eco(["foo", "bar"]);
+    const eco = Eco.create(["foo", "bar"]);
 
     const entity = eco.entity();
     entity.foo = "foo";
@@ -42,7 +42,7 @@ describe("Entities", () => {
   });
 
   it("should return an object of its components", () => {
-    const eco = new Eco(["foo", "bar"]);
+    const eco = Eco.create(["foo", "bar"]);
 
     const entity = eco.entity();
     entity.foo = "foo";
@@ -56,15 +56,27 @@ describe("Entities", () => {
     });
   });
 
-  describe("eco.all", () => {
-    it("should provide an array of all entities", () => {
-      const eco = new Eco();
-      const entities = [eco.entity(), eco.entity(), eco.entity()];
-      const result = eco.all;
+  it("should provide an array of all entities", () => {
+    const eco = Eco.create();
+    const entities = [eco.entity(), eco.entity(), eco.entity()];
+    const result = eco.all;
 
-      expect(Array.isArray(result)).toBe(true);
-      expect(result.length).toBe(entities.length);
-      expect(result).toEqual(entities);
-    });
+    expect(Array.isArray(result)).toBe(true);
+    expect(result.length).toBe(entities.length);
+    expect(result).toEqual(entities);
+  });
+
+  it("should allow entities to be extended", () => {
+    const customEco = Eco.container();
+    customEco.Entity = class extends customEco.Entity {
+      getFoo() {
+        return this.foo;
+      }
+    };
+
+    const eco = customEco.create();
+    const entity = eco.entity();
+    entity.foo = "bar";
+    expect(entity.getFoo()).toBe("bar");
   });
 });

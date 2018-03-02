@@ -9,29 +9,26 @@ game logic decoupled from the game framework and libraries of your choice.
 As an alternative to defining hierarchical types for in-game entities
 (such as "Player", "Enemy", "FlyingEnemy", "FlyingEnemyWithGun" ...), the ECS
 pattern has you split the aspects into components (position, movement, canFly,
-hasGun) and mix and match them. This allows you to assemble many variations
+hasGun) then mix and match them. This allows you to assemble many variations
 using the same component parts, and even allows components to be added or
 removed to change entity behaviour at runtime.
 
 * Components - data structures (position, movement, appearance etc.)
-* Entities - in-game objects that have components
-* Systems - logic that updates entities based on their components
+* Entities - containers that hold components; represent in-game objects
+* Systems - logic that updates entities based on their component set
 
 ## Basic usage
 
 ```javascript
-// Create an instance with a list of component names
-const eco = new Eco(["position", "movement"]);
+// Create an Eco instance, specifying a list of component names
+const eco = Eco.create(["position", "movement"]);
 
 // Create an entity. Add components using dot notation
 const entity = eco.entity();
 entity.position = { x: 100, y: 200 };
 entity.movement = { x: 1, y: 0, speed: 2 };
 
-/**
- * Create an iterator for entities with position && movement components.
- * The iterator listens for changes and only updates when necessary
- */
+// Create an iterator for entities with position && movement components.
 const moveable = eco.iterator(["position", "movement"]);
 
 // Your update function in the main loop
@@ -48,6 +45,7 @@ function update(delta) {
 
 ```javascript
 // Create an empty entity
+const eco = Eco.create(["position"]);
 const entity = eco.entity();
 
 // Add or replace components using standard dot notation
@@ -63,6 +61,24 @@ entity.has("position"); // false
 
 // Remove all components from an entity
 entity.removeAll();
+```
+
+You can add custom methods to the Entity class by extending it.
+
+```javascript
+// Create and edit a custom Eco dependency container
+const myEco = Eco.container();
+
+// Extend the Entity class and add your own methods
+myEco.Entity = class extends myEco.Entity {
+  getFoo() {
+    return this.foo;
+  }
+};
+
+// Create an eco instance then use it as normal
+const eco = myEco.create(["foo"]);
+const entity = eco.entity(); // will be an instance of your entity class
 ```
 
 ## Iterators
@@ -108,11 +124,12 @@ eco.onChange = (entity, componentName, newValue, oldValue) => {
   // this will be called whenever a component value is set
 };
 
-// The following examples will trigger the callback
-entity.position = {}; // oldValue = undefined; newValue = {}
-entity.position = undefined; // oldValue = {}; newValue = undefined
+// Setting a component value will trigger the callback
+entity.foo = "bar"; // oldValue = undefined; newValue = "bar"
+entity.foo = undefined; // oldValue = "bar"; newValue = undefined
 
-// ...but editing component properties will not
+// Eco does not perform deep change detection, so the following won't trigger
+// the callback
 entity.position.x = 100; // will not trigger eco.onChange
 entity.position = entity.position; // you'd have to do this to manually trigger
 ```
