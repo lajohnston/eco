@@ -1,9 +1,5 @@
 import Eco from "../../src/eco";
 
-function mockEntityPrototype() {
-  return jasmine.createSpyObj("Entity", ["defineComponent"]);
-}
-
 function mockEntityCollection() {
   return jasmine.createSpyObj("entityCollection", [
     "add",
@@ -14,18 +10,20 @@ function mockEntityCollection() {
 
 describe("Eco", () => {
   it("should return entity instances", () => {
-    const Entity = function() {};
+    const entity = "foo";
+    const createEntity = jasmine.createSpy().and.returnValue(entity);
+
     const entityCollection = mockEntityCollection();
-    const eco = new Eco(Entity, entityCollection);
+    const eco = new Eco(createEntity, entityCollection);
 
     const instance = eco.entity();
-    expect(instance instanceof Entity).toBeTruthy();
+    expect(createEntity).toHaveBeenCalledWith(eco);
+    expect(instance).toBe(entity);
     expect(entityCollection.add).toHaveBeenCalledWith(instance);
   });
 
   it("should call the onChange function property if a component changes", done => {
-    const Entity = function() {};
-    const eco = new Eco(Entity, mockEntityCollection());
+    const eco = new Eco(() => ({}), mockEntityCollection());
 
     const entity = {};
     const component = "foo";
@@ -44,9 +42,8 @@ describe("Eco", () => {
   });
 
   it("should increment the entityCollection version when a component is added", () => {
-    const Entity = function() {};
     const entityCollection = mockEntityCollection();
-    const eco = new Eco(Entity, entityCollection);
+    const eco = new Eco(() => ({}), entityCollection);
 
     const entity = {};
     eco.onComponentChanged(entity, "foo", "bar", undefined);
@@ -54,9 +51,8 @@ describe("Eco", () => {
   });
 
   it("should increment the entityCollection version when a component is removed", () => {
-    const Entity = function() {};
     const entityCollection = mockEntityCollection();
-    const eco = new Eco(Entity, entityCollection);
+    const eco = new Eco(() => ({}), entityCollection);
 
     const entity = {};
     eco.onComponentChanged(entity, "foo", undefined, "bar");
@@ -64,26 +60,23 @@ describe("Eco", () => {
   });
 
   it("should not increment the entityCollection version if a component value has changed", () => {
-    const Entity = function() {};
     const entityCollection = mockEntityCollection();
-    const eco = new Eco(Entity, entityCollection);
+    const eco = new Eco(() => ({}), entityCollection);
 
     eco.onComponentChanged({}, "foo", "foo", "bar");
     expect(entityCollection.incVersion).not.toHaveBeenCalled();
   });
 
   it("should return an array of all its entities", () => {
-    const Entity = function() {};
     const entityCollection = mockEntityCollection();
-    const eco = new Eco(Entity, entityCollection);
+    const eco = new Eco(() => ({}), entityCollection);
     expect(eco.all).toBe(entityCollection.entities);
   });
 
   it("should create and return iterator instances", () => {
-    const Entity = function() {};
     const entityCollection = mockEntityCollection();
     const createIterator = jasmine.createSpy("createIterator");
-    const eco = new Eco(Entity, entityCollection, createIterator);
+    const eco = new Eco(() => ({}), entityCollection, createIterator);
 
     const filter = {};
     createIterator.and.returnValue(filter);
@@ -98,10 +91,9 @@ describe("Eco", () => {
   });
 
   it("should create and return filter instances with custom filter functions", () => {
-    const Entity = function() {};
     const entityCollection = mockEntityCollection();
     const createIterator = jasmine.createSpy("createIterator");
-    const eco = new Eco(Entity, entityCollection, createIterator);
+    const eco = new Eco(() => ({}), entityCollection, createIterator);
 
     const filter = {};
     createIterator.and.returnValue(filter);
@@ -118,9 +110,8 @@ describe("Eco", () => {
   });
 
   it("should remove entities that have been disabled", () => {
-    const Entity = function() {};
     const entityCollection = mockEntityCollection();
-    const eco = new Eco(Entity, entityCollection);
+    const eco = new Eco(() => ({}), entityCollection);
     const entity = eco.entity();
 
     eco.onEntityStatusChanged(entity, false);
@@ -128,9 +119,8 @@ describe("Eco", () => {
   });
 
   it("should re-add entities that have been re-enabled", () => {
-    const Entity = function() {};
     const entityCollection = mockEntityCollection();
-    const eco = new Eco(Entity, entityCollection);
+    const eco = new Eco(() => ({}), entityCollection);
     const entity = eco.entity();
 
     eco.onEntityStatusChanged(entity, false);

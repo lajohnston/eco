@@ -7,12 +7,12 @@
  */
 export default class Eco {
   /**
-   * @param {function}  Entity class to use to create entities
+   * @param {function}  createEntity function that returns an entity instance
    * @param {Object}    entityCollection collection to hold entities
    * @param {function}  createIterator function that returns an interator instance
    */
-  constructor(Entity, entities, createIterator) {
-    this.Entity = Entity;
+  constructor(createEntity, entities, createIterator) {
+    this._createEntity = createEntity;
     this.entities = entities;
     this.createIterator = createIterator;
 
@@ -66,7 +66,7 @@ export default class Eco {
    * @returns {Entity} the entity
    */
   entity() {
-    const entity = new this.Entity(this);
+    const entity = this._createEntity(this);
     this.entities.add(entity);
     return entity;
   }

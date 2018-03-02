@@ -22,7 +22,7 @@ function createContainer() {
       components.forEach(name => Entity.defineComponent(name));
 
       return new container.Eco(
-        Entity,
+        eco => new Entity(eco),
         container.entityCollection(),
         container.createIterator
       );
