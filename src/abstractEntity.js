@@ -16,6 +16,15 @@ export default class AbstractEntity {
   }
 
   /**
+   * Returns a reference to this entity to allow it to be accessed with destructuring
+   *
+   * @type {Entity} the entity
+   */
+  get entity() {
+    return this;
+  }
+
+  /**
    * @type {boolean} true if the entity is enabled, otherwise false
    */
   get enabled() {

@@ -171,4 +171,9 @@ describe("Entity", () => {
     entity.enabled = false;
     expect(entity.enabled).toBe(false);
   });
+
+  it("should hold a property that references itself, for use when destructuring", () => {
+    const entity = new AbstractEntity();
+    expect(entity.entity).toBe(entity);
+  });
 });

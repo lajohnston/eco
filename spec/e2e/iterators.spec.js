@@ -17,8 +17,11 @@ describe("Iterators", () => {
     matching.foo = "foo";
     matching.bar = "bar";
 
-    filter.forEach((entity, index, array) => {
+    filter.forEach(({ entity, foo, bar }, index, array) => {
       expect(entity).toBe(matching);
+      expect(foo).toBe(matching.foo);
+      expect(bar).toBe(matching.bar);
+
       expect(array).toEqual([matching]);
       done();
     });
